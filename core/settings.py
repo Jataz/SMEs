@@ -28,7 +28,7 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('DEBUG', default=True)
 
 #API_BASE_URL = env('API_BASE_URL', default='https://fleet-management-system-production.up.railway.app')
 API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
@@ -37,7 +37,9 @@ ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'material',
+    'material.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -73,6 +75,8 @@ if DEBUG:
 CSRF_TRUSTED_ORIGINS = [
     'https://fleet-management-system-production.up.railway.app',
 ]
+
+#CSRF_COOKIE_HTTPONLY = False
 
 ROOT_URLCONF = 'core.urls'
 

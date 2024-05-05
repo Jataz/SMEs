@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-{% block title %}| Vehicles {% endblock title %}
+{% block title %}| Smes {% endblock title %}
 {% block extrastyle %}
 <!-- DataTables -->
 <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
@@ -50,7 +50,7 @@
                 <div class="d-flex justify-content-end">
                   
                   {% if perms.smeapp.add_sme  %}
-                  <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#addVehicleModal"><i class="fas fa-plus-circle"></i> Add NEW SME </a>
+                  <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#addSmeModal"><i class="fas fa-plus-circle"></i> Add New SME </a>
                   {% endif %}
                 </div>
               </div>
@@ -61,18 +61,19 @@
                     <tr>
                       <th>No.</th>
                       <th>Company</th>
-                      <th>Contact Person</th>
-                      <th>Phone Number</th>
                       <th>Province</th>
                       <th>District</th>
-                      <th>Address</th>
+                      <th>Contact Person</th>
+                      <th>Phone Number</th>
                       <th>Sector</th>
                       <th>Type of Business</th>
                       <th>Product/Service</th>
+                      <th>Size of Business</th>
                       <th>Annual Revenue</th>
                       <th>Number of Employees</th>
                       <th>Asset Value</th>
-                      <th>Size of Business</th>
+                      <th>Address</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
@@ -80,18 +81,19 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ sme.company }}</td>
-                        <td>{{ sme.province }}</td>
-                        <td>{{ sme.district }}</td>
+                        <td>{{ sme.province.province_name }}</td>
+                        <td>{{ sme.district.district_name }}</td>
                         <td>{{ sme.contact_person }}</td>
                         <td>{{ sme.phone_number }}</td>
-                        <td>{{ sme.address }}</td>
                         <td>{{ sme.sector }}</td>
                         <td>{{ sme.type_of_business }}</td>
                         <td>{{ sme.product_service }}</td>
+                        <td>{{ sme.size_of_business.size }}</td>
                         <td>{{ sme.annual_revenue }}</td>
                         <td>{{ sme.number_of_employees }}</td>
                         <td>{{ sme.asset_value }}</td>
-                        <td>{{ sme.size_of_business }}</td>
+                        <td>{{ sme.address }}</td>
+
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -109,9 +111,8 @@
     </section>
     <!-- /.content -->
   </div>
-  {% include 'pages/vehicle/addVehicle.html' %}
-  {% include 'pages/vehicle/editVehicle.html' %}
-  {% include 'pages/vehicle/viewVehicle.html' %}
+  {% include 'pages/smes/add_sme.html' %}
+
 {% endblock content %}
 
 
@@ -131,6 +132,6 @@
 <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
 <!-- Page specific script -->
 
-{% include 'pages/vehicle/scripts.html' %}
+{% include 'pages/smes/scripts.html' %}
   
 {% endblock extra_scripts %}

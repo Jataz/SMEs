@@ -216,8 +216,9 @@
                                     last_service_mileage:last_service_mileage,
                                     fueltype_id:fuel
                                 }),
-                                headers: {
-                                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                                beforeSend: function(xhr, settings) {
+                                    // Set the CSRF token in the request header
+                                    xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
                                 },
                                 success: function(response) {
                                     // Display success toast and reload page
@@ -304,6 +305,11 @@
         }
 
 </script>
+
+
+
+
+
 <script>
     $(document).ready(function() {
 
