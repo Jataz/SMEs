@@ -1,13 +1,13 @@
 
 from django.urls import path
 
-from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,create_sme_record,sme_record
+from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,sme_record
 from . import views
 
 urlpatterns =[
     #API
     path('smes/', SMEListView.as_view(), name='smes'),
-    path('sme-create/',create_sme_record,name="sme-create"),
+    path('sme-create/',sme_record,name="sme-create"),
 
     path('provinces/', ProvinceAPIView.as_view(), name='provinces'),
     path('districts/', DistrictAPIView.as_view(), name='districts'),

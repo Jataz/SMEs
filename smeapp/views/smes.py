@@ -66,6 +66,13 @@ def sme_record(request):
         asset_value = form_data.get('asset_value')
         annual_revenue = form_data.get('annual_revenue')
         
+        try:
+            annual_revenue = int(form_data.get('annual_revenue'))
+            asset_value = int(form_data.get('asset_value'))
+        except ValueError:
+            return JsonResponse({'error': 'Invalid value for annual revenue or asset value'}, status=400)
+
+        
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
                     province_id, district_id, number_of_employees, asset_value, annual_revenue]):
