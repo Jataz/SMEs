@@ -63,18 +63,12 @@
                       <th>Company</th>
                       <th>Province</th>
                       <th>District</th>
-                      <th>Contact Person</th>
-                      <th>Phone Number</th>
                       <th>Sector</th>
                       <th>Type of Business</th>
                       <th>Product/Service</th>
                       <th>Rating</th>
                       <th>Size of Business</th>
-                      <th>Annual Revenue</th>
-                      <th>Number of Employees</th>
-                      <th>Asset Value</th>
-                      <th>Address</th>
-                      
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -84,8 +78,6 @@
                         <td>{{ sme.company }}</td>
                         <td>{{ sme.province.province_name }}</td>
                         <td>{{ sme.district.district_name }}</td>
-                        <td>{{ sme.contact_person }}</td>
-                        <td>{{ sme.phone_number }}</td>
                         <td>{{ sme.sector }}</td>
                         <td>{{ sme.type_of_business }}</td>
                         <td>{{ sme.product_service }}</td>
@@ -94,11 +86,21 @@
                         <td>{{ scale.rating }}</td>
                         <td>{{ scale.size_of_business.size }}</td>
                         {% endfor %}
-                        <td>{{ sme.annual_revenue }}</td>
-                        <td>{{ sme.number_of_employees }}</td>
-                        <td>{{ sme.asset_value }}</td>
-                        <td>{{ sme.address }}</td>
 
+                        {% if perms.vehicles.vehicle_actions  %}
+                        <td class="project-actions">
+                          {% if perms.vehicles.view_vehicle  %}
+                          <a class="btn btn-outline-info btn-sm view-details" href="#" data-toggle="modal" data-target="#viewVehicleModal" data-vehicle-id="{{ vehicle.id }}" style="padding: 0px 1px; font-size: 13px; color: #232121;">
+                            <i class="fas fa-eye"></i> View
+                          </a>
+                          {% endif %}
+                          {% if perms.vehicles.change_vehicle  %}
+                          <a class="btn btn-outline-info btn-sm edit-vehicle-link" href="#" data-toggle="modal" data-target="#editVehicleModal" data-vehicle-id="{{ vehicle.id }}" style="padding: 0px 1px; font-size: 13px; color: #232121;">
+                            <i class="fas fa-pencil-alt"></i> Edit
+                          </a>
+                          {% endif %}
+                        </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                   </tbody>
