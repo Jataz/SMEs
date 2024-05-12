@@ -68,6 +68,7 @@
                       <th>Sector</th>
                       <th>Type of Business</th>
                       <th>Product/Service</th>
+                      <th>Rating</th>
                       <th>Size of Business</th>
                       <th>Annual Revenue</th>
                       <th>Number of Employees</th>
@@ -88,7 +89,11 @@
                         <td>{{ sme.sector }}</td>
                         <td>{{ sme.type_of_business }}</td>
                         <td>{{ sme.product_service }}</td>
-                        <td>{{ sme.size_of_business.size }}</td>
+                        {% for scale in sme.calculation_scale %}
+                        <!-- Access size_of_business for each scale -->
+                        <td>{{ scale.rating }}</td>
+                        <td>{{ scale.size_of_business.size }}</td>
+                        {% endfor %}
                         <td>{{ sme.annual_revenue }}</td>
                         <td>{{ sme.number_of_employees }}</td>
                         <td>{{ sme.asset_value }}</td>

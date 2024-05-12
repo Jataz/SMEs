@@ -38,20 +38,20 @@ class SME(models.Model):
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     number_of_employees = models.IntegerField()
-    size_of_business = models.ForeignKey(SizeValue, on_delete=models.CASCADE,null=True)
+    #size_of_business = models.ForeignKey(SizeValue, on_delete=models.CASCADE,null=True)
     asset_value= models.DecimalField(max_digits=15, decimal_places=2)
     annual_revenue = models.DecimalField(max_digits=15, decimal_places=2)
 
     def __str__(self):
         return self.company
 
-class ScaleBusiness(models.Model):
-    sme = models.ForeignKey(SME, on_delete=models.CASCADE)
-    size_of_employees = models.ForeignKey(SizeValue, related_name='employee_sizes', on_delete=models.CASCADE)
-    size_of_annual_revenue = models.ForeignKey(SizeValue, related_name='revenue_sizes', on_delete=models.CASCADE)
-    size_of_asset_value = models.ForeignKey(SizeValue, related_name='asset_sizes', on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    business_size = models.CharField(max_length=20)
+class CalculationScale(models.Model):
+    sme = models.ForeignKey(SME,related_name='calculation_scale', on_delete=models.CASCADE)
+    size_of_employees = models.ForeignKey(SizeValue, related_name='employees_scale', on_delete=models.CASCADE, null=True)
+    size_of_annual_revenue = models.ForeignKey(SizeValue, related_name='annual_revenue_scale', on_delete=models.CASCADE, null=True)
+    size_of_asset_value = models.ForeignKey(SizeValue, related_name='asset_value_scale', on_delete=models.CASCADE, null=True)
+    rating = models.IntegerField(null=True)
+    size_of_business = models.ForeignKey(SizeValue, related_name='business_size_scale', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"Business size: {self.business_size}, Rating: {self.rating}"
+        return f"Business size: {self.sme}, Rating: {self.size_of_employees}"

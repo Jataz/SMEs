@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import SME, Province, District, SizeValue
+from ..models import SME, CalculationScale, Province, District, SizeValue
 from django.core.validators import RegexValidator
 
 
@@ -23,15 +23,26 @@ class SizeValueSerializer(serializers.ModelSerializer):
         model = SizeValue
         fields = ['id', 'size', 'value']
 
+class CalculationScaleSerializer(serializers.ModelSerializer):
+    size_of_employees = SizeValueSerializer()
+    size_of_annual_revenue = SizeValueSerializer()
+    size_of_asset_value = SizeValueSerializer()
+    size_of_business = SizeValueSerializer()
+    class Meta:
+        model = CalculationScale
+        fields = ('size_of_employees', 'size_of_annual_revenue', 'size_of_asset_value', 'rating', 'size_of_business')
+
 class SMESerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=20)
     province = ProvinceSerializer()
     district = DistrictSerializer()
-    size_of_business = SizeValueSerializer()
+    calculation_scale = CalculationScaleSerializer(many=True)
 
     class Meta:
         model = SME
-        fields = '__all__'
+        fields = ('company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
+                  'product_service', 'province', 'district', 'number_of_employees', 
+                  'asset_value', 'annual_revenue', 'calculation_scale')
         
     def validate_phone_number(self, value):
         """
