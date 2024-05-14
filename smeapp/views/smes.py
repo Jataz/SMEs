@@ -23,14 +23,6 @@ class DistrictAPIView(APIView):
         districts = District.objects.filter(province_id=province_id)
         serializer = DistrictSerializer(districts, many=True)
         return Response({'districts': serializer.data})
-
-
-class SMEListVie(APIView):
-    def get(self, request):
-        smes = SME.objects.all()
-        serializer = SMESerializer(smes, many=True)
-        return Response(serializer.data)
-
 class SMECreate(generics.CreateAPIView):
     queryset = SME.objects.all()
     serializer_class = SMESerializer
