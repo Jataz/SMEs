@@ -1,12 +1,14 @@
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from rest_framework import status,generics,permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics, status
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from ..models import SME,Province,District,SizeValue,CalculationScale
+from ..models import SME,Province,District,SizeValue,CalculationScale, UserProfile
 
 from ..serializers import SMESerializer,ProvinceSerializer,DistrictSerializer
 
@@ -23,9 +25,32 @@ class DistrictAPIView(APIView):
         districts = District.objects.filter(province_id=province_id)
         serializer = DistrictSerializer(districts, many=True)
         return Response({'districts': serializer.data})
-class SMECreate(generics.CreateAPIView):
-    queryset = SME.objects.all()
-    serializer_class = SMESerializer
+    
+class SMECreate(APIView):
+    
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, *args, **kwargs):
+        serializer = SMESerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user_profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+            serializer.save(user_profile=user_profile)
+            #serializer.save()
+            return Response({"message": "SME Record Created Successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def handle_exception(self, exc):
+        # Check if the exception is a ValidationError with non_field_errors
+        if hasattr(exc, 'get_full_details'):
+            error_detail = exc.get_full_details()
+            if 'non_field_errors' in error_detail:
+                # Extract the non-field error message
+                custom_error_message = error_detail['non_field_errors'][0]['message']
+                # Return a custom response format
+                return Response({"Error": custom_error_message}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Fallback to the default exception handling for other types of exceptions
+        return super().handle_exception(exc)
 
 class SMEListView(APIView):
     def get(self, request):
@@ -187,3 +212,26 @@ def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, siz
         rating=rating,
         size_of_business=size_of_business
     )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def sme_in_user_province(request):
+    # Check if the requesting user is a superuser
+    if request.user.is_superuser:
+        # Return all smes for superusers
+        smes = SME.objects.all()
+        serializer = SMESerializer(smes, many=True)
+        return Response(serializer.data)
+
+    # For regular users, proceed with the original logic
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        return Response({'error': 'UserProfile does not exist for this user.'}, status=status.HTTP_404_NOT_FOUND)
+
+    if user_profile.province:
+        smes = SME.objects.filter(province=user_profile.province)
+        serializer = SMESerializer(smes, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'error': 'No province associated with this user.'}, status=status.HTTP_400_BAD_REQUEST)

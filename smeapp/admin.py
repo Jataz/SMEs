@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SME, District, Province, SizeValue, CalculationScale
+from .models import SME, District, Province, SizeValue, CalculationScale, UserProfile
 from django.contrib.auth.models import Permission
 from django import forms
 
@@ -24,10 +24,14 @@ class CalculationScaleAdmin(admin.ModelAdmin):
     list_display = ('sme', 'size_of_employees', 'size_of_annual_revenue', 'size_of_asset_value', 'rating', 'size_of_business')
     list_filter = ('sme', 'size_of_business')  # Optionally add filters for easier navigation
     search_fields = ('sme__name', 'size_of_business')  # Optionally add search functionality
-    
+ 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('id','user', 'province', 'district')
+       
 admin.site.register(SizeValue,SizeAdmin)
 admin.site.register(Province)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(SME, SMEAdmin)
 admin.site.register(CalculationScale,CalculationScaleAdmin)
 admin.site.register(Permission, PermissionAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

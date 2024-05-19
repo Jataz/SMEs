@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,sme_record,size_of_business_data
+from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,sme_record,size_of_business_data,sme_in_user_province
 from . import views
 
 urlpatterns =[
@@ -9,6 +9,7 @@ urlpatterns =[
     path('smes/', SMEListView.as_view(), name='smes'),
     path('sme-create/',sme_record,name="sme-create"),
     path('size-of-business-data/', size_of_business_data, name='size_of_business_data'),
+    #path('sme/',sme_in_user_province, name='sme'),
 
     path('provinces/', ProvinceAPIView.as_view(), name='provinces'),
     path('districts/', DistrictAPIView.as_view(), name='districts'),

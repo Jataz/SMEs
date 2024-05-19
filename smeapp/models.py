@@ -1,4 +1,5 @@
-from django.db import models    
+from django.db import models  
+from django.contrib.auth.models import User  
 class SizeValue(models.Model):
     SIZE_CHOICES = [
         ('MICRO', 'Micro'),
@@ -26,7 +27,13 @@ class District(models.Model):
     def __str__(self):
         return self.district_name
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, blank=True)
+    district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
+
 class SME(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
     company = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)

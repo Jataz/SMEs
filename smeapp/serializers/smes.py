@@ -1,12 +1,18 @@
 from rest_framework import serializers
-from ..models import SME, CalculationScale, Province, District, SizeValue
+from ..models import SME, CalculationScale, Province, District, SizeValue,UserProfile
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 
 
 phone_regex = RegexValidator(
     regex=r'^\d[\d\s.-]{9,14}$',
     message="Phone number must start with a digit and be 10 to 15 digits long, spaces, dashes, and periods allowed."
 )
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']  # Adjust as needed
 
 class DistrictSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,17 +38,26 @@ class CalculationScaleSerializer(serializers.ModelSerializer):
         model = CalculationScale
         fields = ('size_of_employees', 'size_of_annual_revenue', 'size_of_asset_value', 'rating', 'size_of_business')
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    province = ProvinceSerializer(read_only=True)
+    district = DistrictSerializer(read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ['user', 'province', 'location']
 class SMESerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=20)
     province = ProvinceSerializer()
     district = DistrictSerializer()
     calculation_scale = CalculationScaleSerializer(many=True)
+    user_profile = UserProfileSerializer(read_only=True) 
 
     class Meta:
         model = SME
         fields = ('company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
                   'product_service', 'province', 'district', 'number_of_employees', 
-                  'asset_value', 'annual_revenue', 'calculation_scale')
+                  'asset_value', 'annual_revenue', 'calculation_scale','user_profile')
         
     def validate_phone_number(self, value):
         """
