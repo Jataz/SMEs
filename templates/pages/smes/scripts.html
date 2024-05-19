@@ -54,14 +54,14 @@
     
             // Get form data
             var formData = {
-                company: $("#company").val().trim(),
-                contact_person: $("#contact_person").val().trim(),
+                company: $("#company").val().trim().toUpperCase(),
+                contact_person: $("#contact_person").val().trim().toUpperCase(),
                 phone_number: $("#phone_number").val().trim(),
                 email: $("#email").val().trim(),
                 address: $("#address").val().trim(),
                 sector: $("#sector").val(),
                 type_of_business: $("#type_of_business").val(),
-                product_service: $("#product_service").val().trim(),
+                product_service: $("#product_service").val().trim().toUpperCase(),
                 province_id: $("#province-dropdown").val(),
                 district_id: $("#district-dropdown").val(),
                 number_of_employees: $("#number_of_employees").val(),
