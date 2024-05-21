@@ -31,6 +31,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
+    is_ward_level = models.BooleanField(default=False)
+    is_district_level = models.BooleanField(default=False)
+    is_province_level = models.BooleanField(default=False)
+    is_national_level = models.BooleanField(default=False)
 
 class SME(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
@@ -40,6 +44,8 @@ class SME(models.Model):
     email = models.EmailField()
     address = models.CharField(max_length=500)
     sector = models.CharField(max_length=100)
+    sex = models.CharField(max_length=10)
+    age = models.IntegerField()
     type_of_business = models.CharField(max_length=100)
     product_service = models.CharField(max_length=500)
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
@@ -48,6 +54,9 @@ class SME(models.Model):
     #size_of_business = models.ForeignKey(SizeValue, on_delete=models.CASCADE,null=True)
     asset_value= models.DecimalField(max_digits=15, decimal_places=2)
     annual_revenue = models.DecimalField(max_digits=15, decimal_places=2)
+    
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return self.company

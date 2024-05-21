@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="addSmeModalLabel">Add SME</h4>
+                <h4 class="modal-title" id="addSmeModalLabel">CREATE SME</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -19,27 +19,47 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 col-md-3">
+                        <div class="mb-3 col-md-6">
                             <div class="form-group">
                                 <label for="contact_person">Contact Person</label>
                                 <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name" required>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-3 col-md-3">
+                    <div class="row g-2">
+
+                        <div class="mb-3 col-md-6">
                             <div class="form-group">
                                 <label for="phone_number">Phone Number</label>
                                 <input type="phone" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone  Number" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
                             </div>
                         </div>
 
                     </div>
 
                     <div class="row g-2">
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-3">
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" placeholder="Enter Age" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-3">
+                            <div class="form-group">
+                                <label for="sex">Gender</label>
+                                <select class="form-control select2" id="sex" name="sex">
+                                    <option selected="selected" disabled="disabled">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select> 
                             </div>
                         </div>
 

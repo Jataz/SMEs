@@ -23,10 +23,9 @@ class SizeAdmin(admin.ModelAdmin):
 class CalculationScaleAdmin(admin.ModelAdmin):
     list_display = ('sme', 'size_of_employees', 'size_of_annual_revenue', 'size_of_asset_value', 'rating', 'size_of_business')
     list_filter = ('sme', 'size_of_business')  # Optionally add filters for easier navigation
-    search_fields = ('sme__name', 'size_of_business')  # Optionally add search functionality
- 
+    search_fields = ('sme__name', 'size_of_business')  # Optionally add search functionality 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id','user', 'province', 'district')
+    list_display = ('id','user', 'province', 'district','is_ward_level','is_district_level','is_province_level','is_national_level')
        
 admin.site.register(SizeValue,SizeAdmin)
 admin.site.register(Province)
