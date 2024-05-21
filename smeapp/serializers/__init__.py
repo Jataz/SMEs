@@ -1,1 +1,1 @@
-from .smes import SMESerializer,DistrictSerializer,ProvinceSerializer
+from .smes import SMESerializer,DistrictSerializer,ProvinceSerializer,WardSerializer

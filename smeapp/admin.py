@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SME, District, Province, SizeValue, CalculationScale, UserProfile
+from .models import SME, District, Province, SizeValue, CalculationScale, UserProfile, Ward
 from django.contrib.auth.models import Permission
 from django import forms
 
@@ -17,6 +17,8 @@ class PermissionAdmin(admin.ModelAdmin):
 class DistrictAdmin(admin.ModelAdmin):
     list_display = ('id', 'province', 'district_name')
 
+class WardAdmin(admin.ModelAdmin):
+    list_display = ('id', 'district', 'ward_name')  
 class SizeAdmin(admin.ModelAdmin):
     list_display = ('id', 'size', 'value')
 
@@ -27,9 +29,10 @@ class CalculationScaleAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id','user', 'province', 'district','is_ward_level','is_district_level','is_province_level','is_national_level')
        
-admin.site.register(SizeValue,SizeAdmin)
 admin.site.register(Province)
 admin.site.register(District, DistrictAdmin)
+admin.site.register(Ward, WardAdmin)
+admin.site.register(SizeValue,SizeAdmin)
 admin.site.register(SME, SMEAdmin)
 admin.site.register(CalculationScale,CalculationScaleAdmin)
 admin.site.register(Permission, PermissionAdmin)

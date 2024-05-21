@@ -20,6 +20,7 @@
 
         // Cascading dropdowns for Province and district
         // Populate Provinces dropdown
+        // Fetch provinces and populate dropdown
         $.ajax({
             url: '/api/v1/provinces/',
             dataType: 'json',
@@ -34,7 +35,10 @@
         $('#province-dropdown').change(function() {
             var provinceId = $(this).val();
             $('#district-dropdown').empty();
+            $('#ward-dropdown').empty();
+            $('#ward-dropdown').append('<option value="" selected disabled>Select Ward</option>');
             if (provinceId) {
+                // Fetch districts and populate dropdown
                 $.ajax({
                     url: '/api/v1/districts/?province_id=' + provinceId,
                     dataType: 'json',
@@ -47,6 +51,26 @@
                 });
             }
         });
+
+        // Handle change event for districts dropdown
+        $('#district-dropdown').change(function() {
+            var districtId = $(this).val();
+            $('#ward-dropdown').empty();
+            if (districtId) {
+                // Fetch wards and populate dropdown
+                $.ajax({
+                    url: '/api/v1/wards/?district_id=' + districtId,
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#ward-dropdown').append('<option value="" selected disabled>Select Ward</option>');
+                        $.each(data.wards, function(index, ward) {
+                            $('#ward-dropdown').append('<option value="' + ward.id + '">' + ward.ward_name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+
 
         $('#addSMEForm').submit(function(event) {
             // Prevent default form submission
@@ -64,6 +88,7 @@
                 product_service: $("#product_service").val().trim().toUpperCase(),
                 province_id: $("#province-dropdown").val(),
                 district_id: $("#district-dropdown").val(),
+                ward_id:$("#ward-dropdown").val(),
                 number_of_employees: $("#number_of_employees").val(),
                 asset_value: $("#asset_value").val(),
                 annual_revenue: $("#annual_revenue").val(),

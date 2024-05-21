@@ -148,77 +148,86 @@
                   <div class="card-body">
                       <canvas id="sizeOfBusinessChart1" width="400" height="300"></canvas>
                       <script>
-                          // Function to fetch data from Django view and render the bar chart
-                          function fetchDataAndRenderBarChart() {
-                              // Fetch data from the Django view
-                              fetch("{% url 'size_of_business_data' %}")
-                                  .then(response => response.json())
-                                  .then(data => {
-                                      // Extract labels and counts from the received data
-                                      const labels = Object.keys(data);
-                                      const counts = Object.values(data);
-                                      const ctx = document.getElementById('sizeOfBusinessChart1').getContext('2d');
-                                      const sizeOfBusinessChart1 = new Chart(ctx, {
-                                          type: 'bar',
-                                          data: {
-                                              labels: labels,
-                                              datasets: [{
-                                                  // Label for the dataset
-                                                  label: 'Number of SMEs by Size of Business',
-                                                  // Data points
-                                                  data: counts,
-                                                  // Background color for the bars
-                                                  backgroundColor: [
-                                                      'rgba(0, 255, 0, 0.8)',     // Green for 'Micro'
-                                                      'rgba(105, 105, 105, 0.5)', // Secondary (Gray) for 'Small'
-                                                      'rgba(255, 193, 7, 1)',   // Yellow for 'Medium'
-                                                      'rgba(255, 0, 0, 0.5)'      // Red for 'Large'
-                                                  ],
-                                                  // Border color for the bars
-                                                  borderColor: [
-                                                      'rgba(0, 255, 0, 1)',      // Green for 'Micro'
-                                                      'rgba(105, 105, 105, 1)',  // Secondary (Gray) for 'Small'
-                                                      'rgba(255, 193, 0, 1)',    // Yellow for 'Medium'
-                                                      'rgba(255, 0, 0, 1)'       // Red for 'Large'
-                                                  ],
-                                                  borderWidth: 1
-                                              }]
-                                          },
-                                          options: {
-                                              scales: {
-                                                  yAxes: [{
-                                                      ticks: {
-                                                          // Start y-axis from zero
-                                                          beginAtZero: true,
-                                                          // Set step size to 1 for whole numbers only
-                                                          stepSize: 1,
-                                                          // Format y-axis ticks with commas for better readability
-                                                          callback: function(value) {
-                                                              return Number(value).toLocaleString();
-                                                          }
-                                                      },
-                                                      // Label for the y-axis
-                                                      scaleLabel: {
-                                                          display: true,
-                                                          labelString: 'Number of SMEs'
-                                                      }
-                                                  }],
-                                                  xAxes: [{
-                                                      // Label for the x-axis
-                                                      scaleLabel: {
-                                                          display: true,
-                                                          labelString: 'Size of Business'
-                                                      }
-                                                  }]
-                                              }
-                                          }
-                                      });
-                                  });
-                          }
-      
-                          // Call the function to render the bar chart when the page is loaded
-                          document.addEventListener("DOMContentLoaded", fetchDataAndRenderBarChart);
-                      </script>
+                        // Function to fetch data from Django view and render the bar chart
+                        function fetchDataAndRenderBarChart() {
+                            // Fetch data from the Django view
+                            fetch("{% url 'size_of_business_data' %}")
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.labels.length === 0) {
+                                        // No data available, display a message
+                                        document.getElementById('sizeOfBusinessChart1').innerHTML = 'No data available';
+                                    } else {
+                                        // Data available, render the bar chart
+                                        var ctx = document.getElementById('sizeOfBusinessChart1').getContext('2d');
+                                        var myChart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: {
+                                                labels: data.labels,
+                                                datasets: [{
+                                                    // Label for the dataset
+                                                    label: 'Number of SMEs by Size of Business',
+                                                    // Data points
+                                                    data: data.data,
+                                                    // Background color for the bars
+                                                    backgroundColor: [
+                                                        'rgba(0, 255, 0, 0.8)',     // Green for 'Micro'
+                                                        'rgba(105, 105, 105, 0.5)', // Secondary (Gray) for 'Small'
+                                                        'rgba(255, 193, 7, 1)',   // Yellow for 'Medium'
+                                                        'rgba(255, 0, 0, 0.5)'      // Red for 'Large'
+                                                    ],
+                                                    // Border color for the bars
+                                                    borderColor: [
+                                                        'rgba(0, 255, 0, 1)',      // Green for 'Micro'
+                                                        'rgba(105, 105, 105, 1)',  // Secondary (Gray) for 'Small'
+                                                        'rgba(255, 193, 0, 1)',    // Yellow for 'Medium'
+                                                        'rgba(255, 0, 0, 1)'       // Red for 'Large'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                scales: {
+                                                    yAxes: [{
+                                                        ticks: {
+                                                            // Start y-axis from zero
+                                                            beginAtZero: true,
+                                                            // Set step size to 1 for whole numbers only
+                                                            stepSize: 1,
+                                                            // Format y-axis ticks with commas for better readability
+                                                            callback: function(value) {
+                                                                return Number(value).toLocaleString();
+                                                            }
+                                                        },
+                                                        // Label for the y-axis
+                                                        scaleLabel: {
+                                                            display: true,
+                                                            labelString: 'Number of SMEs'
+                                                        }
+                                                    }],
+                                                    xAxes: [{
+                                                        // Label for the x-axis
+                                                        scaleLabel: {
+                                                            display: true,
+                                                            labelString: 'Size of Business'
+                                                        }
+                                                    }]
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching data:', error);
+                                    // Display an error message
+                                    document.getElementById('sizeOfBusinessChart1').innerHTML = 'Error fetching data';
+                                });
+                        }
+                    
+                        // Call the function to render the bar chart when the page is loaded
+                        document.addEventListener("DOMContentLoaded", fetchDataAndRenderBarChart);
+                    </script>
+                    
                   </div>
               </div>
           </div>
@@ -227,50 +236,70 @@
                   <div class="card-body">
                       <canvas id="sizeOfBusinessChart2" width="400" height="300"></canvas>
                       <script>
-                          // Function to fetch data from Django view and render the pie chart
-                          function fetchDataAndRenderPieChart() {
-                              // Fetch data from the Django view
-                              fetch("{% url 'size_of_business_data' %}")
-                                  .then(response => response.json())
-                                  .then(data => {
-                                      // Extract labels and counts from the received data
-                                      const labels = Object.keys(data);
-                                      const counts = Object.values(data);
-                                      const ctx = document.getElementById('sizeOfBusinessChart2').getContext('2d');
-                                      const sizeOfBusinessChart2 = new Chart(ctx, {
-                                          type: 'pie',
-                                          data: {
-                                              labels: labels,
-                                              datasets: [{
-                                                  // Data points
-                                                  data: counts,
-                                                  // Background color for the slices
-                                                  backgroundColor: [
-                                                      'rgba(0, 255, 0, 0.8)',     // Green for 'Micro'
-                                                      'rgba(105, 105, 105, 0.5)', // Secondary (Gray) for 'Small'
-                                                      'rgba(255, 193, 7, 1)',   // Yellow for 'Medium'
-                                                      'rgba(255, 0, 0, 0.5)'      // Red for 'Large'
-                                                  ],
-                                                  // Border color for the bars
-                                                  borderColor: [
-                                                      'rgba(0, 255, 0, 1)',      // Green for 'Micro'
-                                                      'rgba(105, 105, 105, 1)',  // Secondary (Gray) for 'Small'
-                                                      'rgba(255, 193, 0, 1)',    // Yellow for 'Medium'
-                                                      'rgba(255, 0, 0, 1)'       // Red for 'Large'
-                                                  ],
-                                                  borderWidth: 1
-                                              }]
-                                          },
-                                          options: {
-                                              // Add options if needed
-                                          }
-                                      });
-                                  });
-                          }
-      
-                          // Call the function to render the pie chart when the page is loaded
-                          document.addEventListener("DOMContentLoaded", fetchDataAndRenderPieChart);
+                        // Function to fetch data from Django view and render the pie chart
+                        function fetchDataAndRenderPieChart() {
+                            // Fetch data from the Django view
+                            fetch("{% url 'size_of_business_data' %}")
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.labels.length === 0) {
+                                        // No data available, display a message
+                                        // No data available, display a message
+                                        var noDataText = document.createTextNode("No data available");
+                                        var chartContainer = document.getElementById('sizeOfBusinessChart2');
+                                        chartContainer.innerHTML = ''; // Clear any existing content
+                                        chartContainer.appendChild(noDataText);
+                                    } else {
+                                        // Data available, render the pie chart
+                                        var ctx = document.getElementById('sizeOfBusinessChart2').getContext('2d');
+                                        var myChart = new Chart(ctx, {
+                                            type: 'pie',
+                                            data: {
+                                                labels: data.labels,
+                                                datasets: [{
+                                                    // Data points
+                                                    data: data.data,
+                                                    // Background color for the segments
+                                                    backgroundColor: [
+                                                        'rgba(0, 255, 0, 0.8)',     // Green for 'Micro'
+                                                        'rgba(105, 105, 105, 0.5)', // Secondary (Gray) for 'Small'
+                                                        'rgba(255, 193, 7, 1)',   // Yellow for 'Medium'
+                                                        'rgba(255, 0, 0, 0.5)'      // Red for 'Large'
+                                                    ],
+                                                    // Border color for the segments
+                                                    borderColor: [
+                                                        'rgba(0, 255, 0, 1)',      // Green for 'Micro'
+                                                        'rgba(105, 105, 105, 1)',  // Secondary (Gray) for 'Small'
+                                                        'rgba(255, 193, 0, 1)',    // Yellow for 'Medium'
+                                                        'rgba(255, 0, 0, 1)'       // Red for 'Large'
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                scales: {
+                                                    yAxes: [{
+                                                        display: false // Hide the y-axis
+                                                    }],
+                                                    xAxes: [{
+                                                        display: false // Hide the x-axis
+                                                    }]
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching data:', error);
+                                    // Display an error message
+                                    document.getElementById('sizeOfBusinessChart2').innerHTML = 'Error fetching data';
+                                });
+                        }
+                    
+                        // Call the function to render the pie chart when the page is loaded
+                        document.addEventListener("DOMContentLoaded", fetchDataAndRenderPieChart);
                       </script>
+                    
                   </div>
               </div>
           </div>

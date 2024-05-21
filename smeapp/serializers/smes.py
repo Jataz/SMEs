@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import SME, CalculationScale, Province, District, SizeValue,UserProfile
+from ..models import SME, CalculationScale, Province, District, SizeValue,UserProfile, Ward
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
@@ -14,16 +14,20 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'first_name', 'last_name']  # Adjust as needed
 
-class DistrictSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = District
-        fields = ['id', 'district_name']
 
 class ProvinceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
         fields = ['id', 'province_name']
+class DistrictSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = District
+        fields = ['id', 'district_name']
 
+class WardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ward
+        fields = ['id', 'ward_name']
 class SizeValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = SizeValue
@@ -50,13 +54,14 @@ class SMESerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=20)
     province = ProvinceSerializer()
     district = DistrictSerializer()
+    ward = WardSerializer()
     calculation_scale = CalculationScaleSerializer(many=True)
     user_profile = UserProfileSerializer(read_only=True) 
 
     class Meta:
         model = SME
         fields = ('company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
-                  'product_service', 'province', 'district', 'number_of_employees', 
+                  'product_service', 'province', 'district','ward', 'number_of_employees', 
                   'asset_value', 'annual_revenue', 'calculation_scale','user_profile','age','sex')
         
     def validate_phone_number(self, value):

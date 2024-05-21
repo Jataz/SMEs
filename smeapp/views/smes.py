@@ -11,23 +11,40 @@ import json
 
 from .Calculations import calculate_rating, create_calculation_scale, determine_business_size, determine_size_of_annual_revenue, determine_size_of_asset_value, determine_size_of_employees
 
-from ..models import SME,Province,District,SizeValue,CalculationScale, UserProfile
+from ..models import SME,Province,District,SizeValue,CalculationScale, UserProfile, Ward
 
-from ..serializers import SMESerializer,ProvinceSerializer,DistrictSerializer
+from ..serializers import SMESerializer,ProvinceSerializer,DistrictSerializer,WardSerializer
 
 
 class ProvinceAPIView(APIView):
     def get(self, request):
-        provinces = Province.objects.all()
+        # Fetch all provinces and order them by province_name
+        provinces = Province.objects.all().order_by('province_name')
         serializer = ProvinceSerializer(provinces, many=True)
         return Response({'provinces': serializer.data})
-
+    
 class DistrictAPIView(APIView):
     def get(self, request):
         province_id = request.GET.get('province_id')
-        districts = District.objects.filter(province_id=province_id)
-        serializer = DistrictSerializer(districts, many=True)
-        return Response({'districts': serializer.data})
+        if province_id is not None:
+            # Fetch districts by province_id and order them by district_name
+            districts = District.objects.filter(province_id=province_id).order_by('district_name')
+            serializer = DistrictSerializer(districts, many=True)
+            return Response({'districts': serializer.data})
+        else:
+            return Response({'error': 'province_id parameter is required'}, status=400)
+
+class WardAPIView(APIView):
+    def get(self, request):
+        district_id = request.GET.get('district_id')
+        if district_id is not None:
+            # Fetch wards by district_id and order them by ward_name
+            wards = Ward.objects.filter(district_id=district_id).order_by('ward_name')
+            serializer = WardSerializer(wards, many=True)
+            return Response({'wards': sorted(serializer.data, key=lambda x: x['ward_name'])})
+        else:
+            return Response({'error': 'district_id parameter is required'}, status=400)
+
     
 class SMECreate(APIView):
     
@@ -103,6 +120,7 @@ def sme_record(request):
         product_service = form_data.get('product_service')
         province_id = form_data.get('province_id')
         district_id = form_data.get('district_id')
+        ward_id =form_data.get('ward_id')
         number_of_employees = int(form_data.get('number_of_employees'))  # Convert to integer
         asset_value = form_data.get('asset_value')
         annual_revenue = form_data.get('annual_revenue')
@@ -118,7 +136,7 @@ def sme_record(request):
         
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
-                    province_id, district_id, number_of_employees, asset_value, annual_revenue,age,sex]):
+                    province_id, district_id,ward_id, number_of_employees, asset_value, annual_revenue,age,sex]):
             return JsonResponse({'error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
@@ -126,7 +144,7 @@ def sme_record(request):
             try:
                 # Create SME record
                 sme = create_sme_record(company, contact_person, phone_number, email, address, sector,
-                                         type_of_business, product_service, province_id, district_id,
+                                         type_of_business, product_service, province_id, district_id,ward_id,
                                          number_of_employees, asset_value, annual_revenue,age,sex)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
@@ -152,7 +170,7 @@ def sme_record(request):
 
 
 def create_sme_record(company, contact_person, phone_number, email, address, sector,
-                      type_of_business, product_service, province_id, district_id,
+                      type_of_business, product_service, province_id, district_id,ward_id,
                       number_of_employees, asset_value, annual_revenue,age,sex):
     """Create an SME record."""
 
@@ -167,6 +185,7 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         product_service=product_service,
         province_id=province_id,
         district_id=district_id,
+        ward_id=ward_id,
         number_of_employees=number_of_employees,
         asset_value=asset_value,
         annual_revenue=annual_revenue,

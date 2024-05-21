@@ -27,10 +27,18 @@ class District(models.Model):
     def __str__(self):
         return self.district_name
 
+class Ward(models.Model):
+    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    ward_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.ward_name
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True, blank=True)
     district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True, blank=True)
+    ward = models.ForeignKey(Ward,on_delete=models.SET_NULL, null=True, blank=True)
     is_ward_level = models.BooleanField(default=False)
     is_district_level = models.BooleanField(default=False)
     is_province_level = models.BooleanField(default=False)
@@ -50,6 +58,7 @@ class SME(models.Model):
     product_service = models.CharField(max_length=500)
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
+    ward = models.ForeignKey(Ward,on_delete=models.SET_NULL, null=True, blank=True)
     number_of_employees = models.IntegerField()
     #size_of_business = models.ForeignKey(SizeValue, on_delete=models.CASCADE,null=True)
     asset_value= models.DecimalField(max_digits=15, decimal_places=2)
