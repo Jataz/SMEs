@@ -21,14 +21,14 @@ class Province(models.Model):
         return self.province_name
 
 class District(models.Model):
-    province = models.ForeignKey(Province, on_delete=models.CASCADE)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE,related_name='districts')
     district_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.district_name
 
 class Ward(models.Model):
-    district = models.ForeignKey(District, on_delete=models.CASCADE)
+    district = models.ForeignKey(District, on_delete=models.CASCADE,related_name='wards')
     ward_name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -45,7 +45,7 @@ class UserProfile(models.Model):
     is_national_level = models.BooleanField(default=False)
 
 class SME(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,blank=True)
     company = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
@@ -60,7 +60,6 @@ class SME(models.Model):
     district = models.ForeignKey(District, on_delete=models.CASCADE)
     ward = models.ForeignKey(Ward,on_delete=models.SET_NULL, null=True, blank=True)
     number_of_employees = models.IntegerField()
-    #size_of_business = models.ForeignKey(SizeValue, on_delete=models.CASCADE,null=True)
     asset_value= models.DecimalField(max_digits=15, decimal_places=2)
     annual_revenue = models.DecimalField(max_digits=15, decimal_places=2)
     

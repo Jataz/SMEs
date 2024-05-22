@@ -37,9 +37,9 @@ ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app'
 # Application definition
 
 INSTALLED_APPS = [
-    'material',
-    'material.admin',
-    #'django.contrib.admin',
+    #'material',
+    #'material.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'smeapp.apps.SmeappConfig',  # Custom app config
     'corsheaders',
     'rest_framework',
+    
 ]
 
 MIDDLEWARE = [

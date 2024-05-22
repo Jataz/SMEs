@@ -18,33 +18,31 @@ from ..serializers import SMESerializer,ProvinceSerializer,DistrictSerializer,Wa
 
 class ProvinceAPIView(APIView):
     def get(self, request):
-        # Fetch all provinces and order them by province_name
-        provinces = Province.objects.all().order_by('province_name')
+        provinces = Province.objects.all()
         serializer = ProvinceSerializer(provinces, many=True)
         return Response({'provinces': serializer.data})
-    
+
 class DistrictAPIView(APIView):
     def get(self, request):
         province_id = request.GET.get('province_id')
-        if province_id is not None:
-            # Fetch districts by province_id and order them by district_name
-            districts = District.objects.filter(province_id=province_id).order_by('district_name')
-            serializer = DistrictSerializer(districts, many=True)
-            return Response({'districts': serializer.data})
-        else:
-            return Response({'error': 'province_id parameter is required'}, status=400)
+        districts = District.objects.filter(province_id=province_id).order_by('district_name')
+        serializer = DistrictSerializer(districts, many=True)
+        return Response({'districts': serializer.data})
 
 class WardAPIView(APIView):
     def get(self, request):
         district_id = request.GET.get('district_id')
-        if district_id is not None:
-            # Fetch wards by district_id and order them by ward_name
-            wards = Ward.objects.filter(district_id=district_id).order_by('ward_name')
-            serializer = WardSerializer(wards, many=True)
-            return Response({'wards': sorted(serializer.data, key=lambda x: x['ward_name'])})
-        else:
-            return Response({'error': 'district_id parameter is required'}, status=400)
+        wards = Ward.objects.filter(district_id=district_id).order_by('ward_name')
+        serializer = WardSerializer(wards, many=True)
+        return Response({'wards': serializer.data})
+#For Admin Panel#
+def get_districts(request, province_id):
+    districts = list(District.objects.filter(province_id=province_id).values('id', 'district_name'))
+    return JsonResponse({'districts': districts})
 
+def get_wards(request, district_id):
+    wards = list(Ward.objects.filter(district_id=district_id).values('id', 'ward_name'))
+    return JsonResponse({'wards': wards})
     
 class SMECreate(APIView):
     

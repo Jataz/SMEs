@@ -1,7 +1,8 @@
 
 from django.urls import path
 
-from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_record,size_of_business_data
+from .views import SMEListView,SMECreate,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_record,size_of_business_data,\
+            get_districts,get_wards
 from . import views
 
 urlpatterns =[
@@ -14,6 +15,10 @@ urlpatterns =[
     path('provinces/', ProvinceAPIView.as_view(), name='provinces'),
     path('districts/', DistrictAPIView.as_view(), name='districts'),
     path('wards/', WardAPIView.as_view(), name='ward_data'),
+    
+    #Admin Panel
+    path('admin/get_districts/<int:province_id>/', views.get_districts, name='get_districts'),
+    path('admin/get_wards/<int:district_id>/', views.get_wards, name='get_wards'),
 
     #Frontend URLS
     path('dashboard/', views.index ,name='index'),
@@ -21,6 +26,6 @@ urlpatterns =[
     path('login/', views.UserLoginView.as_view(), name='login'),
     path('logout/', views.user_logout_view, name='logout'), 
     
-    #Testing
-    path('sme-record/', sme_record, name='sme-record'),
+    #Testing    
+
 ]

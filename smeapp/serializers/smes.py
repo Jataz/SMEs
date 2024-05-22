@@ -41,15 +41,15 @@ class CalculationScaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalculationScale
         fields = ('size_of_employees', 'size_of_annual_revenue', 'size_of_asset_value', 'rating', 'size_of_business')
-
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     province = ProvinceSerializer(read_only=True)
     district = DistrictSerializer(read_only=True)
+    ward = WardSerializer(read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'province', 'location']
+        fields = ['user', 'province', 'district', 'ward', 'is_ward_level', 'is_district_level', 'is_province_level', 'is_national_level']
 class SMESerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(validators=[phone_regex], max_length=20)
     province = ProvinceSerializer()
