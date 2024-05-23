@@ -276,33 +276,82 @@
                 modal.find('#type_of_business').val(data.type_of_business);
                 modal.find('#product_service').val(data.product_service);
     
-                // Populate province dropdown
-                // Populate province dropdown
                 $.ajax({
                     url: '/api/v1/provinces/',
                     dataType: 'json',
                     success: function(provinceData) {
                         var provinceDropdown = modal.find('#province-dropdown');
                         provinceDropdown.empty(); // Clear existing options
+                
+                        // Populate the province dropdown
                         $.each(provinceData.provinces, function(index, province) {
                             provinceDropdown.append('<option value="' + province.id + '">' + province.province_name + '</option>');
                         });
-
+                
                         // Select the province in the dropdown
                         provinceDropdown.val(data.province.id);
-
+                
                         // Trigger change event manually to populate district and ward dropdowns
                         provinceDropdown.change();
                     }
                 });
-
-                // Populate district dropdown
-                modal.find('#district-dropdown').empty();
-                modal.find('#district-dropdown').append(`<option value="${data.district.id}">${data.district.district_name}</option>`);
-    
-                // Populate ward dropdown
-                modal.find('#ward-dropdown').empty();
-                modal.find('#ward-dropdown').append(`<option value="${data.ward.id}">${data.ward.ward_name}</option>`);
+                
+                // Populate district dropdown based on selected province
+                modal.find('#province-dropdown').change(function() {
+                    var selectedProvinceId = $(this).val();
+                    var districtDropdown = modal.find('#district-dropdown');
+                    var wardDropdown = modal.find('#ward-dropdown');
+                
+                    // Clear existing options
+                    districtDropdown.empty();
+                    wardDropdown.empty();
+                
+                    if (selectedProvinceId) {
+                        // Fetch districts for the selected province
+                        $.ajax({
+                            url: `/api/v1/districts/?province_id=${selectedProvinceId}`,
+                            dataType: 'json',
+                            success: function(districtData) {
+                                // Append districts to the dropdown
+                                $.each(districtData.districts, function(index, district) {
+                                    districtDropdown.append(`<option value="${district.id}">${district.district_name}</option>`);
+                                });
+                
+                                // Trigger change event manually to populate ward dropdown
+                                districtDropdown.change();
+                            },
+                            error: function(error) {
+                                console.error('Error fetching districts:', error);
+                            }
+                        });
+                    }
+                });
+                
+                // Populate ward dropdown based on selected district
+                modal.find('#district-dropdown').change(function() {
+                    var selectedDistrictId = $(this).val();
+                    var wardDropdown = modal.find('#ward-dropdown');
+                
+                    // Clear existing options
+                    wardDropdown.empty();
+                
+                    if (selectedDistrictId) {
+                        // Fetch wards for the selected district
+                        $.ajax({
+                            url: `/api/v1/wards/?district_id=${selectedDistrictId}`,
+                            dataType: 'json',
+                            success: function(wardData) {
+                                // Append wards to the dropdown
+                                $.each(wardData.wards, function(index, ward) {
+                                    wardDropdown.append(`<option value="${ward.id}">${ward.ward_name}</option>`);
+                                });
+                            },
+                            error: function(error) {
+                                console.error('Error fetching wards:', error);
+                            }
+                        });
+                    }
+                });
     
                 modal.find('#number_of_employees').val(data.number_of_employees);
                 modal.find('#asset_value').val(data.asset_value);
