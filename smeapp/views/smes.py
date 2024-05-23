@@ -53,6 +53,9 @@ class SmeDetail(APIView):
         except SME.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+class SMEUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = SME.objects.all()
+    serializer_class = SMESerializer
   
 class SMECreate(APIView):
     

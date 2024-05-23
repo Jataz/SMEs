@@ -247,3 +247,115 @@
         });
     });
 </script>
+
+<script>
+    
+    
+    $('#editSmeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var smeId = button.data('sme-id'); // Extract info from data-* attributes
+        var modal = $(this);
+        console.log('SME ID:', smeId); // Log SME ID to ensure it is captured
+    
+        // Use AJAX or Fetch API to populate form fields with existing SME data
+        fetch(`/api/v1/sme-update/${smeId}/`)
+            .then(response => response.json())
+            .then(data => {
+                // Log fetched data
+                console.log('Fetched SME data:', data);
+    
+                // Populate form fields with retrieved data
+                modal.find('#company').val(data.company);
+                modal.find('#contact_person').val(data.contact_person);
+                modal.find('#phone_number').val(data.phone_number);
+                modal.find('#email').val(data.email);
+                modal.find('#address').val(data.address);
+                modal.find('#sector').val(data.sector);
+                modal.find('#sex').val(data.sex);
+                modal.find('#age').val(data.age);
+                modal.find('#type_of_business').val(data.type_of_business);
+                modal.find('#product_service').val(data.product_service);
+    
+                // Populate province dropdown
+                // Populate province dropdown
+                $.ajax({
+                    url: '/api/v1/provinces/',
+                    dataType: 'json',
+                    success: function(provinceData) {
+                        var provinceDropdown = modal.find('#province-dropdown');
+                        provinceDropdown.empty(); // Clear existing options
+                        $.each(provinceData.provinces, function(index, province) {
+                            provinceDropdown.append('<option value="' + province.id + '">' + province.province_name + '</option>');
+                        });
+
+                        // Select the province in the dropdown
+                        provinceDropdown.val(data.province.id);
+
+                        // Trigger change event manually to populate district and ward dropdowns
+                        provinceDropdown.change();
+                    }
+                });
+
+                // Populate district dropdown
+                modal.find('#district-dropdown').empty();
+                modal.find('#district-dropdown').append(`<option value="${data.district.id}">${data.district.district_name}</option>`);
+    
+                // Populate ward dropdown
+                modal.find('#ward-dropdown').empty();
+                modal.find('#ward-dropdown').append(`<option value="${data.ward.id}">${data.ward.ward_name}</option>`);
+    
+                modal.find('#number_of_employees').val(data.number_of_employees);
+                modal.find('#asset_value').val(data.asset_value);
+                modal.find('#annual_revenue').val(data.annual_revenue);
+            })
+            .catch(error => console.error('Error fetching SME data:', error));
+    });
+    
+    
+
+    document.getElementById('editSMEForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        // Collect form data
+        const formData = {
+            company: document.getElementById('company').value,
+            contact_person: document.getElementById('contact_person').value,
+            phone_number: document.getElementById('phone_number').value,
+            email: document.getElementById('email').value,
+            address: document.getElementById('address').value,
+            sector: document.getElementById('sector').value,
+            sex: document.getElementById('sex').value,
+            age: document.getElementById('age').value,
+            type_of_business: document.getElementById('type_of_business').value,
+            product_service: document.getElementById('product_service').value,
+            province: document.getElementById('province-dropdown').value,
+            district: document.getElementById('district-dropdown').value,
+            ward: document.getElementById('ward-dropdown').value,
+            number_of_employees: document.getElementById('number_of_employees').value,
+            asset_value: document.getElementById('asset_value').value,
+            annual_revenue: document.getElementById('annual_revenue').value
+        };
+
+        try {
+            const response = await fetch(`/api/v1/sme-update/${smeId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                const updatedSME = await response.json();
+                console.log('SME updated successfully:', updatedSME);
+                // Optionally close the modal and reset the form
+                $('#editSmeModal').modal('hide');
+                document.getElementById('editSMEForm').reset();
+            } else {
+                console.error('Failed to update SME:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error updating SME:', error);
+        }
+    });
+</script>
