@@ -27,7 +27,7 @@ class DistrictSerializer(serializers.ModelSerializer):
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['id', 'ward_name']
+        fields = ['id','district','ward_name']
 class SizeValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = SizeValue
@@ -60,7 +60,7 @@ class SMESerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SME
-        fields = ('company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
+        fields = ('id','company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
                   'product_service', 'province', 'district','ward', 'number_of_employees', 
                   'asset_value', 'annual_revenue', 'calculation_scale','user_profile','age','sex')
         

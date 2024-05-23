@@ -43,7 +43,17 @@ def get_districts(request, province_id):
 def get_wards(request, district_id):
     wards = list(Ward.objects.filter(district_id=district_id).values('id', 'ward_name'))
     return JsonResponse({'wards': wards})
-    
+
+class SmeDetail(APIView):
+    def get(self, request, pk):
+        try:
+            sme = SME.objects.get(id=pk)
+            serializer = SMESerializer(sme)
+            return Response(serializer.data)
+        except SME.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+  
 class SMECreate(APIView):
     
     permission_classes = [permissions.IsAuthenticated]

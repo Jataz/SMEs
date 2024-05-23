@@ -1,0 +1,165 @@
+<style>
+    /* Custom styles for modal */
+.modal-content {
+    border-radius: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #acc5df;
+    color: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: bold;
+    color: black;
+    align-content: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn-close {
+    color: #fff;
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    opacity: 0.7;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+label {
+    color: #333; /* Dark gray color */
+}
+
+</style>
+<!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" data-backdrop="static" id="viewSmeModal" tabindex="-1" role="dialog" aria-labelledby="viewSmeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="viewSmeModalLabel">Sme Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6" style="border-right: 1px solid #ccc;">
+                        <div class="form-group">
+                            <label for="contact-person" class="font-weight-bold">Contact Person:</label>
+                            <p id="contact-person" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="font-weight-bold">Gender:</label>
+                            <p id="sex" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="age" class="font-weight-bold">Age:</label>
+                            <p id="age" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number" class="font-weight-bold">Phone Number</label>
+                            <p id="phone-number" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="font-weight-bold">Email:</label>
+                            <p id="email" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="font-weight-bold">Address:</label>
+                            <p id="address" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sector" class="font-weight-bold">Sector:</label>
+                            <p id="sector" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="type-of-business" class="font-weight-bold">Type of Business:</label>
+                            <p id="type-of-business" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-service" class="font-weight-bold">Product/Service:</label>
+                            <p id="product-service" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="number-of-employees" class="font-weight-bold">Number of Employees</label>
+                            <p id="number-of-employees" class="form-control-static"></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="annual-revenue" class="font-weight-bold">Annual Turnover:</label>
+                            <p id="annual-revenue" class="form-control-static"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="asset-value" class="font-weight-bold">Assets Value:</label>
+                            <p id="asset-value" class="form-control-static"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="size" class="font-weight-bold">Size of Business:</label>
+                            <p id="size" class="form-control-static"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="divider" style="    height: 2px;
+                        background-color: #ccc;
+                        margin-top: 20px;
+                    "></div>
+                    </div>
+                </div>
+                
+                <div class="row g-2">
+                    <div class="col-md-12 d-flex flex-wrap align-items-center">
+                        <div class="mb-3 col-md-3">
+                            <div class="form-group">
+                                <label for="province" class="form-label">Province:</label>
+                                <p id="province" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="form-group">
+                                <label for="district" class="form-label">District:</label>
+                                <p id="district" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <div class="form-group">
+                                <label for="ward" class="form-label">Ward:</label>
+                                <p id="ward" class="form-control-static"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-dismiss="modal">Close</button>
+                </div>
+        </div>
+    </div>
+</div>
+
