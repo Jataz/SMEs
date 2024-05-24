@@ -182,9 +182,8 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
 def update_sme_record(request):
     if request.method == 'PUT':
         form_data = json.loads(request.body)
-        
-        # Retrieve form data
-        sme_id = form_data.get('id')
+         # Retrieve form data
+        sme_id = form_data.get('smeId')
         company = form_data.get('company')
         contact_person = form_data.get('contact_person')
         phone_number = form_data.get('phone_number')

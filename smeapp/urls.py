@@ -12,9 +12,8 @@ urlpatterns =[
     path('size-of-business-data/', size_of_business_data, name='size_of_business_data'),
     path('sme-detail/<int:pk>/', SmeDetail.as_view(), name='sme-detail'),
     path('sme-update/<int:pk>/', SMEUpdateView.as_view(), name='sme-update'),
-    path('sme/updates/', update_sme_record, name='update_sme_records'),
-    path('sme/update/<int:sme_id>/', update_sme_record, name='update_sme_record'),
-    #path('sme/',sme_in_user_province, name='sme'),
+    path('sme/update/', update_sme_record, name='update_sme_records'),
+  
 
     path('provinces/', ProvinceAPIView.as_view(), name='provinces'),
     path('districts/', DistrictAPIView.as_view(), name='districts'),
