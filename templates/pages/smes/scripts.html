@@ -249,14 +249,15 @@
 </script>
 
 <script>
-    
-    
+    //Updating details 
     $('#editSmeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var smeId = button.data('sme-id'); // Extract info from data-* attributes
         var modal = $(this);
         console.log('SME ID:', smeId); // Log SME ID to ensure it is captured
-    
+        // Store smeId in the form as a data attribute
+        $('#editSMEForm').data('sme-id', smeId);
+
         // Use AJAX or Fetch API to populate form fields with existing SME data
         fetch(`/api/v1/sme-update/${smeId}/`)
             .then(response => response.json())
@@ -276,36 +277,39 @@
                 modal.find('#type_of_business').val(data.type_of_business);
                 modal.find('#product_service').val(data.product_service);
     
+                // Populate province dropdown
                 $.ajax({
                     url: '/api/v1/provinces/',
                     dataType: 'json',
                     success: function(provinceData) {
                         var provinceDropdown = modal.find('#province-dropdown');
                         provinceDropdown.empty(); // Clear existing options
-                
-                        // Populate the province dropdown
                         $.each(provinceData.provinces, function(index, province) {
                             provinceDropdown.append('<option value="' + province.id + '">' + province.province_name + '</option>');
                         });
-                
+    
                         // Select the province in the dropdown
                         provinceDropdown.val(data.province.id);
-                
+    
                         // Trigger change event manually to populate district and ward dropdowns
                         provinceDropdown.change();
+                    },
+                    error: function(error) {
+                        console.error('Error fetching provinces:', error);
                     }
                 });
-                
-                // Populate district dropdown based on selected province
+    
+                // Handle change event for provinces dropdown
                 modal.find('#province-dropdown').change(function() {
                     var selectedProvinceId = $(this).val();
                     var districtDropdown = modal.find('#district-dropdown');
                     var wardDropdown = modal.find('#ward-dropdown');
-                
+    
                     // Clear existing options
                     districtDropdown.empty();
                     wardDropdown.empty();
-                
+                    wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
+    
                     if (selectedProvinceId) {
                         // Fetch districts for the selected province
                         $.ajax({
@@ -313,10 +317,14 @@
                             dataType: 'json',
                             success: function(districtData) {
                                 // Append districts to the dropdown
+                                districtDropdown.append('<option value="" selected disabled>Select District</option>');
                                 $.each(districtData.districts, function(index, district) {
                                     districtDropdown.append(`<option value="${district.id}">${district.district_name}</option>`);
                                 });
-                
+    
+                                // Select the district in the dropdown
+                                districtDropdown.val(data.district.id);
+    
                                 // Trigger change event manually to populate ward dropdown
                                 districtDropdown.change();
                             },
@@ -326,15 +334,16 @@
                         });
                     }
                 });
-                
+    
                 // Populate ward dropdown based on selected district
                 modal.find('#district-dropdown').change(function() {
                     var selectedDistrictId = $(this).val();
                     var wardDropdown = modal.find('#ward-dropdown');
-                
+    
                     // Clear existing options
                     wardDropdown.empty();
-                
+                    wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
+    
                     if (selectedDistrictId) {
                         // Fetch wards for the selected district
                         $.ajax({
@@ -345,6 +354,9 @@
                                 $.each(wardData.wards, function(index, ward) {
                                     wardDropdown.append(`<option value="${ward.id}">${ward.ward_name}</option>`);
                                 });
+    
+                                // Select the ward in the dropdown
+                                wardDropdown.val(data.ward.id);
                             },
                             error: function(error) {
                                 console.error('Error fetching wards:', error);
@@ -352,59 +364,128 @@
                         });
                     }
                 });
-    
+
                 modal.find('#number_of_employees').val(data.number_of_employees);
                 modal.find('#asset_value').val(data.asset_value);
                 modal.find('#annual_revenue').val(data.annual_revenue);
             })
             .catch(error => console.error('Error fetching SME data:', error));
     });
-    
-    
 
-    document.getElementById('editSMEForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        // Collect form data
-        const formData = {
-            company: document.getElementById('company').value,
-            contact_person: document.getElementById('contact_person').value,
-            phone_number: document.getElementById('phone_number').value,
-            email: document.getElementById('email').value,
-            address: document.getElementById('address').value,
-            sector: document.getElementById('sector').value,
-            sex: document.getElementById('sex').value,
-            age: document.getElementById('age').value,
-            type_of_business: document.getElementById('type_of_business').value,
-            product_service: document.getElementById('product_service').value,
-            province: document.getElementById('province-dropdown').value,
-            district: document.getElementById('district-dropdown').value,
-            ward: document.getElementById('ward-dropdown').value,
-            number_of_employees: document.getElementById('number_of_employees').value,
-            asset_value: document.getElementById('asset_value').value,
-            annual_revenue: document.getElementById('annual_revenue').value
-        };
-
-        try {
-            const response = await fetch(`/api/v1/sme-update/${smeId}/`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.ok) {
-                const updatedSME = await response.json();
-                console.log('SME updated successfully:', updatedSME);
-                // Optionally close the modal and reset the form
-                $('#editSmeModal').modal('hide');
-                document.getElementById('editSMEForm').reset();
-            } else {
-                console.error('Failed to update SME:', response.statusText);
+    // Function to get the CSRF token from the cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
-        } catch (error) {
-            console.error('Error updating SME:', error);
+        }
+        return cookieValue;
+    }
+
+    // Set up jQuery to include the CSRF token in the headers of all AJAX requests
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
         }
     });
+
+    // Event listener for form submission
+    $('#editSMEForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting via the browser
+    
+        var smeId = $(this).data('sme-id'); // Get the SME ID from the form data attribute
+        var form = $(this);
+    
+        // Append smeId to the form data
+        var formData = {
+            smeId: smeId,
+            company: form.find('#company').val().trim().toUpperCase(),
+            contact_person: form.find('#contact_person').val().trim().toUpperCase(),
+            age: form.find('#age').val(),
+            sex: form.find('#sex').val(),
+            phone_number: form.find('#phone_number').val().trim(),
+            email: form.find('#email').val().trim(),
+            address: form.find('#address').val().trim(),
+
+            province_id: form.find('#province-dropdown').val(),
+            district_id: form.find('#district-dropdown').val(),
+            ward_id: form.find('#ward-dropdown').val(),
+
+            sector: form.find('#sector').val(),
+            type_of_business: form.find('#type_of_business').val(),
+            product_service: form.find('#product_service').val().trim().toUpperCase(),
+
+            number_of_employees: form.find('#number_of_employees').val(),
+            asset_value: form.find('#asset_value').val(),
+            annual_revenue: form.find('#annual_revenue').val(),
+
+        };
+
+        console.log(formData);
+        
+    
+        $.ajax({
+            url: '/api/v1/sme/updates/',
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                console.log('SME updated successfully:', response);
+                showToast('success', 'Success', 'SME Record Updates successfully');
+                $("#editSmeModal").modal("hide");
+                $('#editSMEForm')[0].reset();
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000); // Delay for 3 seconds (adjust as needed)
+            },
+            error: function(xhr, status, error) {
+                console.error('Error submitting SME data:', error);
+            
+                // Initialize a variable to hold your error messages
+                let errorMessage = 'Failed to Uodate SME data. Please try again.';
+            
+                // Check if the xhr response has a JSON body
+                if (xhr.responseJSON) {
+                    const responseErrors = xhr.responseJSON;
+            
+                    // Initialize an array to collect error messages
+                    let errorMessages = [];
+            
+                    // Iterate over the object and collect error messages
+                    Object.keys(responseErrors).forEach(function(key) {
+                        const value = responseErrors[key];
+                        // Assuming each key's value is an array of error messages
+                        // Adjust if your error structure is different
+                        if (Array.isArray(value)) {
+                            value.forEach(function(message) {
+                                errorMessages.push(`${key}: ${message}`);
+                            });
+                        } else {
+                            // If the value is not an array, directly add it to the messages
+                            errorMessages.push(`${key}: ${value}`);
+                        }
+                    });
+            
+                    // Join all error messages into a single string, separated by semicolons
+                    if (errorMessages.length > 0) {
+                        errorMessage = errorMessages.join('; ');
+                    }
+                }
+            
+                // Display the error message
+                // Ensure your showToast function or equivalent can handle a plain text string
+                showToast('error', 'Error', errorMessage);
+            }
+        });
+    });  
+    
 </script>

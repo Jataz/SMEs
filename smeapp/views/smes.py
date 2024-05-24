@@ -9,7 +9,8 @@ from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from .Calculations import calculate_rating, create_calculation_scale, determine_business_size, determine_size_of_annual_revenue, determine_size_of_asset_value, determine_size_of_employees
+from .Calculations import calculate_rating, create_calculation_scale, determine_business_size, determine_size_of_annual_revenue, determine_size_of_asset_value,\
+    determine_size_of_employees,update_calculation_scale,update_sme_record_in_database
 
 from ..models import SME,Province,District,SizeValue,CalculationScale, UserProfile, Ward
 
@@ -52,37 +53,6 @@ class SmeDetail(APIView):
             return Response(serializer.data)
         except SME.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-class SMEUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = SME.objects.all()
-    serializer_class = SMESerializer
-  
-class SMECreate(APIView):
-    
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def post(self, request, *args, **kwargs):
-        serializer = SMESerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user_profile, created = UserProfile.objects.get_or_create(user=self.request.user)
-            serializer.save(user_profile=user_profile)
-            #serializer.save()
-            return Response({"message": "SME Record Created Successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def handle_exception(self, exc):
-        # Check if the exception is a ValidationError with non_field_errors
-        if hasattr(exc, 'get_full_details'):
-            error_detail = exc.get_full_details()
-            if 'non_field_errors' in error_detail:
-                # Extract the non-field error message
-                custom_error_message = error_detail['non_field_errors'][0]['message']
-                # Return a custom response format
-                return Response({"Error": custom_error_message}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Fallback to the default exception handling for other types of exceptions
-        return super().handle_exception(exc)
-
 class SMEListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -114,9 +84,13 @@ class SMEListView(APIView):
 
         # Return serialized data
         return Response(serializer.data)
-    
+
+class SMEUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = SME.objects.all()
+    serializer_class = SMESerializer
+  
 @csrf_exempt
-def sme_record(request):
+def sme_create_record(request):
     if request.method == 'POST':
         form_data = json.loads(request.body)
         
@@ -204,3 +178,68 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         sex=sex
     )
     return sme
+
+def update_sme_record(request):
+    if request.method == 'PUT':
+        form_data = json.loads(request.body)
+        
+        # Retrieve form data
+        sme_id = form_data.get('id')
+        company = form_data.get('company')
+        contact_person = form_data.get('contact_person')
+        phone_number = form_data.get('phone_number')
+        email = form_data.get('email')
+        address = form_data.get('address')
+        sector = form_data.get('sector')
+        type_of_business = form_data.get('type_of_business')
+        product_service = form_data.get('product_service')
+        province_id = form_data.get('province_id')
+        district_id = form_data.get('district_id')
+        ward_id = form_data.get('ward_id')
+        number_of_employees = form_data.get('number_of_employees')  # Convert to integer
+        asset_value = form_data.get('asset_value')
+        annual_revenue = form_data.get('annual_revenue')
+        age = form_data.get('age')
+        sex = form_data.get('sex')
+        
+        try:
+            number_of_employees = int(form_data.get('number_of_employees'))
+            annual_revenue = float(form_data.get('annual_revenue'))
+            asset_value = float(form_data.get('asset_value'))
+        except ValueError:
+            return JsonResponse({'error': 'Invalid value for annual revenue or asset value'}, status=400)
+
+        # Validate form data
+        if not all([sme_id, company, contact_person, phone_number, email, address, sector, type_of_business,
+                    product_service, province_id, district_id, ward_id, number_of_employees, asset_value,
+                    annual_revenue, age, sex]):
+            return JsonResponse({'error': 'Please fill in all fields'}, status=400)
+        
+        # Start a database transaction
+        with transaction.atomic():
+            try:
+                # Update SME record
+                update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
+                                              type_of_business, product_service, province_id, district_id, ward_id,
+                                              number_of_employees, asset_value, annual_revenue, age, sex)
+                
+                # Determine rating based on number_of_employees, annual_revenue, and asset_value
+                size_of_employees = determine_size_of_employees(number_of_employees)
+                size_of_annual_revenue = determine_size_of_annual_revenue(annual_revenue)
+                size_of_asset_value = determine_size_of_asset_value(asset_value)
+                rating = calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value)
+                
+                # Determine the size of the business based on rating
+                size_of_business = determine_business_size(rating)
+                
+                # Update CalculationScale record
+                update_calculation_scale(sme_id, size_of_employees, size_of_annual_revenue, size_of_asset_value,
+                                         rating, size_of_business)
+                
+                return JsonResponse({'success': 'SME updated successfully'}, status=200)
+                
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=400)
+    
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)

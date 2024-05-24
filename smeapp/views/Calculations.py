@@ -1,5 +1,5 @@
 
-from ..models import CalculationScale, SizeValue
+from ..models import SME, CalculationScale, SizeValue
 
 
 def determine_size_of_employees(number_of_employees):
@@ -66,3 +66,40 @@ def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, siz
         rating=rating,
         size_of_business=size_of_business
     )
+    
+
+def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
+                                  type_of_business, product_service, province_id, district_id, ward_id,
+                                  number_of_employees, asset_value, annual_revenue, age, sex):
+    # Assuming you have a model for SME records and CalculationScale records
+    sme = SME.objects.get(id=sme_id)
+    sme.company = company
+    sme.contact_person = contact_person
+    sme.phone_number = phone_number
+    sme.email = email
+    sme.address = address
+    sme.sector = sector
+    sme.type_of_business = type_of_business
+    sme.product_service = product_service
+    sme.province_id = province_id
+    sme.district_id = district_id
+    sme.ward_id = ward_id
+    sme.number_of_employees = number_of_employees
+    sme.asset_value = asset_value
+    sme.annual_revenue = annual_revenue
+    sme.age = age
+    sme.sex = sex
+    sme.save()
+
+
+def update_calculation_scale(sme_id, size_of_employees, size_of_annual_revenue, size_of_asset_value,
+                             rating, size_of_business):
+    # Assuming you have a model for CalculationScale records
+    calculation_scale = CalculationScale.objects.get(sme=sme_id)
+    calculation_scale.size_of_employees = size_of_employees
+    calculation_scale.size_of_annual_revenue = size_of_annual_revenue
+    calculation_scale.size_of_asset_value = size_of_asset_value
+    calculation_scale.rating = rating
+    calculation_scale.size_of_business = size_of_business
+    calculation_scale.save()
+

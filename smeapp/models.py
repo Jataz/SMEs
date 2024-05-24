@@ -45,7 +45,6 @@ class UserProfile(models.Model):
     is_national_level = models.BooleanField(default=False)
 
 class SME(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,blank=True)
     company = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
