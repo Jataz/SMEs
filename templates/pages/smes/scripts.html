@@ -254,17 +254,13 @@
         var button = $(event.relatedTarget); // Button that triggered the modal
         var smeId = button.data('sme-id'); // Extract info from data-* attributes
         var modal = $(this);
-        console.log('SME ID:', smeId); // Log SME ID to ensure it is captured
         // Store smeId in the form as a data attribute
         $('#editSMEForm').data('sme-id', smeId);
 
         // Use AJAX or Fetch API to populate form fields with existing SME data
         fetch(`/api/v1/sme-update/${smeId}/`)
             .then(response => response.json())
-            .then(data => {
-                // Log fetched data
-                console.log('Fetched SME data:', data);
-    
+            .then(data => {    
                 // Populate form fields with retrieved data
                 modal.find('#company').val(data.company);
                 modal.find('#contact_person').val(data.contact_person);
@@ -430,8 +426,6 @@
 
         };
 
-        console.log(formData);
-        
     
         $.ajax({
             url: '/api/v1/sme/update/',
