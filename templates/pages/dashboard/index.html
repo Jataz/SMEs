@@ -47,8 +47,31 @@
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
+        <div class="row justify-content-center">
+          <div class="col-lg-2 col-6 mb-3">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <div class="row">
+                  <div class="col-6">
+                    <h4 class="mb-1 mt-1"><span data-plugin="counterup">{{ total_count }}</span></h4>
+                  </div>
+                  <div class="col-6 text-right">
+                    <h4 class="mb-1 mt-1"><span data-plugin="counterup">{{total_percentage}}%</span></h4>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <p class="text-white mb-0">TOTAL</p>
+                </div>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-gra"></i>
+              </div>
+              <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        
+          <div class="col-lg-2 col-6 mb-3">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
@@ -70,8 +93,8 @@
               <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          
+          <div class="col-lg-2 col-6 mb-3">
             <!-- small box -->
             <div class="small-box bg-secondary">
               <div class="inner">
@@ -93,8 +116,8 @@
               <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          
+          <div class="col-lg-2 col-6 mb-3">
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
@@ -116,8 +139,8 @@
               <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          
+          <div class="col-lg-2 col-6 mb-3">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
@@ -139,8 +162,9 @@
               <a href="#" class="small-box-footer"> <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
         </div>
+        
+        
         <!-- /.row -->
         <div class="row">
           <div class="col-md-6 my-4">

@@ -34,8 +34,8 @@ def index(request):
     large_count = size_of_business_list.count('LARGE')
 
     total_count = len(size_of_business_list)
-    print(total_count)
-    
+
+    total_percentage = round((total_count / total_count) * 100, 2) if total_count > 0 else 0
     micro_percentage = round((micro_count / total_count) * 100, 2) if total_count > 0 else 0
     small_percentage = round((small_count / total_count) * 100, 2) if total_count > 0 else 0
     medium_percentage = round((medium_count / total_count) * 100, 2) if total_count > 0 else 0
@@ -51,7 +51,8 @@ def index(request):
         'small_percentage': small_percentage,
         'medium_percentage': medium_percentage,
         'large_percentage': large_percentage,
-
+        'total_percentage':total_percentage,
+        'total_count':total_count
     }
 
     return render(request, 'pages/dashboard/index.html', context)
