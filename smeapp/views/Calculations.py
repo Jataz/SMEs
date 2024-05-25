@@ -4,7 +4,7 @@ from ..models import SME, CalculationScale, SizeValue
 
 def determine_size_of_employees(number_of_employees):
     """Determine the size of employees based on the number of employees."""
-    if number_of_employees < 5:
+    if number_of_employees <= 5:
         return SizeValue.objects.get(size='MICRO')
     elif 5 <= number_of_employees <= 40:
         return SizeValue.objects.get(size='SMALL')
