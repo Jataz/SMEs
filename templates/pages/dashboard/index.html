@@ -269,14 +269,14 @@
                           yAxes: [{
                             ticks: {
                               beginAtZero: true,
-                              stepSize: 1,
+                              stepSize: 20,
                               callback: function(value) {
                                 return Number(value).toLocaleString();
                               }
                             },
                             scaleLabel: {
                               display: true,
-                              labelString: 'Number of SMEs'
+                              labelString: 'Number of SMEs in %'
                             }
                           }],
                           xAxes: [{
@@ -399,20 +399,20 @@
                           yAxes: [{
                             ticks: {
                               beginAtZero: true,
-                              stepSize: 1,
+                              stepSize: 20,
                               callback: function(value) {
                                 return Number(value).toLocaleString();
                               }
                             },
                             scaleLabel: {
                               display: true,
-                              labelString: 'Total Number'
+                              labelString: 'Total Number in %'
                             }
                           }],
                           xAxes: [{
                             scaleLabel: {
                               display: true,
-                              labelString: 'Gender'
+                              labelString: 'Sex'
                             }
                           }]
                         },

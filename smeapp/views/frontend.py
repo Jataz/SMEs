@@ -107,12 +107,15 @@ def size_of_business_data(request):
     # Count the occurrences of each size_of_business
     size_of_business_counts = Counter(size_of_businesses)
 
-    # Convert Counter object to dictionary
-    size_of_business_counts_dict = dict(size_of_business_counts)
+    # Calculate the total number of SMEs
+    total_smes = len(size_of_businesses)
+
+    # Calculate percentages for each size category
+    percentages = {size: (count / total_smes) * 100 for size, count in size_of_business_counts.items()}
 
     # Prepare data for Chart.js
-    labels = list(size_of_business_counts_dict.keys())
-    data = list(size_of_business_counts_dict.values())
+    labels = list(percentages.keys())
+    data = list(percentages.values())
 
     context = {
         'labels': labels,
@@ -133,16 +136,22 @@ def sex_data(request):
     else:
         sme_data = []
 
-    # Extract sex from each SME
-    sexes = [sme['sex'] for sme in sme_data if sme.get('sex')]
-
     # Count the occurrences of each sex
-    sex_counts = Counter(sexes)
-    print(sex_counts)
+    total_smes = len(sme_data)
+    sex_counts = {'Male': 0, 'Female': 0}
+    for sme in sme_data:
+        sex = sme.get('sex')
+        if sex in sex_counts:
+            sex_counts[sex] += 1
+
+    # Calculate percentages
+    percentages = {}
+    for sex, count in sex_counts.items():
+        percentages[sex] = round((count / total_smes) * 100)
 
     # Prepare data for Chart.js
-    labels = list(sex_counts.keys())
-    data = list(sex_counts.values())
+    labels = list(percentages.keys())
+    data = list(percentages.values())
 
     context = {
         'labels': labels,
