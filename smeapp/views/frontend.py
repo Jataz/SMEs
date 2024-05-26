@@ -89,13 +89,6 @@ def sme_list(request):
         # Handle the case where the request was not successful
         return render(request, 'error.html', {'message': 'Failed to fetch SMEs data'})
     
-def size_of_business_dat(request):
-    # Query the database to get the count of each size_of_business category
-    size_of_business_counts = Counter(CalculationScale.objects.values_list('size_of_business__size', flat=True))
-    print(size_of_business_counts)
-
-    return JsonResponse(size_of_business_counts)
-
 def size_of_business_data(request):
     session_id = request.COOKIES.get('sessionid')
     response = requests.get(
@@ -120,6 +113,36 @@ def size_of_business_data(request):
     # Prepare data for Chart.js
     labels = list(size_of_business_counts_dict.keys())
     data = list(size_of_business_counts_dict.values())
+
+    context = {
+        'labels': labels,
+        'data': data,
+    }
+
+    return JsonResponse(context)
+
+def sex_data(request):
+    session_id = request.COOKIES.get('sessionid')
+    response = requests.get(
+        f'{settings.API_BASE_URL}/api/v1/smes/',
+        cookies={'sessionid': session_id} if session_id else {}
+    )
+
+    if response.status_code == 200:
+        sme_data = response.json()
+    else:
+        sme_data = []
+
+    # Extract sex from each SME
+    sexes = [sme['sex'] for sme in sme_data if sme.get('sex')]
+
+    # Count the occurrences of each sex
+    sex_counts = Counter(sexes)
+    print(sex_counts)
+
+    # Prepare data for Chart.js
+    labels = list(sex_counts.keys())
+    data = list(sex_counts.values())
 
     context = {
         'labels': labels,

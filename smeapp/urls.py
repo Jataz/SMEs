@@ -2,18 +2,20 @@
 from django.urls import path
 
 from .views import SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_create_record,size_of_business_data,\
-            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record
+            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record,sex_data
 from . import views
 
 urlpatterns =[
     #API
     path('smes/', SMEListView.as_view(), name='smes'),
     path('sme-create/',sme_create_record,name="sme-create"),
-    path('size-of-business-data/', size_of_business_data, name='size_of_business_data'),
     path('sme-detail/<int:pk>/', SmeDetail.as_view(), name='sme-detail'),
     path('sme-update/<int:pk>/', SMEUpdateView.as_view(), name='sme-update'),
     path('sme/update/', update_sme_record, name='update_sme_records'),
-  
+    
+    #Graphs
+    path('size-of-business-data/', size_of_business_data, name='size_of_business_data'),
+    path('sex-data/', sex_data, name='sex_data'),
 
     path('provinces/', ProvinceAPIView.as_view(), name='provinces'),
     path('districts/', DistrictAPIView.as_view(), name='districts'),

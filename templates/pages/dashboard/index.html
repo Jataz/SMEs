@@ -176,6 +176,37 @@
                 <div class="card-tools">
                   <ul class="nav nav-pills ml-auto">
                     <li class="nav-item">
+                      <a class="nav-link active" href="#size-business-bar-chart" data-toggle="tab">Bar</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#size-business-pie-chart" data-toggle="tab">Pie</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="size-business-bar-chart" style="position: relative; height: 300px;">
+                    <canvas id="size-business-bar-chart-canvas" height="300" style="height: 300px; width: 100%;"></canvas>
+                  </div>
+                  <div class="chart tab-pane" id="size-business-pie-chart" style="position: relative; height: 300px;">
+                    <canvas id="size-business-pie-chart-canvas" height="300" style="height: 300px; width: 100%;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 my-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i>
+                  Gender
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
                       <a class="nav-link active" href="#gender-bar-chart" data-toggle="tab">Bar</a>
                     </li>
                     <li class="nav-item">
@@ -196,44 +227,143 @@
               </div>
             </div>
           </div>
-          
-          <div class="col-md-6 my-4">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-chart-pie mr-1"></i>
-                  Gender
-                </h3>
-                <div class="card-tools">
-                  <ul class="nav nav-pills ml-auto">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="#bar-chart" data-toggle="tab">Bar</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#pie-chart" data-toggle="tab">Pie</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="tab-content p-0">
-                  <div class="chart tab-pane active" id="bar-chart" style="position: relative; height: 300px;">
-                    <canvas id="bar-chart-canvas" height="300" style="height: 300px; width: 100%;"></canvas>
-                  </div>
-                  <div class="chart tab-pane" id="pie-chart" style="position: relative; height: 300px;">
-                    <canvas id="pie-chart-canvas" height="300" style="height: 300px; width: 100%;"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         
         <script>
           document.addEventListener("DOMContentLoaded", function() {
             // Fetch data and render bar chart
-            function fetchDataAndRenderBarChart() {
+            function fetchDataAndRenderSizeBarChart() {
               fetch("{% url 'size_of_business_data' %}")
+                .then(response => response.json())
+                .then(data => {
+                  if (data.labels.length === 0) {
+                    document.getElementById('size-business-bar-chart-canvas').innerHTML = 'No data available';
+                  } else {
+                    var ctx = document.getElementById('size-business-bar-chart-canvas').getContext('2d');
+                    var barChart = new Chart(ctx, {
+                      type: 'bar',
+                      data: {
+                        labels: data.labels,
+                        datasets: [{
+                          label: '', // Set label to an empty string
+                          data: data.data,
+                          backgroundColor: [
+                            'rgba(0, 255, 0, 0.8)',
+                            'rgba(105, 105, 105, 0.5)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 0, 0, 0.5)'
+                          ],
+                          borderColor: [
+                            'rgba(0, 255, 0, 1)',
+                            'rgba(105, 105, 105, 1)',
+                            'rgba(255, 193, 0, 1)',
+                            'rgba(255, 0, 0, 1)'
+                          ],
+                          borderWidth: 1,
+                        }]
+                      },
+                      options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          yAxes: [{
+                            ticks: {
+                              beginAtZero: true,
+                              stepSize: 1,
+                              callback: function(value) {
+                                return Number(value).toLocaleString();
+                              }
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Number of SMEs'
+                            }
+                          }],
+                          xAxes: [{
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Size of Business'
+                            }
+                          }]
+                        },
+                        // Hide legend
+                        legend: {
+                          display: false
+                        }
+                      }
+                    });
+                  }
+                })
+                .catch(error => {
+                  console.error('Error fetching data:', error);
+                  document.getElementById('size-business-bar-chart-canvas').innerHTML = 'Error fetching data';
+                });
+            }
+        
+            // Fetch data and render pie chart
+            function fetchDataAndRenderSizePieChart() {
+              fetch("{% url 'size_of_business_data' %}")
+                .then(response => response.json())
+                .then(data => {
+                  if (data.labels.length === 0) {
+                    var noDataText = document.createTextNode("No data available");
+                    var chartContainer = document.getElementById('size-business-pie-chart-canvas');
+                    chartContainer.innerHTML = ''; // Clear any existing content
+                    chartContainer.appendChild(noDataText);
+                  } else {
+                    var ctx = document.getElementById('size-business-pie-chart-canvas').getContext('2d');
+                    var pieChart = new Chart(ctx, {
+                      type: 'pie',
+                      data: {
+                        labels: data.labels,
+                        datasets: [{
+                          data: data.data,
+                          backgroundColor: [
+                            'rgba(0, 255, 0, 0.8)',
+                            'rgba(105, 105, 105, 0.5)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 0, 0, 0.5)'
+                          ],
+                          borderColor: [
+                            'rgba(0, 255, 0, 1)',
+                            'rgba(105, 105, 105, 1)',
+                            'rgba(255, 193, 0, 1)',
+                            'rgba(255, 0, 0, 1)'
+                          ],
+                          borderWidth: 1
+                        }]
+                      },
+                      options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                      }
+                    });
+                  }
+                })
+                .catch(error => {
+                  console.error('Error fetching data:', error);
+                  document.getElementById('size-business-pie-chart-canvas').innerHTML = 'Error fetching data';
+                });
+            }
+        
+            fetchDataAndRenderSizeBarChart();
+            fetchDataAndRenderSizePieChart();
+        
+            // Ensure charts are re-rendered when switching tabs
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+              var target = $(e.target).attr("href"); // activated tab
+              if (target === '#size-business-bar-chart') {
+                fetchDataAndRenderSizeBarChart();
+              } else if (target === '#size-business-pie-chart') {
+                fetchDataAndRenderSizePieChart();
+              }
+            });
+          });
+
+          document.addEventListener("DOMContentLoaded", function() {
+            // Fetch data and render bar chart
+            function fetchDataAndRenderGenderBarChart() {
+              fetch("{% url 'sex_data' %}")
                 .then(response => response.json())
                 .then(data => {
                   if (data.labels.length === 0) {
@@ -301,8 +431,8 @@
             }
         
             // Fetch data and render pie chart
-            function fetchDataAndRenderPieChart() {
-              fetch("{% url 'size_of_business_data' %}")
+            function fetchDataAndRenderGenderPieChart() {
+              fetch("{% url 'sex_data' %}")
                 .then(response => response.json())
                 .then(data => {
                   if (data.labels.length === 0) {
@@ -346,16 +476,16 @@
                 });
             }
         
-            fetchDataAndRenderBarChart();
-            fetchDataAndRenderPieChart();
+            fetchDataAndRenderGenderBarChart();
+            fetchDataAndRenderGenderPieChart();
         
             // Ensure charts are re-rendered when switching tabs
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
               var target = $(e.target).attr("href"); // activated tab
               if (target === '#gender-bar-chart') {
-                fetchDataAndRenderBarChart();
+                fetchDataAndRenderGenderBarChart();
               } else if (target === '#gender-pie-chart') {
-                fetchDataAndRenderPieChart();
+                fetchDataAndRenderGenderPieChart();
               }
             });
           });
