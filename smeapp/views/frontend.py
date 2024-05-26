@@ -23,10 +23,21 @@ def index(request):
         sme_data = response.json()
     else:
         sme_data = []
+    
+        # Initialize counters
+    male_count = 0
+    female_count = 0
+
+    # Iterate through the sme_data and count males and females
+    for sme in sme_data:
+        if sme.get('sex') == 'Male':
+            male_count += 1
+        elif sme.get('sex') == 'Female':
+            female_count += 1
 
     # Process the data to extract size_of_business
     size_of_business_list = [sme['calculation_scale'][0]['size_of_business']['size'] for sme in sme_data if sme.get('calculation_scale')]
-    print(size_of_business_list)
+    #print(size_of_business_list)
     # Count occurrences of each size_of_business
     micro_count = size_of_business_list.count('MICRO')
     small_count = size_of_business_list.count('SMALL')
@@ -52,7 +63,9 @@ def index(request):
         'medium_percentage': medium_percentage,
         'large_percentage': large_percentage,
         'total_percentage':total_percentage,
-        'total_count':total_count
+        'total_count':total_count,
+        'male_count': male_count,
+        'female_count': female_count
     }
 
     return render(request, 'pages/dashboard/index.html', context)
