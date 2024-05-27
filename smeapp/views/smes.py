@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 import json
 
 from .Calculations import calculate_rating, create_calculation_scale, determine_business_size, determine_size_of_annual_revenue, determine_size_of_asset_value,\
@@ -94,6 +95,13 @@ def sme_create_record(request):
     if request.method == 'POST':
         form_data = json.loads(request.body)
         
+        # Retrieve user's profile
+        user = request.user
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+        except UserProfile.DoesNotExist:
+            return JsonResponse({'error': 'User profile does not exist. Please create a profile first.'}, status=400)
+        
         # Retrieve form data
         company = form_data.get('company')
         contact_person = form_data.get('contact_person')
@@ -118,10 +126,14 @@ def sme_create_record(request):
         except ValueError:
             return JsonResponse({'error': 'Invalid value for annual revenue or asset value'}, status=400)
 
+        # Retrieve province, district, and ward from user's profile
+        province_id = user_profile.province_id
+        district_id = user_profile.district_id
+        ward_id = user_profile.ward_id
         
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
-                    province_id, district_id,ward_id, number_of_employees, asset_value, annual_revenue,age,sex]):
+                    number_of_employees, asset_value, annual_revenue,age,sex]):
             return JsonResponse({'error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
