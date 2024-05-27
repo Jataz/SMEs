@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="row g-2">
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <div class="form-group">
                                 <label for="sector">Sector</label>
                                 <select class="form-control select2" id="sector" name="sector">
@@ -109,27 +109,42 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <div class="form-group">
                                 <label for="type_of_business">Type of Business</label>
                                 <select class="form-control select2" id="type_of_business" name="type_of_business">
                                     <option selected="selected" disabled="disabled">Select Type of Business</option>
-                                    <option value="Pvt Ltd">Pvt Ltd</option>
+                                    <option value="PVT Ltd">PVT Ltd</option>
                                     <option value="Pbc">PBC</option>
                                     <option value="Cooperative">Cooperative</option>
-                                    <option value="Partnership">Partnership</option>
-                                    <option value="Sole Trader">Sole Trader</option>
+                                    <option value="Partnership Registered">Partnership Registered</option>
+                                    <option value="Partnership Unregistered">Partnership Unregistered</option>
+                                    <option value="Sole Trader Registered">Sole Trader Registered</option>
+                                    <option value="Sole Trader UnRegistered">Sole Trader Unregistered</option>
                                 </select> 
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-3 col-md-4">
+                    <div class="row g-2">
+                        <div class="mb-3 col-md-6">
                             <div class="form-group">
-                                <label for="product_service">Product/Service</label>
+                                <label for="product_service">Product or Service</label>
                                 <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required>   
                             </div>
                         </div>
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="">Exports</label>
+                                <select class="form-control select2" id="export" name="export">
+                                    <option selected="selected" disabled="disabled">Select</option>
+                                    <option value="YES">YES</option>
+                                    <option value="NO">NO</option>
+                                </select> 
+                            </div>
+                        </div>
                     </div>
+                    
 
                     <div class="row g-2">
                         <div class="mb-3 col-md-4">
@@ -149,6 +164,14 @@
                             <div class="form-group">
                                 <label for="asset_value">Assets Value</label>
                                 <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-12">
+                            <div class="form-group">
+                                <label for="asset_value">Challenges or Recommendations</label>
+                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges or Recomendations"></textarea>   
                             </div>
                         </div>
                     </div>

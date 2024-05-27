@@ -57,10 +57,13 @@ class SME(models.Model):
     product_service = models.CharField(max_length=500)
     province = models.ForeignKey(Province, on_delete=models.CASCADE)
     district = models.ForeignKey(District, on_delete=models.CASCADE)
-    ward = models.ForeignKey(Ward,on_delete=models.SET_NULL, null=True, blank=True)
+    ward = models.ForeignKey(Ward,on_delete=models.CASCADE)
+    export = models.CharField(max_length=10)
+    comments = models.CharField(max_length=10000)
     number_of_employees = models.IntegerField()
     asset_value= models.DecimalField(max_digits=15, decimal_places=2)
     annual_revenue = models.DecimalField(max_digits=15, decimal_places=2)
+    
     
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)

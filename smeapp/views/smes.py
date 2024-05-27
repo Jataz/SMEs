@@ -119,6 +119,8 @@ def sme_create_record(request):
         annual_revenue = form_data.get('annual_revenue')
         age = form_data.get('age')
         sex = form_data.get('sex')
+        export = form_data.get('export')
+        comments = form_data.get('comments')
         
         try:
             annual_revenue = int(form_data.get('annual_revenue'))
@@ -133,7 +135,7 @@ def sme_create_record(request):
         
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
-                    number_of_employees, asset_value, annual_revenue,age,sex]):
+                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments]):
             return JsonResponse({'error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
@@ -142,7 +144,7 @@ def sme_create_record(request):
                 # Create SME record
                 sme = create_sme_record(company, contact_person, phone_number, email, address, sector,
                                          type_of_business, product_service, province_id, district_id,ward_id,
-                                         number_of_employees, asset_value, annual_revenue,age,sex)
+                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)
@@ -168,7 +170,7 @@ def sme_create_record(request):
 
 def create_sme_record(company, contact_person, phone_number, email, address, sector,
                       type_of_business, product_service, province_id, district_id,ward_id,
-                      number_of_employees, asset_value, annual_revenue,age,sex):
+                      number_of_employees, asset_value, annual_revenue,age,sex,export,comments):
     """Create an SME record."""
 
     sme = SME.objects.create(
@@ -187,7 +189,9 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         asset_value=asset_value,
         annual_revenue=annual_revenue,
         age=age,
-        sex=sex
+        sex=sex,
+        export=export,
+        comments=comments
     )
     return sme
 
@@ -204,15 +208,16 @@ def update_sme_record(request):
         sector = form_data.get('sector')
         type_of_business = form_data.get('type_of_business')
         product_service = form_data.get('product_service')
-        province_id = form_data.get('province_id')
-        district_id = form_data.get('district_id')
-        ward_id = form_data.get('ward_id')
+        #province_id = form_data.get('province_id')
+        #district_id = form_data.get('district_id')
+        #ward_id = form_data.get('ward_id')
         number_of_employees = form_data.get('number_of_employees')  # Convert to integer
         asset_value = form_data.get('asset_value')
         annual_revenue = form_data.get('annual_revenue')
         age = form_data.get('age')
         sex = form_data.get('sex')
-        
+        export = form_data.get('export')
+        comments = form_data.get('comments')
         try:
             number_of_employees = int(form_data.get('number_of_employees'))
             annual_revenue = float(form_data.get('annual_revenue'))
@@ -222,8 +227,7 @@ def update_sme_record(request):
 
         # Validate form data
         if not all([sme_id, company, contact_person, phone_number, email, address, sector, type_of_business,
-                    product_service, province_id, district_id, ward_id, number_of_employees, asset_value,
-                    annual_revenue, age, sex]):
+                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments]):
             return JsonResponse({'error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
@@ -231,8 +235,7 @@ def update_sme_record(request):
             try:
                 # Update SME record
                 update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                              type_of_business, product_service, province_id, district_id, ward_id,
-                                              number_of_employees, asset_value, annual_revenue, age, sex)
+                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)

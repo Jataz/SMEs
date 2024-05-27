@@ -90,7 +90,9 @@
                 asset_value: $("#asset_value").val(),
                 annual_revenue: $("#annual_revenue").val(),
                 age: $("#age").val(),
-                sex: $("#sex").val()
+                sex: $("#sex").val(),
+                export: $("#export").val(),
+                comments: $("#comments").val()
             };
     
             // Send AJAX request to submit form data
@@ -231,6 +233,8 @@
                     modal.find('.modal-body #number-of-employees').text(data.number_of_employees);
                     modal.find('.modal-body #asset-value').text(data.asset_value);
                     modal.find('.modal-body #annual-revenue').text(data.annual_revenue);
+                    modal.find('.modal-body #export').text(data.export);
+                    modal.find('.modal-body #comments').text(data.comments);
 
                     modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);
 
@@ -269,95 +273,11 @@
                 modal.find('#age').val(data.age);
                 modal.find('#type_of_business').val(data.type_of_business);
                 modal.find('#product_service').val(data.product_service);
+                modal.find('#export').val(data.export);
+                modal.find('#comments').val(data.comments);
     
                 // Populate province dropdown
-                $.ajax({
-                    url: '/api/v1/provinces/',
-                    dataType: 'json',
-                    success: function(provinceData) {
-                        var provinceDropdown = modal.find('#province-dropdown');
-                        provinceDropdown.empty(); // Clear existing options
-                        $.each(provinceData.provinces, function(index, province) {
-                            provinceDropdown.append('<option value="' + province.id + '">' + province.province_name + '</option>');
-                        });
-    
-                        // Select the province in the dropdown
-                        provinceDropdown.val(data.province.id);
-    
-                        // Trigger change event manually to populate district and ward dropdowns
-                        provinceDropdown.change();
-                    },
-                    error: function(error) {
-                        console.error('Error fetching provinces:', error);
-                    }
-                });
-    
-                // Handle change event for provinces dropdown
-                modal.find('#province-dropdown').change(function() {
-                    var selectedProvinceId = $(this).val();
-                    var districtDropdown = modal.find('#district-dropdown');
-                    var wardDropdown = modal.find('#ward-dropdown');
-    
-                    // Clear existing options
-                    districtDropdown.empty();
-                    wardDropdown.empty();
-                    wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
-    
-                    if (selectedProvinceId) {
-                        // Fetch districts for the selected province
-                        $.ajax({
-                            url: `/api/v1/districts/?province_id=${selectedProvinceId}`,
-                            dataType: 'json',
-                            success: function(districtData) {
-                                // Append districts to the dropdown
-                                districtDropdown.append('<option value="" selected disabled>Select District</option>');
-                                $.each(districtData.districts, function(index, district) {
-                                    districtDropdown.append(`<option value="${district.id}">${district.district_name}</option>`);
-                                });
-    
-                                // Select the district in the dropdown
-                                districtDropdown.val(data.district.id);
-    
-                                // Trigger change event manually to populate ward dropdown
-                                districtDropdown.change();
-                            },
-                            error: function(error) {
-                                console.error('Error fetching districts:', error);
-                            }
-                        });
-                    }
-                });
-    
-                // Populate ward dropdown based on selected district
-                modal.find('#district-dropdown').change(function() {
-                    var selectedDistrictId = $(this).val();
-                    var wardDropdown = modal.find('#ward-dropdown');
-    
-                    // Clear existing options
-                    wardDropdown.empty();
-                    wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
-    
-                    if (selectedDistrictId) {
-                        // Fetch wards for the selected district
-                        $.ajax({
-                            url: `/api/v1/wards/?district_id=${selectedDistrictId}`,
-                            dataType: 'json',
-                            success: function(wardData) {
-                                // Append wards to the dropdown
-                                $.each(wardData.wards, function(index, ward) {
-                                    wardDropdown.append(`<option value="${ward.id}">${ward.ward_name}</option>`);
-                                });
-    
-                                // Select the ward in the dropdown
-                                wardDropdown.val(data.ward.id);
-                            },
-                            error: function(error) {
-                                console.error('Error fetching wards:', error);
-                            }
-                        });
-                    }
-                });
-
+                
                 modal.find('#number_of_employees').val(data.number_of_employees);
                 modal.find('#asset_value').val(data.asset_value);
                 modal.find('#annual_revenue').val(data.annual_revenue);
@@ -409,9 +329,9 @@
             email: form.find('#email').val().trim(),
             address: form.find('#address').val().trim(),
 
-            province_id: form.find('#province-dropdown').val(),
-            district_id: form.find('#district-dropdown').val(),
-            ward_id: form.find('#ward-dropdown').val(),
+            //province_id: form.find('#province-dropdown').val(),
+            //district_id: form.find('#district-dropdown').val(),
+            //ward_id: form.find('#ward-dropdown').val(),
 
             sector: form.find('#sector').val(),
             type_of_business: form.find('#type_of_business').val(),
@@ -420,6 +340,8 @@
             number_of_employees: form.find('#number_of_employees').val(),
             asset_value: form.find('#asset_value').val(),
             annual_revenue: form.find('#annual_revenue').val(),
+            export: form.find('#export').val(),
+            comments: form.find('#comments').val(),
 
         };
 
