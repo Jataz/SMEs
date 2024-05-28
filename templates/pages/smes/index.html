@@ -20,8 +20,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">SMEs</li>
+              <li class="breadcrumb-sme"><a href="#">Home</a></li>
+              <li class="breadcrumb-sme active">SMEs</li>
             </ol>
           </div>
         </div>
@@ -61,12 +61,23 @@
                     <tr>
                       <th>No.</th>
                       <th>Company</th>
-                      <th>Province</th>
-                      <th>District</th>
-                      <th>Ward</th>
-                      <th>Type of Business</th>
-                      <th>Product/Service</th>
-                      <th>Gender</th>
+                      <th>Contact Person</th>
+                      <th hidden>Phone Number</th>
+                      <th hidden>Email</th>
+                      <th hidden>Address</th>
+                      <th hidden>Sector</th>
+                      <th>Sex</th>
+                      <th hidden>Age</th>
+                      <th hidden>Type of Business</th>
+                      <th hidden>Product/Service</th>
+                      <th hidden>Province</th>
+                      <th hidden>District</th>
+                      <th hidden>Ward</th>
+                      <th>Export</th>
+                      <th hidden>Comments</th>
+                      <th>Number of Employees</th>
+                      <th>Asset Value</th>
+                      <th>Annual Revenue</th>
                       <th>Size of Business</th>
                       <th>Actions</th>
                     </tr>
@@ -76,12 +87,23 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ sme.company }}</td>
-                        <td>{{ sme.province.province_name }}</td>
-                        <td>{{ sme.district.district_name }}</td>
-                        <td>{{ sme.ward.ward_name }}</td>
-                        <td>{{ sme.type_of_business }}</td>
-                        <td>{{ sme.product_service }}</td>
+                        <td>{{ sme.contact_person }}</td>
+                        <td hidden>{{ sme.phone_number }}</td>
+                        <td hidden>{{ sme.email }}</td>
+                        <td hidden>{{ sme.address }}</td>
+                        <td hidden>{{ sme.sector }}</td>
                         <td>{{ sme.sex }}</td>
+                        <td hidden>{{ sme.age }}</td>
+                        <td hidden>{{ sme.type_of_business }}</td>
+                        <td hidden>{{ sme.product_service }}</td>
+                        <td hidden>{{ sme.province.province_name }}</td>
+                        <td hidden>{{ sme.district.district_name }}</td>
+                        <td hidden>{{ sme.ward.ward_name }}</td>
+                        <td>{{ sme.export }}</td>
+                        <td hidden>{{ sme.comments }}</td>
+                        <td>{{ sme.number_of_employees }}</td>
+                        <td>{{ sme.asset_value }}</td>
+                        <td>{{ sme.annual_revenue }}</td>
                         {% for scale in sme.calculation_scale %}
                         <!-- Access size_of_business for each scale -->
                         <td>{{ scale.size_of_business.size }}</td>
