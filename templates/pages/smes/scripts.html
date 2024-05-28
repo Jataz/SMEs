@@ -75,24 +75,68 @@
         $('#addSMEForm').submit(function(event) {
             // Prevent default form submission
             event.preventDefault();
-    
-            // Get form data
+
+            // Validation patterns
+            var wordPattern = /^[A-Za-z\s]+$/;
+            var phonePattern = /^07\d{8}$/;
+
+            // Get the form values
+            var company = $("#company").val().trim().toUpperCase();
+            var contact_person = $("#contact_person").val().trim().toUpperCase();
+            var phone_number = $("#phone_number").val().trim();
+            var email = $("#email").val().trim();
+            var address = $("#address").val().trim().toUpperCase();
+            var sector = $("#sector").val();
+            var type_of_business = $("#type_of_business").val();
+            var product_service = $("#product_service").val().trim().toUpperCase();
+            var number_of_employees = $("#number_of_employees").val();
+            var asset_value = $("#asset_value").val();
+            var annual_revenue = $("#annual_revenue").val();
+            var age = $("#age").val();
+            var sex = $("#sex").val();
+            var exportField = $("#export").val();
+            var comments = $("#comments").val();
+
+            // Validate company
+            if (!wordPattern.test(company)) {
+                showToast("error","Error","Please enter a valid company name containing only letters and spaces.");
+                return;
+            }
+
+            if (!wordPattern.test(contact_person)) {
+                showToast("error","Error","Please enter a valid company name containing only letters and spaces.");
+                return;
+            }
+
+            // Validate product service
+            if (!wordPattern.test(product_service)) {
+                showToast("error","Error","Please enter a valid product/service name containing only letters and spaces.");
+                return;
+            }
+
+            // Validate phone number
+            if (!phonePattern.test(phone_number)) {
+                showToast("error","Error","Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
+                return;
+            }
+
+            // Create the formData object after validation
             var formData = {
-                company: $("#company").val().trim().toUpperCase(),
-                contact_person: $("#contact_person").val().trim().toUpperCase(),
-                phone_number: $("#phone_number").val().trim(),
-                email: $("#email").val().trim(),
-                address: $("#address").val().trim(),
-                sector: $("#sector").val(),
-                type_of_business: $("#type_of_business").val(),
-                product_service: $("#product_service").val().trim().toUpperCase(),
-                number_of_employees: $("#number_of_employees").val(),
-                asset_value: $("#asset_value").val(),
-                annual_revenue: $("#annual_revenue").val(),
-                age: $("#age").val(),
-                sex: $("#sex").val(),
-                export: $("#export").val(),
-                comments: $("#comments").val()
+                company: company,
+                contact_person: contact_person,
+                phone_number: phone_number,
+                email: email,
+                address: address,
+                sector: sector,
+                type_of_business: type_of_business,
+                product_service: product_service,
+                number_of_employees: number_of_employees,
+                asset_value: asset_value,
+                annual_revenue: annual_revenue,
+                age: age,
+                sex: sex,
+                export: exportField,
+                comments: comments
             };
     
             // Send AJAX request to submit form data
@@ -319,31 +363,71 @@
         var form = $(this);
     
         // Append smeId to the form data
+        // Validation patterns
+        var wordPattern = /^[A-Za-z\s]+$/;
+        var phonePattern = /^07\d{8}$/;
+
+        // Get the form values
+        var company = form.find('#company').val().trim().toUpperCase();
+        var contact_person = form.find('#contact_person').val().trim().toUpperCase();
+        var phone_number = form.find('#phone_number').val().trim();
+        var email = form.find('#email').val().trim();
+        var address = form.find('#address').val().trim().toUpperCase();
+        var sector = form.find('#sector').val();
+        var type_of_business = form.find('#type_of_business').val();
+        var product_service = form.find('#product_service').val().trim().toUpperCase();
+        var number_of_employees = form.find('#number_of_employees').val();
+        var asset_value = form.find('#asset_value').val();
+        var annual_revenue = form.find('#annual_revenue').val();
+        var age = form.find('#age').val();
+        var sex = form.find('#sex').val();
+        var exportField = form.find('#export').val();
+        var comments = form.find('#comments').val();
+
+        // Validate company
+        if (!wordPattern.test(company)) {
+            showToast("error", "Error", "Please enter a valid company name containing only letters and spaces.");
+            return;
+        }
+
+        // Validate contact person
+        if (!wordPattern.test(contact_person)) {
+            showToast("error", "Error", "Please enter a valid contact person name containing only letters and spaces.");
+            return;
+        }
+
+        // Validate product service
+        if (!wordPattern.test(product_service)) {
+            showToast("error", "Error", "Please enter a valid product/service name containing only letters and spaces.");
+            return;
+        }
+
+        // Validate phone number
+        if (!phonePattern.test(phone_number)) {
+            showToast("error", "Error", "Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
+            return;
+        }
+
+        // Create the formData object after validation
         var formData = {
             smeId: smeId,
-            company: form.find('#company').val().trim().toUpperCase(),
-            contact_person: form.find('#contact_person').val().trim().toUpperCase(),
-            age: form.find('#age').val(),
-            sex: form.find('#sex').val(),
-            phone_number: form.find('#phone_number').val().trim(),
-            email: form.find('#email').val().trim(),
-            address: form.find('#address').val().trim(),
-
-            //province_id: form.find('#province-dropdown').val(),
-            //district_id: form.find('#district-dropdown').val(),
-            //ward_id: form.find('#ward-dropdown').val(),
-
-            sector: form.find('#sector').val(),
-            type_of_business: form.find('#type_of_business').val(),
-            product_service: form.find('#product_service').val().trim().toUpperCase(),
-
-            number_of_employees: form.find('#number_of_employees').val(),
-            asset_value: form.find('#asset_value').val(),
-            annual_revenue: form.find('#annual_revenue').val(),
-            export: form.find('#export').val(),
-            comments: form.find('#comments').val(),
-
+            company: company,
+            contact_person: contact_person,
+            age: age,
+            sex: sex,
+            phone_number: phone_number,
+            email: email,
+            address: address,
+            sector: sector,
+            type_of_business: type_of_business,
+            product_service: product_service,
+            number_of_employees: number_of_employees,
+            asset_value: asset_value,
+            annual_revenue: annual_revenue,
+            export: exportField,
+            comments: comments
         };
+
 
     
         $.ajax({
