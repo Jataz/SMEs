@@ -1,4 +1,43 @@
 <script>
+    document.getElementById('type_of_business').addEventListener('change', function() {
+        var typeOfBusiness = this.value;
+        var soleTraderRelatedFields = document.querySelectorAll('.sole-trader-related');
+        var otherSelectRelatedFields = document.querySelectorAll('.other-select-related');
+        var commonFields = document.querySelectorAll('.common-fields');
+        
+        // Hide all Sole Trader related fields initially
+        soleTraderRelatedFields.forEach(function(field) {
+            field.classList.add('hidden');
+        });
+
+        otherSelectRelatedFields.forEach(function(field) {
+            field.classList.add('hidden');
+        });
+        
+        // Show relevant fields based on selection
+        if (typeOfBusiness === 'Sole Trader Registered' || typeOfBusiness === 'Sole Trader Unregistered') {
+            soleTraderRelatedFields.forEach(function(field) {
+                field.classList.remove('hidden');
+            });
+            // Also show common fields for Sole Trader
+            commonFields.forEach(function(field) {
+                field.classList.remove('hidden');
+            });
+        } else if (typeOfBusiness !== 'Select Type of Business') {
+            // Show common fields for other 
+            otherSelectRelatedFields.forEach(function(field) {
+                field.classList.remove('hidden');
+            });
+
+            commonFields.forEach(function(field) {
+                field.classList.remove('hidden');
+            });
+        }
+    });
+    
+    
+
+    
     $(document).ready(function() {
         // Get the CSRF token from cookie
         function getCookie(name) {
@@ -96,6 +135,7 @@
             var sex = $("#sex").val();
             var exportField = $("#export").val();
             var comments = $("#comments").val();
+            var disability = $("#disability").val();
 
             // Validate company
             if (!wordPattern.test(company)) {
@@ -110,13 +150,13 @@
 
             // Validate product service
             if (!wordPattern.test(product_service)) {
-                showToast("error","Error","Please enter a valid product/service name containing only letters and spaces.");
+                showToast("error","Error","Please enter a valid product or service name containing only letters and spaces.");
                 return;
             }
 
             // Validate phone number
             if (!phonePattern.test(phone_number)) {
-                showToast("error","Error","Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
+                showToast("error","Error","Please Enter a valid phone number starting with 07 and containing exactly 10 digits.");
                 return;
             }
 
@@ -136,9 +176,10 @@
                 age: age,
                 sex: sex,
                 export: exportField,
-                comments: comments
+                comments: comments,
+                disability: disability 
             };
-    
+            console.log(formData);
             // Send AJAX request to submit form data
             $.ajax({
                 url: '/api/v1/sme-create/', // URL to submit SME data

@@ -16,7 +16,7 @@ class SMEAdmin(admin.ModelAdmin):
         'id', 'company', 'contact_person', 'phone_number',
         'province', 'district','ward', 'address', 'sector','email',
         'type_of_business', 'product_service', 'annual_revenue',
-        'number_of_employees', 'asset_value'
+        'number_of_employees', 'asset_value','age','sex','disability'
     )
     form = SMEAdminForm
 
