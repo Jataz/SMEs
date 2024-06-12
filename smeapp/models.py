@@ -45,10 +45,11 @@ class UserProfile(models.Model):
     is_national_level = models.BooleanField(default=False)
 
 class SME(models.Model):
+    sme_ref_number = models.CharField(unique=True)
     company = models.CharField()
-    contact_person = models.CharField()
-    phone_number = models.CharField()
-    email = models.EmailField()
+    contact_person = models.CharField(unique=True)
+    phone_number = models.CharField(unique=True)
+    email = models.EmailField(unique=True)
     address = models.CharField()
     sector = models.CharField()
     sex = models.CharField()
@@ -69,7 +70,6 @@ class SME(models.Model):
 
     def __str__(self):
         return self.company
-
 
 class CalculationScale(models.Model):
     sme = models.ForeignKey(SME,related_name='calculation_scale', on_delete=models.CASCADE)

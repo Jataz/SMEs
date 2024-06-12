@@ -1,43 +1,4 @@
 <script>
-    document.getElementById('type_of_business').addEventListener('change', function() {
-        var typeOfBusiness = this.value;
-        var soleTraderRelatedFields = document.querySelectorAll('.sole-trader-related');
-        var otherSelectRelatedFields = document.querySelectorAll('.other-select-related');
-        var commonFields = document.querySelectorAll('.common-fields');
-        
-        // Hide all Sole Trader related fields initially
-        soleTraderRelatedFields.forEach(function(field) {
-            field.classList.add('hidden');
-        });
-
-        otherSelectRelatedFields.forEach(function(field) {
-            field.classList.add('hidden');
-        });
-        
-        // Show relevant fields based on selection
-        if (typeOfBusiness === 'Sole Trader Registered' || typeOfBusiness === 'Sole Trader Unregistered') {
-            soleTraderRelatedFields.forEach(function(field) {
-                field.classList.remove('hidden');
-            });
-            // Also show common fields for Sole Trader
-            commonFields.forEach(function(field) {
-                field.classList.remove('hidden');
-            });
-        } else if (typeOfBusiness !== 'Select Type of Business') {
-            // Show common fields for other 
-            otherSelectRelatedFields.forEach(function(field) {
-                field.classList.remove('hidden');
-            });
-
-            commonFields.forEach(function(field) {
-                field.classList.remove('hidden');
-            });
-        }
-    });
-    
-    
-
-    
     $(document).ready(function() {
         // Get the CSRF token from cookie
         function getCookie(name) {
