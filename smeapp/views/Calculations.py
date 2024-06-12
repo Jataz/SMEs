@@ -69,7 +69,7 @@ def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, siz
     
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                  type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments):
+                                  type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments,disability):
     # Assuming you have a model for SME records and CalculationScale records
     sme = SME.objects.get(id=sme_id)
     sme.company = company
@@ -90,6 +90,7 @@ def update_sme_record_in_database(sme_id, company, contact_person, phone_number,
     sme.sex = sex
     sme.export = export
     sme.comments = comments
+    sme.disability = disability
     sme.save()
 
 

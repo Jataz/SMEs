@@ -73,89 +73,111 @@ def index(request):
 
 @login_required(login_url="/login")
 def sme_list(request):
-    # Assuming session-based authentication with your Django backend
-    session_id = request.COOKIES.get('sessionid')
+    try:
+        # Assuming session-based authentication with your Django backend
+        session_id = request.COOKIES.get('sessionid')
 
-    # Make a GET request to fetch a list of vehicles, including the session cookie for authentication
-    response = requests.get(
-        f'{settings.API_BASE_URL}/api/v1/smes/',       
-        cookies={'sessionid': session_id} if session_id else {}
-    )
+        # Make a GET request to fetch a list of vehicles, including the session cookie for authentication
+        response = requests.get(
+            f'{settings.API_BASE_URL}/api/v1/smes/',       
+            cookies={'sessionid': session_id} if session_id else {}
+        )
 
-    if response.status_code == 200:
-        smes = response.json() # Extract JSON data from the response
-        return render(request, 'pages/smes/index.html',{'smes':smes})
-    else:
-        # Handle the case where the request was not successful
-        return render(request, 'error.html', {'message': 'Failed to fetch SMEs data'})
+        if response.status_code == 200:
+            smes = response.json() # Extract JSON data from the response
+            return render(request, 'pages/smes/index.html',{'smes':smes})
+        else:
+            # Handle the case where the request was not successful
+            return render(request, 'error.html', {'message': 'Failed to fetch SMEs data'})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
     
 def size_of_business_data(request):
-    session_id = request.COOKIES.get('sessionid')
-    response = requests.get(
-        f'{settings.API_BASE_URL}/api/v1/smes/',
-        cookies={'sessionid': session_id} if session_id else {}
-    )
+    try:
+        session_id = request.COOKIES.get('sessionid')
+        response = requests.get(
+            f'{settings.API_BASE_URL}/api/v1/smes/',
+            cookies={'sessionid': session_id} if session_id else {}
+        )
 
-    if response.status_code == 200:
-        sme_data = response.json()
-    else:
-        sme_data = []
+        if response.status_code == 200:
+            sme_data = response.json()
+        else:
+            sme_data = []
 
-    # Extract size_of_business from each calculation_scale
-    size_of_businesses = [sme['calculation_scale'][0]['size_of_business']['size'] for sme in sme_data if sme.get('calculation_scale')]
+        # Extract size_of_business from each calculation_scale
+        size_of_businesses = [
+            sme['calculation_scale'][0]['size_of_business']['size']
+            for sme in sme_data if sme.get('calculation_scale')
+        ]
 
-    # Count the occurrences of each size_of_business
-    size_of_business_counts = Counter(size_of_businesses)
+        # Count the occurrences of each size_of_business
+        size_of_business_counts = Counter(size_of_businesses)
 
-    # Calculate the total number of SMEs
-    total_smes = len(size_of_businesses)
+        # Calculate the total number of SMEs
+        total_smes = len(size_of_businesses)
 
-    # Calculate percentages for each size category
-    percentages = {size: (count / total_smes) * 100 for size, count in size_of_business_counts.items()}
+        # Calculate percentages for each size category
+        percentages = {}
+        if total_smes > 0:
+            percentages = {size: (count / total_smes) * 100 for size, count in size_of_business_counts.items()}
+        else:
+            percentages = {size: 0 for size in size_of_business_counts.keys()}
 
-    # Prepare data for Chart.js
-    labels = list(percentages.keys())
-    data = list(percentages.values())
+        # Prepare data for Chart.js
+        labels = list(percentages.keys())
+        data = list(percentages.values())
 
-    context = {
-        'labels': labels,
-        'data': data,
-    }
+        context = {
+            'labels': labels,
+            'data': data,
+        }
 
-    return JsonResponse(context)
+        return JsonResponse(context)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def sex_data(request):
-    session_id = request.COOKIES.get('sessionid')
-    response = requests.get(
-        f'{settings.API_BASE_URL}/api/v1/smes/',
-        cookies={'sessionid': session_id} if session_id else {}
-    )
+    try:
+        session_id = request.COOKIES.get('sessionid')
+        response = requests.get(
+            f'{settings.API_BASE_URL}/api/v1/smes/',
+            cookies={'sessionid': session_id} if session_id else {}
+        )
 
-    if response.status_code == 200:
-        sme_data = response.json()
-    else:
-        sme_data = []
+        if response.status_code == 200:
+            sme_data = response.json()
+        else:
+            sme_data = []
 
-    # Count the occurrences of each sex
-    total_smes = len(sme_data)
-    sex_counts = {'Male': 0, 'Female': 0}
-    for sme in sme_data:
-        sex = sme.get('sex')
-        if sex in sex_counts:
-            sex_counts[sex] += 1
+        # Count the occurrences of each sex
+        total_smes = len(sme_data)
+        sex_counts = {'Male': 0, 'Female': 0}
+        for sme in sme_data:
+            sex = sme.get('sex')
+            if sex in sex_counts:
+                sex_counts[sex] += 1
 
-    # Calculate percentages
-    percentages = {}
-    for sex, count in sex_counts.items():
-        percentages[sex] = round((count / total_smes) * 100)
+        # Calculate percentages
+        percentages = {}
+        if total_smes > 0:
+            for sex, count in sex_counts.items():
+                percentages[sex] = round((count / total_smes) * 100)
+        else:
+            pass
 
-    # Prepare data for Chart.js
-    labels = list(percentages.keys())
-    data = list(percentages.values())
+        # Prepare data for Chart.js
+        labels = list(percentages.keys())
+        data = list(percentages.values())
 
-    context = {
-        'labels': labels,
-        'data': data,
-    }
+        context = {
+            'labels': labels,
+            'data': data,
+        }
 
-    return JsonResponse(context)
+        return JsonResponse(context)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

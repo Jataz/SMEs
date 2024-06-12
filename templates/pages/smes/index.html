@@ -20,8 +20,8 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-sme"><a href="#">Home</a></li>
-              <li class="breadcrumb-sme active">SMEs</li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">SMEs</li>
             </ol>
           </div>
         </div>
@@ -60,6 +60,7 @@
                   <thead style="background-color: lightblue;">
                     <tr>
                       <th>No.</th>
+                      <th>Reference Number</th>
                       <th>Company</th>
                       <th>Contact Person</th>
                       <th hidden>Phone Number</th>
@@ -68,6 +69,7 @@
                       <th hidden>Sector</th>
                       <th>Sex</th>
                       <th hidden>Age</th>
+                      <th hidden>Disability</th>
                       <th hidden>Type of Business</th>
                       <th hidden>Product/Service</th>
                       <th hidden>Province</th>
@@ -86,6 +88,7 @@
                     {% for sme in smes %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
+                        <td>{{ sme.sme_ref_number }}</td>
                         <td>{{ sme.company }}</td>
                         <td>{{ sme.contact_person }}</td>
                         <td hidden>{{ sme.phone_number }}</td>
@@ -94,6 +97,7 @@
                         <td hidden>{{ sme.sector }}</td>
                         <td>{{ sme.sex }}</td>
                         <td hidden>{{ sme.age }}</td>
+                        <td hidden>{{ sme.disability }}</td>
                         <td hidden>{{ sme.type_of_business }}</td>
                         <td hidden>{{ sme.product_service }}</td>
                         <td hidden>{{ sme.province.province_name }}</td>

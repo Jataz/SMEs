@@ -96,6 +96,7 @@
             var sex = $("#sex").val();
             var exportField = $("#export").val();
             var comments = $("#comments").val();
+            var disability = $("#disability").val();
 
             // Validate company
             if (!wordPattern.test(company)) {
@@ -110,13 +111,13 @@
 
             // Validate product service
             if (!wordPattern.test(product_service)) {
-                showToast("error","Error","Please enter a valid product/service name containing only letters and spaces.");
+                showToast("error","Error","Please enter a valid product or service name containing only letters and spaces.");
                 return;
             }
 
             // Validate phone number
             if (!phonePattern.test(phone_number)) {
-                showToast("error","Error","Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
+                showToast("error","Error","Please Enter a valid phone number starting with 07 and containing exactly 10 digits.");
                 return;
             }
 
@@ -136,9 +137,10 @@
                 age: age,
                 sex: sex,
                 export: exportField,
-                comments: comments
+                comments: comments,
+                disability: disability 
             };
-    
+            console.log(formData);
             // Send AJAX request to submit form data
             $.ajax({
                 url: '/api/v1/sme-create/', // URL to submit SME data
@@ -262,7 +264,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    modal.find('.modal-title').text(data.company);
+                    modal.find('.modal-title').text(data.sme_ref_number);
                     modal.find('.modal-body #company').text(data.company);
                     modal.find('.modal-body #contact-person').text(data.contact_person);
                     modal.find('.modal-body #phone-number').text(data.phone_number);
@@ -281,6 +283,7 @@
                     modal.find('.modal-body #comments').text(data.comments);
 
                     modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);
+                    modal.find('.modal-body #disability').text(data.ward.disability);
 
                     modal.find('.modal-body #province').text(data.province.province_name);
                     modal.find('.modal-body #district').text(data.district.district_name);
@@ -325,6 +328,7 @@
                 modal.find('#number_of_employees').val(data.number_of_employees);
                 modal.find('#asset_value').val(data.asset_value);
                 modal.find('#annual_revenue').val(data.annual_revenue);
+                modal.find('#disability').val(data.disability);
             })
             .catch(error => console.error('Error fetching SME data:', error));
     });
@@ -383,6 +387,7 @@
         var sex = form.find('#sex').val();
         var exportField = form.find('#export').val();
         var comments = form.find('#comments').val();
+        var disability = form.find('#disability').val();
 
         // Validate company
         if (!wordPattern.test(company)) {
@@ -425,7 +430,8 @@
             asset_value: asset_value,
             annual_revenue: annual_revenue,
             export: exportField,
-            comments: comments
+            comments: comments,
+            disability: disability
         };
 
 

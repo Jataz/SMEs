@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from rest_framework import status,generics,permissions
@@ -100,7 +101,7 @@ def sme_create_record(request):
         try:
             user_profile = UserProfile.objects.get(user=user)
         except UserProfile.DoesNotExist:
-            return JsonResponse({'error': 'User profile does not exist. Please create a profile first.'}, status=400)
+            return JsonResponse({'Error': 'User profile does not exist. Please create a profile first.'}, status=400)
         
         # Retrieve form data
         company = form_data.get('company')
@@ -121,22 +122,24 @@ def sme_create_record(request):
         sex = form_data.get('sex')
         export = form_data.get('export')
         comments = form_data.get('comments')
+        disability = form_data.get('disability')
         
         try:
             annual_revenue = int(form_data.get('annual_revenue'))
             asset_value = int(form_data.get('asset_value'))
         except ValueError:
-            return JsonResponse({'error': 'Invalid value for annual revenue or asset value'}, status=400)
+            return JsonResponse({'Error': 'Invalid value for annual revenue or asset value'}, status=400)
 
         # Retrieve province, district, and ward from user's profile
         province_id = user_profile.province_id
         district_id = user_profile.district_id
         ward_id = user_profile.ward_id
+        sme_ref_number = f"SME{datetime.now().strftime('%Y%m%d%H%M%S')}"
         
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
-                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments]):
-            return JsonResponse({'error': 'Please fill in all fields'}, status=400)
+                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments,disability]):
+            return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
         with transaction.atomic():
@@ -144,7 +147,7 @@ def sme_create_record(request):
                 # Create SME record
                 sme = create_sme_record(company, contact_person, phone_number, email, address, sector,
                                          type_of_business, product_service, province_id, district_id,ward_id,
-                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments)
+                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments,disability,sme_ref_number)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)
@@ -162,18 +165,15 @@ def sme_create_record(request):
                 return JsonResponse({'success': 'SME added successfully'}, status=201)
                 
             except Exception as e:
-                return JsonResponse({'error': str(e)}, status=400)
+                return JsonResponse({'Error': str(e)}, status=400)
     
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-
-def create_sme_record(company, contact_person, phone_number, email, address, sector,
-                      type_of_business, product_service, province_id, district_id,ward_id,
-                      number_of_employees, asset_value, annual_revenue,age,sex,export,comments):
-    """Create an SME record."""
-
-    sme = SME.objects.create(
+        return JsonResponse({'Error': 'Method not allowed'}, status=405)
+def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
+                      province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue, age, sex, 
+                      export, comments, disability, sme_ref_number):
+    
+    return SME.objects.create(
         company=company,
         contact_person=contact_person,
         phone_number=phone_number,
@@ -191,9 +191,13 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         age=age,
         sex=sex,
         export=export,
-        comments=comments
+        comments=comments,
+        disability = disability,
+        sme_ref_number=sme_ref_number
     )
+
     return sme
+
 
 def update_sme_record(request):
     if request.method == 'PUT':
@@ -218,24 +222,25 @@ def update_sme_record(request):
         sex = form_data.get('sex')
         export = form_data.get('export')
         comments = form_data.get('comments')
+        disability = form_data.get('disability')
         try:
             number_of_employees = int(form_data.get('number_of_employees'))
             annual_revenue = float(form_data.get('annual_revenue'))
             asset_value = float(form_data.get('asset_value'))
         except ValueError:
-            return JsonResponse({'error': 'Invalid value for annual revenue or asset value'}, status=400)
+            return JsonResponse({'Error': 'Invalid value for annual revenue or asset value'}, status=400)
 
         # Validate form data
         if not all([sme_id, company, contact_person, phone_number, email, address, sector, type_of_business,
-                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments]):
-            return JsonResponse({'error': 'Please fill in all fields'}, status=400)
+                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments,disability]):
+            return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
         with transaction.atomic():
             try:
                 # Update SME record
                 update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments)
+                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments,disability)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)
@@ -253,7 +258,7 @@ def update_sme_record(request):
                 return JsonResponse({'success': 'SME updated successfully'}, status=200)
                 
             except Exception as e:
-                return JsonResponse({'error': str(e)}, status=400)
+                return JsonResponse({'Error': str(e)}, status=400)
     
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'Error': 'Method not allowed'}, status=405)
