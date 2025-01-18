@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 import requests
 from django.conf import settings
 
-from ..models import CalculationScale,SizeValue
+from ..models import CalculationScale,SizeValue,Sector
 from django.http import JsonResponse
 from collections import Counter
 
@@ -51,7 +51,7 @@ def index(request):
     small_percentage = round((small_count / total_count) * 100, 2) if total_count > 0 else 0
     medium_percentage = round((medium_count / total_count) * 100, 2) if total_count > 0 else 0
     large_percentage = round((large_count / total_count) * 100, 2) if total_count > 0 else 0
-
+    
     context = {
         'micro_count': micro_count,
         'small_count': small_count,
@@ -181,3 +181,9 @@ def sex_data(request):
     
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+def get_sectors(request):
+    """Return a list of sectors in JSON format."""
+    if request.method == 'GET':
+        sectors = list(Sector.objects.all().values('id', 'name'))
+        return JsonResponse(sectors, safe=False)

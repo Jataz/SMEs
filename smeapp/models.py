@@ -51,7 +51,7 @@ class SME(models.Model):
     phone_number = models.CharField(unique=True)
     email = models.EmailField(unique=True)
     address = models.CharField()
-    sector = models.CharField()
+    sector = models.ForeignKey('Sector', on_delete=models.CASCADE,default=1) 
     sex = models.CharField()
     age = models.CharField()
     disability = models.CharField()
@@ -86,3 +86,24 @@ class CalculationScale(models.Model):
 
     def __str__(self):
         return f"Business size: {self.sme}, Rating: {self.size_of_employees}"
+
+class Sector(models.Model):
+    name = models.CharField(max_length=255, unique=True)  # Sector name (e.g., Agriculture, Mining)
+
+    def __str__(self):
+        return self.name
+
+
+class SectorThreshold(models.Model):
+
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE, related_name="thresholds")
+    size = models.ForeignKey(SizeValue, on_delete=models.CASCADE, related_name='sector_thresholds')  # Link to SizeValue
+    max_employees = models.IntegerField()  # Maximum number of employees for this size
+    max_annual_revenue = models.FloatField()  # Maximum annual revenue for this size
+    max_asset_value = models.FloatField()  # Maximum asset value for this size
+
+    class Meta:
+        unique_together = ('sector', 'size')  # Ensure no duplicate thresholds for the same sector and size
+
+    def __str__(self):
+        return f"{self.sector.name} - {self.size}"

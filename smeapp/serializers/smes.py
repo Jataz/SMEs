@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import SME, CalculationScale, Province, District, SizeValue,UserProfile, Ward
+from ..models import SME, CalculationScale, Province, District, SizeValue,UserProfile, Ward,Sector,SectorThreshold
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
@@ -33,6 +33,17 @@ class SizeValueSerializer(serializers.ModelSerializer):
         model = SizeValue
         fields = ['id', 'size', 'value']
 
+class SectorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sector
+        fields = ['id', 'name']
+
+class SectorThresholdSerializer(serializers.ModelSerializer):
+    sector = SectorSerializer()
+    class Meta:
+        model = SectorThreshold
+        fields = ['id', 'sector', 'size', 'value']
+
 class CalculationScaleSerializer(serializers.ModelSerializer):
     size_of_employees = SizeValueSerializer()
     size_of_annual_revenue = SizeValueSerializer()
@@ -55,6 +66,7 @@ class SMESerializer(serializers.ModelSerializer):
     province = ProvinceSerializer()
     district = DistrictSerializer()
     ward = WardSerializer()
+    sector = SectorSerializer()
     calculation_scale = CalculationScaleSerializer(many=True)
     user_profile = UserProfileSerializer(read_only=True) 
 

@@ -1,4 +1,34 @@
 <script>
+    $(document).ready(function () {
+        // Fetch and populate sectors dropdown
+        function populateSectors() {
+            $.ajax({
+                url: '/api/v1/sectors/',
+                dataType: 'json',
+                success: function (data) {
+                    const sectorDropdown = $('#sector');
+                    sectorDropdown.empty();
+                    sectorDropdown.append('<option value="" selected disabled>Select Sector</option>');
+                    $.each(data, function (index, sector) {
+                        sectorDropdown.append('<option value="' + sector.id + '">' + sector.name + '</option>');
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching sectors:', error);
+                    showToast('error', 'Error', 'Failed to load sectors. Please refresh the page.');
+                }
+            });
+        }
+
+        // Call populateSectors when the modal is shown
+        $('#addSmeModal').on('show.bs.modal', function () {
+            populateSectors();
+        });
+    });
+</script>
+
+
+<script>
     $(document).ready(function() {
         // Get the CSRF token from cookie
         function getCookie(name) {
@@ -283,7 +313,7 @@
                     modal.find('.modal-body #age').text(data.age);
                     modal.find('.modal-body #sex').text(data.sex);
 
-                    modal.find('.modal-body #sector').text(data.sector);
+                    modal.find('.modal-body #sector').text(data.sector.name);
                     modal.find('.modal-body #type-of-business').text(data.type_of_business);
                     modal.find('.modal-body #product-service').text(data.product_service);
                     modal.find('.modal-body #number-of-employees').text(data.number_of_employees);
@@ -314,45 +344,76 @@
 
 <script>
     //Updating details 
+    // Updating details 
     $('#editSmeModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
-        var smeId = button.data('sme-id'); // Extract info from data-* attributes
+        var smeId = button.data('sme-id'); // Extract SME ID from data attribute
         var modal = $(this);
+
         // Store smeId in the form as a data attribute
         $('#editSMEForm').data('sme-id', smeId);
 
-        // Use AJAX or Fetch API to populate form fields with existing SME data
-        fetch(`/api/v1/sme-update/${smeId}/`)
-            .then(response => response.json())
-            .then(data => {    
-                // Populate form fields with retrieved data
+        // Fetch SME details from the server
+        $.ajax({
+            url: `/api/v1/sme-update/${smeId}/`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Populate modal fields with retrieved data
                 modal.find('#company').val(data.company);
                 modal.find('#contact_person').val(data.contact_person);
                 modal.find('#phone_number').val(data.phone_number);
                 modal.find('#email').val(data.email);
                 modal.find('#address').val(data.address);
-                modal.find('#sector').val(data.sector);
                 modal.find('#sex').val(data.sex);
                 modal.find('#age').val(data.age);
                 modal.find('#type_of_business').val(data.type_of_business);
                 modal.find('#product_service').val(data.product_service);
                 modal.find('#export').val(data.export);
                 modal.find('#comments').val(data.comments);
-
                 modal.find('#compliance').val(data.compliance);
                 modal.find('#registration').val(data.registration);
                 modal.find('#tax').val(data.tax);
                 modal.find('#training').val(data.training);
                 modal.find('#education').val(data.education);
-    
-                // Populate province dropdown
-                
                 modal.find('#number_of_employees').val(data.number_of_employees);
                 modal.find('#asset_value').val(data.asset_value);
                 modal.find('#annual_revenue').val(data.annual_revenue);
                 modal.find('#disability').val(data.disability);
-            })
-            .catch(error => console.error('Error fetching SME data:', error));
+
+                // Populate the sector dropdown dynamically with preselection
+                $.ajax({
+                    url: '/api/v1/sectors/',
+                    dataType: 'json',
+                    success: function (sectors) {
+                        const sectorDropdown = modal.find('#sector');
+                        sectorDropdown.empty();
+                        sectorDropdown.append('<option value="" selected disabled>Select Sector</option>');
+
+                        // Loop through the sectors and append options
+                        $.each(sectors, function (index, sector) {
+                            const option = $('<option></option>')
+                                .val(sector.id)
+                                .text(sector.name);
+
+                            // Preselect the sector if it matches the current SME's sector
+                            if (sector.id === data.sector.id) {
+                                option.attr('selected', 'selected');
+                            }
+                            sectorDropdown.append(option);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching sectors:', error);
+                        showToast('error', 'Error', 'Failed to load sectors. Please refresh the page.');
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching SME data:', error);
+                showToast('error', 'Error', 'Failed to load SME details.');
+            }
+        });
     });
 
     // Function to get the CSRF token from the cookie
@@ -488,7 +549,7 @@
                 console.error('Error submitting SME data:', error);
             
                 // Initialize a variable to hold your error messages
-                let errorMessage = 'Failed to Uodate SME data. Please try again.';
+                let errorMessage = 'Failed to Update SME data. Please try again.';
             
                 // Check if the xhr response has a JSON body
                 if (xhr.responseJSON) {

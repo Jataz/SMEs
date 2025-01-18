@@ -120,7 +120,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smes',
+        'NAME': 'smes_db',
         'USER': 'postgres',
         'PASSWORD': '9965@jay',
         'HOST': 'localhost',  # Set to 'localhost' or the address of your database server

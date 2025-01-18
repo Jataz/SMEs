@@ -14,7 +14,7 @@ import json
 from .Calculations import calculate_rating, create_calculation_scale, determine_business_size, determine_size_of_annual_revenue, determine_size_of_asset_value,\
     determine_size_of_employees,update_calculation_scale,update_sme_record_in_database
 
-from ..models import SME,Province,District, Sector,SizeValue,CalculationScale, UserProfile, Ward
+from ..models import SME,Province,District,SizeValue,CalculationScale, UserProfile, Ward
 
 from ..serializers import SMESerializer,ProvinceSerializer,DistrictSerializer,WardSerializer
 
@@ -93,37 +93,31 @@ class SMEUpdateView(generics.RetrieveUpdateAPIView):
   
 @csrf_exempt
 def sme_create_record(request):
-    if request.method != 'POST':
-        return JsonResponse({'Error': 'Method not allowed'}, status=405)
-
-    try:
-        # Parse the JSON payload
+    if request.method == 'POST':
         form_data = json.loads(request.body)
-
-        # Retrieve the logged-in user profile
+        
+        # Retrieve user's profile
         user = request.user
-        user_profile = UserProfile.objects.get(user=user)
-
-        # Fetch user location details from profile
-        province_id = user_profile.province_id
-        district_id = user_profile.district_id
-        ward_id = user_profile.ward_id
-
-        # Retrieve sector object
-        sector_id = int(form_data.get('sector'))
-        sector = Sector.objects.get(id=sector_id)
-
-        # Extract other form data
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+        except UserProfile.DoesNotExist:
+            return JsonResponse({'Error': 'User profile does not exist. Please create a profile first.'}, status=400)
+        
+        # Retrieve form data
         company = form_data.get('company')
         contact_person = form_data.get('contact_person')
         phone_number = form_data.get('phone_number')
         email = form_data.get('email')
         address = form_data.get('address')
+        sector = form_data.get('sector')
         type_of_business = form_data.get('type_of_business')
         product_service = form_data.get('product_service')
-        number_of_employees = int(form_data.get('number_of_employees'))
-        asset_value = int(form_data.get('asset_value'))
-        annual_revenue = int(form_data.get('annual_revenue'))
+        province_id = form_data.get('province_id')
+        district_id = form_data.get('district_id')
+        ward_id =form_data.get('ward_id')
+        number_of_employees = int(form_data.get('number_of_employees'))  # Convert to integer
+        asset_value = form_data.get('asset_value')
+        annual_revenue = form_data.get('annual_revenue')
         age = form_data.get('age')
         sex = form_data.get('sex')
         export = form_data.get('export')
@@ -134,74 +128,54 @@ def sme_create_record(request):
         tax = form_data.get('tax')
         training = form_data.get('training')
         education = form_data.get('education')
+        
+        try:
+            annual_revenue = int(form_data.get('annual_revenue'))
+            asset_value = int(form_data.get('asset_value'))
+        except ValueError:
+            return JsonResponse({'Error': 'Invalid value for annual revenue or asset value'}, status=400)
 
-        # Generate SME reference number
+        # Retrieve province, district, and ward from user's profile
+        province_id = user_profile.province_id
+        district_id = user_profile.district_id
+        ward_id = user_profile.ward_id
         sme_ref_number = f"SME{datetime.now().strftime('%Y%m%d%H%M%S')}"
-
-        # Start a transaction to ensure atomicity
+        
+        # Validate form data
+        if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
+                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments,
+                    disability,compliance,registration,tax,training,education]):
+            return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
+        
+        # Start a database transaction
         with transaction.atomic():
-            # Create the SME record
-            sme = SME.objects.create(
-                company=company,
-                contact_person=contact_person,
-                phone_number=phone_number,
-                email=email,
-                address=address,
-                sector=sector,
-                type_of_business=type_of_business,
-                product_service=product_service,
-                province_id=province_id,
-                district_id=district_id,
-                ward_id=ward_id,
-                number_of_employees=number_of_employees,
-                asset_value=asset_value,
-                annual_revenue=annual_revenue,
-                age=age,
-                sex=sex,
-                export=export,
-                comments=comments,
-                disability=disability,
-                sme_ref_number=sme_ref_number,
-                compliance=compliance,
-                registration=registration,
-                tax=tax,
-                training=training,
-                education=education
-            )
-
-            # Calculate sizes based on sector thresholds
-            size_of_employees = determine_size_of_employees(number_of_employees, sector)
-            size_of_annual_revenue = determine_size_of_annual_revenue(annual_revenue, sector)
-            size_of_asset_value = determine_size_of_asset_value(asset_value, sector)
-
-            # Calculate the rating and determine business size
-            rating = calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value)
-            size_of_business = determine_business_size(rating)
-
-            # Create the CalculationScale record
-            create_calculation_scale(
-                sme=sme,
-                size_of_employees=size_of_employees,
-                size_of_annual_revenue=size_of_annual_revenue,
-                size_of_asset_value=size_of_asset_value,
-                rating=rating,
-                size_of_business=size_of_business
-            )
-
-        return JsonResponse({'success': 'SME added successfully'}, status=201)
-
-    except UserProfile.DoesNotExist:
-        return JsonResponse({'Error': 'User profile does not exist. Please create a profile first.'}, status=400)
-
-    except Sector.DoesNotExist:
-        return JsonResponse({'Error': 'Invalid sector provided.'}, status=400)
-
-    except ValueError as ve:
-        return JsonResponse({'Error': f'Invalid input data: {ve}'}, status=400)
-
-    except Exception as e:
-        return JsonResponse({'Error': f'An unexpected error occurred: {e}'}, status=400)
-
+            try:
+                # Create SME record
+                sme = create_sme_record(company, contact_person, phone_number, email, address, sector,
+                                         type_of_business, product_service, province_id, district_id,ward_id,
+                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments,
+                                         disability,sme_ref_number,compliance, registration, tax, training, education)
+                
+                # Determine rating based on number_of_employees, annual_revenue, and asset_value
+                size_of_employees = determine_size_of_employees(number_of_employees)
+                size_of_annual_revenue = determine_size_of_annual_revenue(annual_revenue)
+                size_of_asset_value = determine_size_of_asset_value(asset_value)
+                rating = calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value)
+                
+                # Determine the size of the business based on rating
+                size_of_business = determine_business_size(rating)
+                
+                # Create CalculationScale record
+                create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, size_of_asset_value,
+                                         rating, size_of_business)
+                
+                return JsonResponse({'success': 'SME added successfully'}, status=201)
+                
+            except Exception as e:
+                return JsonResponse({'Error': str(e)}, status=400)
+    
+    else:
+        return JsonResponse({'Error': 'Method not allowed'}, status=405)
 def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
                       province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue, age, sex, 
                       export, comments, disability, sme_ref_number,compliance,registration,tax,training,education):
@@ -239,25 +213,24 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
 
 
 def update_sme_record(request):
-    if request.method != 'PUT':
-        return JsonResponse({'Error': 'Method not allowed'}, status=405)
-
-    try:
+    if request.method == 'PUT':
         form_data = json.loads(request.body)
-
-        # Retrieve form data
+         # Retrieve form data
         sme_id = form_data.get('smeId')
         company = form_data.get('company')
         contact_person = form_data.get('contact_person')
         phone_number = form_data.get('phone_number')
         email = form_data.get('email')
         address = form_data.get('address')
-        sector = form_data.get('sector')  # Retrieve sector ID
+        sector = form_data.get('sector')
         type_of_business = form_data.get('type_of_business')
         product_service = form_data.get('product_service')
-        number_of_employees = int(form_data.get('number_of_employees'))
-        asset_value = float(form_data.get('asset_value'))
-        annual_revenue = float(form_data.get('annual_revenue'))
+        #province_id = form_data.get('province_id')
+        #district_id = form_data.get('district_id')
+        #ward_id = form_data.get('ward_id')
+        number_of_employees = form_data.get('number_of_employees')  # Convert to integer
+        asset_value = form_data.get('asset_value')
+        annual_revenue = form_data.get('annual_revenue')
         age = form_data.get('age')
         sex = form_data.get('sex')
         export = form_data.get('export')
@@ -268,106 +241,47 @@ def update_sme_record(request):
         tax = form_data.get('tax')
         training = form_data.get('training')
         education = form_data.get('education')
-
-        # Validate required fields
-        missing_fields = []
-        required_fields = {
-        'sme_id': sme_id,
-        'company': company,
-        'contact_person': contact_person,
-        'phone_number': phone_number,
-        'email': email,
-        'address': address,
-        'sector': sector,
-        'type_of_business': type_of_business,
-        'product_service': product_service,
-        'number_of_employees': number_of_employees,
-        'asset_value': asset_value,
-        'annual_revenue': annual_revenue,
-        'age': age,
-        'sex': sex,
-        'export': export,
-        'comments': comments,
-        'disability': disability,
-        'compliance': compliance,
-        'registration': registration,
-        'tax': tax,
-        'training': training,
-        'education': education
-        }
-
-        # Check each field explicitly
-        for field, value in required_fields.items():
-            if value is None or value == '':
-                missing_fields.append(field)
-
-            if missing_fields:
-                return JsonResponse({'Error': f'Missing required fields: {", ".join(missing_fields)}'}, status=400)
-
-
         try:
-            # Retrieve the sector object
-            sector = Sector.objects.get(id=sector)
-        except Sector.DoesNotExist:
-            return JsonResponse({'Error': 'Invalid sector provided.'}, status=400)
+            number_of_employees = int(form_data.get('number_of_employees'))
+            annual_revenue = float(form_data.get('annual_revenue'))
+            asset_value = float(form_data.get('asset_value'))
+        except ValueError:
+            return JsonResponse({'Error': 'Invalid value for annual turnover or asset value'}, status=400)
 
+        # Validate form data
+        if not all([sme_id, company, contact_person, phone_number, email, address, sector, type_of_business,
+                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments,disability,
+                    compliance,registration,tax,training,education]):
+            return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
+        
         # Start a database transaction
         with transaction.atomic():
-            # Update SME record
-            SME.objects.filter(id=sme_id).update(
-                company=company,
-                contact_person=contact_person,
-                phone_number=phone_number,
-                email=email,
-                address=address,
-                sector=sector,
-                type_of_business=type_of_business,
-                product_service=product_service,
-                number_of_employees=number_of_employees,
-                asset_value=asset_value,
-                annual_revenue=annual_revenue,
-                age=age,
-                sex=sex,
-                export=export,
-                comments=comments,
-                disability=disability,
-                compliance=compliance,
-                registration=registration,
-                tax=tax,
-                training=training,
-                education=education
-            )
-
-            # Calculate sizes based on sector-specific thresholds
-            size_of_employees = determine_size_of_employees(number_of_employees, sector)
-            size_of_annual_revenue = determine_size_of_annual_revenue(annual_revenue, sector)
-            size_of_asset_value = determine_size_of_asset_value(asset_value, sector)
-
-            # Calculate rating and determine business size
-            rating = calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value)
-            size_of_business = determine_business_size(rating)
-
-            # Update or create CalculationScale record
-            CalculationScale.objects.update_or_create(
-                sme_id=sme_id,
-                defaults={
-                    'size_of_employees': size_of_employees,
-                    'size_of_annual_revenue': size_of_annual_revenue,
-                    'size_of_asset_value': size_of_asset_value,
-                    'rating': rating,
-                    'size_of_business': size_of_business
-                }
-            )
-
-            return JsonResponse({'success': 'SME updated successfully.'}, status=200)
-
-    except ValueError as ve:
-        return JsonResponse({'Error': f'Invalid input data: {ve}'}, status=400)
-
-    except Exception as e:
-        return JsonResponse({'Error': f'An unexpected error occurred: {str(e)}'}, status=400)
-
+            try:
+                # Update SME record
+                update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
+                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age,
+                                              sex,export,comments,disability,compliance,registration,tax,training,education)
+                
+                # Determine rating based on number_of_employees, annual_revenue, and asset_value
+                size_of_employees = determine_size_of_employees(number_of_employees)
+                size_of_annual_revenue = determine_size_of_annual_revenue(annual_revenue)
+                size_of_asset_value = determine_size_of_asset_value(asset_value)
+                rating = calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value)
+                
+                # Determine the size of the business based on rating
+                size_of_business = determine_business_size(rating)
+                
+                # Update CalculationScale record
+                update_calculation_scale(sme_id, size_of_employees, size_of_annual_revenue, size_of_asset_value,
+                                         rating, size_of_business)
+                
+                return JsonResponse({'success': 'SME updated successfully'}, status=200)
+                
+            except Exception as e:
+                return JsonResponse({'Error': str(e)}, status=400)
     
+    else:
+        return JsonResponse({'Error': 'Method not allowed'}, status=405)
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
                                   type_of_business, product_service, number_of_employees, asset_value, annual_revenue, age,
