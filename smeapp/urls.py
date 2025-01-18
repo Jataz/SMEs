@@ -13,6 +13,7 @@ urlpatterns =[
     path('sme-update/<int:pk>/', SMEUpdateView.as_view(), name='sme-update'),
     path('sme/update/', update_sme_record, name='update_sme_records'),
     path('sectors/', get_sectors, name='get_sectors'),
+    path('age-range-report/', views.age_range_report_filtered_view, name='age_range_report_filtered'),
     
     #Graphs
     path('size-of-business-data/', size_of_business_data, name='size_of_business_data'),
