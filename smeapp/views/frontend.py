@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 import requests
 from django.conf import settings
 
-from ..models import CalculationScale,SizeValue,Sector
+from ..models import SME, CalculationScale,SizeValue,Sector
 from django.http import JsonResponse
 from collections import Counter
 
@@ -187,3 +187,36 @@ def get_sectors(request):
     if request.method == 'GET':
         sectors = list(Sector.objects.all().values('id', 'name'))
         return JsonResponse(sectors, safe=False)
+
+def smes_by_age_range_filtered(province_id=None, district_id=None, ward_id=None):
+    """Filter SMEs by location and return age range counts."""
+    queryset = SME.objects.all()
+
+    # Apply filters based on the provided location IDs
+    if province_id:
+        queryset = queryset.filter(province_id=province_id)
+    if district_id:
+        queryset = queryset.filter(district_id=district_id)
+    if ward_id:
+        queryset = queryset.filter(ward_id=ward_id)
+
+    # Generate age range counts
+    age_ranges = {
+        "18-25": queryset.filter(age__gte=18, age__lte=25).count(),
+        "26-35": queryset.filter(age__gte=26, age__lte=35).count(),
+        "36-45": queryset.filter(age__gte=36, age__lte=45).count(),
+        "46-55": queryset.filter(age__gte=46, age__lte=55).count(),
+        "56+": queryset.filter(age__gte=56).count(),
+    }
+    return age_ranges
+
+def age_range_report_filtered_view(request):
+    province_id = request.GET.get('province_id')
+    district_id = request.GET.get('district_id')
+    ward_id = request.GET.get('ward_id')
+
+    try:
+        age_range_data = smes_by_age_range_filtered(province_id, district_id, ward_id)
+        return JsonResponse({'age_range_report': age_range_data}, safe=False)
+    except Exception as e:
+        return JsonResponse({'Error': str(e)}, status=400)
