@@ -26,16 +26,15 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <div class="form-group">
-                                <label for="type_of_business">Type of Business</label>
+                                <label for="type_of_business">Form of Business</label>
                                 <select class="form-control select2" id="type_of_business" name="type_of_business">
-                                    <option selected="selected" disabled="disabled">Select Type of Business</option>
+                                    <option selected="selected" disabled="disabled">Select Form of Business</option>
                                     <option value="Private Limited">Private Limited</option>
-                                    <option value="Private Bussiness Cooperation">Private Bussiness Cooperation</option>
+                                    <option value="Private Bussiness Cooperation">Private Business Cooperation</option>
                                     <option value="Cooperative">Cooperative</option>
-                                    <option value="Partnership Registered">Partnership Registered</option>
-                                    <option value="Partnership Unregistered">Partnership Unregistered</option>
-                                    <option value="Sole Trader Registered">Sole Trader Registered</option>
-                                    <option value="Sole Trader Unregistered">Sole Trader Unregistered</option>
+                                    <option value="Partnership">Partnership</option>
+                                    <option value="Syndicate">Syndicate</option>
+                                    <option value="Consortium">Consortium</option>
                                 </select> 
                             </div>
                         </div>
@@ -80,19 +79,21 @@
                                 <label for="age">Age</label>
                                 <select class="form-control select2" id="age" name="age">
                                     <option selected="selected" disabled="disabled">Select Age Group</option>
-                                    <option value="Below 20">Below 20</option>
-                                    <option value="20-35">20 to 35</option>
-                                    <option value="36-60">36 to 60</option>
-                                    <option value="Above 60">Above 60</option>
+                                    <option value="18-24">18 to 24</option>
+                                    <option value="25-34">25 to 34</option>
+                                    <option value="35-44">35 to 44</option>
+                                    <option value="45-54">45 to 54</option>
+                                    <option value="55-64">55 to 64</option>
+                                    <option value="65+">65 or over</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="mb-3 col-md-4">
                             <div class="form-group">
-                                <label for="sex">Gender</label>
+                                <label for="sex">Sex</label>
                                 <select class="form-control select2" id="sex" name="sex">
-                                    <option selected="selected" disabled="disabled">Select Gender</option>
+                                    <option selected="selected" disabled="disabled">Select Sex</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select> 
@@ -104,9 +105,75 @@
                                 <label for="disability">Disability</label>
                                 <select class="form-control select2" id="disability" name="disability">
                                     <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="YES">YES</option>
-                                    <option value="NO">NO</option>
+                                    <option value="Disabled">Disabled</option>
+                                    <option value="Not Disabled">Not Disabled</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="education">Education Level</label>
+                                <select class="form-control select2" id="education" name="education">
+                                    <option selected="selected" disabled="disabled">Select Education Level</option>
+                                    <option value="Primary">Primary</option>
+                                    <option value="O Level">O Level</option>
+                                    <option value="A Level">A Level</option>
+                                    <option value="Tertiary">Tertiary</option>
+                                    <option value="None">None</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="training">Training</label>
+                                <select class="form-control select2" id="training" name="training">
+                                    <option selected="selected" disabled="disabled">Select Training</option>
+                                    <option value="Trained">Trained</option>
+                                    <option value="Not Trained">Not Trained</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-2">
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="registration">Registration</label>
+                                <select class="form-control select2" id="registration" name="registration">
+                                    <option selected="selected" disabled="disabled">Select</option>
+                                    <option value="Registered">Registered</option>
+                                    <option value="Not Registered">Not Registered</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="compliance">Compliance</label>
+                                <input type="text" class="form-control" id="compliance" name="compliance" placeholder="Enter Compliance e.g ZIMRA,NSSA,EMA ...." required>                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="tax">Tax</label>
+                                <select class="form-control select2" id="tax" name="status">
+                                    <option selected="selected" disabled="disabled">Select Tax Type</option>
+                                    <option value="Income Tax">Income Tax</option>
+                                    <option value="Presumptive Tax">Presumptive Tax</option>
+                                    <option value="Value Added Tax (VAT)">Value Added Tax (VAT)</option>
+                                    <option value="Withholding Tax">Withholding Tax</option>
+                                    <option value="Pay As You Earn (PAYE)">Pay As You Earn (PAYE)</option>
+                                    <option value="Capital Gains Tax">Capital Gains Tax</option>
+                                    <option value="Carbon Tax">Carbon Tax</option>
+                                    <option value="Excise Duty">Excise Duty</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>                                
                             </div>
                         </div>
                     </div>
@@ -154,8 +221,8 @@
                                 <label for="">Exports</label>
                                 <select class="form-control select2" id="export" name="export">
                                     <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="YES">YES</option>
-                                    <option value="NO">NO</option>
+                                    <option value="Exporter">Exporter</option>
+                                    <option value="Non Exporter">Non Exporter</option>
                                 </select> 
                             </div>
                         </div>
@@ -171,7 +238,7 @@
                         <div class="mb-3 col-md-4">
                             <div class="form-group">
                                 <label for="annual_revenue">Annual Turnover</label>
-                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter  Annual Revenue" required>
+                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter  Annual Turnover" required>
                             </div>
                         </div>
 
@@ -185,8 +252,8 @@
                     <div class="row">
                         <div class="mb-3 col-md-12">
                             <div class="form-group">
-                                <label for="asset_value">Challenges or Recommendations</label>
-                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges or Recomendations"></textarea>   
+                                <label for="asset_value">Challenges</label>
+                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>   
                             </div>
                         </div>
                     </div>
@@ -200,26 +267,7 @@
     </div>
 </div>
 
-<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 16px; right: 16px; z-index: 9999;"></div>
-    <!-- Popup -->
-    <div class="modal fade" id="numberPlateExistsModal" tabindex="-1" role="dialog" aria-labelledby="numberPlateExistsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="numberPlateExistsModalLabel">Number Plate Already Exists</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>The number plate you entered already exists. Please enter a different number plate.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
 
     

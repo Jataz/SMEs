@@ -75,11 +75,16 @@
                       <th hidden>Province</th>
                       <th hidden>District</th>
                       <th hidden>Ward</th>
+                      <th hidden>Compliance</th>
+                      <th>Registration</th>
+                      <th hidden>Tax</th>
+                      <th hidden>Training</th>
+                      <th hidden>Educcation Level</th>
                       <th>Export</th>
                       <th hidden>Comments</th>
-                      <th>Number of Employees</th>
-                      <th>Asset Value</th>
-                      <th>Annual Revenue</th>
+                      <th hidden>Number of Employees</th>
+                      <th hidden>Asset Value</th>
+                      <th hidden>Annual Turnover</th>
                       <th>Size of Business</th>
                       <th>Actions</th>
                     </tr>
@@ -103,11 +108,16 @@
                         <td hidden>{{ sme.province.province_name }}</td>
                         <td hidden>{{ sme.district.district_name }}</td>
                         <td hidden>{{ sme.ward.ward_name }}</td>
+                        <td hidden>{{ sme.compliance }}</td>
+                        <td>{{ sme.registration }}</td>
+                        <td hidden>{{ sme.tax }}</td>
+                        <td hidden>{{ sme.training}}</td>
+                        <td hidden>{{ sme.education}}</td>
                         <td>{{ sme.export }}</td>
                         <td hidden>{{ sme.comments }}</td>
-                        <td>{{ sme.number_of_employees }}</td>
-                        <td>{{ sme.asset_value }}</td>
-                        <td>{{ sme.annual_revenue }}</td>
+                        <td hidden>{{ sme.number_of_employees }}</td>
+                        <td hidden>{{ sme.asset_value }}</td>
+                        <td hidden>{{ sme.annual_revenue }}</td>
                         {% for scale in sme.calculation_scale %}
                         <!-- Access size_of_business for each scale -->
                         <td>{{ scale.size_of_business.size }}</td>

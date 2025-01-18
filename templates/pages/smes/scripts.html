@@ -97,6 +97,11 @@
             var exportField = $("#export").val();
             var comments = $("#comments").val();
             var disability = $("#disability").val();
+            var compliance = $("#compliance").val().trim();
+            var registration = $("#registration").val().trim();
+            var tax = $("#tax").val();
+            var traning = $("#training").val();
+            var education = $("#education").val();
 
             // Validate company
             if (!wordPattern.test(company)) {
@@ -138,7 +143,12 @@
                 sex: sex,
                 export: exportField,
                 comments: comments,
-                disability: disability 
+                disability: disability ,
+                compliance: compliance,
+                registration: registration,
+                tax: tax,
+                training: traning,
+                education: education
             };
             console.log(formData);
             // Send AJAX request to submit form data
@@ -412,6 +422,8 @@
             showToast("error", "Error", "Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
             return;
         }
+
+        // Validate compliance
 
         // Create the formData object after validation
         var formData = {
