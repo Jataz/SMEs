@@ -30,7 +30,7 @@
                                 <select class="form-control select2" id="type_of_business" name="type_of_business">
                                     <option selected="selected" disabled="disabled">Select Form of Business</option>
                                     <option value="Private Limited">Private Limited</option>
-                                    <option value="Private Bussiness Cooperation">Private Bussiness Cooperation</option>
+                                    <option value="Private Bussiness Cooperation">Private Business Cooperation</option>
                                     <option value="Cooperative">Cooperative</option>
                                     <option value="Partnership">Partnership</option>
                                     <option value="Syndicate">Syndicate</option>
@@ -112,6 +112,72 @@
                         </div>
                     </div>
 
+                    <div class="row g-2">
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="education">Education Level</label>
+                                <select class="form-control select2" id="education" name="education">
+                                    <option selected="selected" disabled="disabled">Select Education Level</option>
+                                    <option value="Primary">Primary</option>
+                                    <option value="O Level">O Level</option>
+                                    <option value="A Level">A Level</option>
+                                    <option value="Tertiary">Tertiary</option>
+                                    <option value="None">None</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <div class="form-group">
+                                <label for="training">Training</label>
+                                <select class="form-control select2" id="training" name="training">
+                                    <option selected="selected" disabled="disabled">Select Training</option>
+                                    <option value="Trained">Trained</option>
+                                    <option value="Not Trained">Not Trained</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-2">
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="registration">Registration</label>
+                                <select class="form-control select2" id="registration" name="registration">
+                                    <option selected="selected" disabled="disabled">Select</option>
+                                    <option value="Registered">Registered</option>
+                                    <option value="Not Registered">Not Registered</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="compliance">Compliance</label>
+                                <input type="text" class="form-control" id="compliance" name="compliance" placeholder="Enter Compliance e.g ZIMRA,NSSA,EMA ...." required>                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-md-4">
+                            <div class="form-group">
+                                <label for="tax">Tax</label>
+                                <select class="form-control select2" id="tax" name="status">
+                                    <option selected="selected" disabled="disabled">Select Tax Type</option>
+                                    <option value="Income Tax">Income Tax</option>
+                                    <option value="Presumptive Tax">Presumptive Tax</option>
+                                    <option value="Value Added Tax (VAT)">Value Added Tax (VAT)</option>
+                                    <option value="Withholding Tax">Withholding Tax</option>
+                                    <option value="Pay As You Earn (PAYE)">Pay As You Earn (PAYE)</option>
+                                    <option value="Capital Gains Tax">Capital Gains Tax</option>
+                                    <option value="Carbon Tax">Carbon Tax</option>
+                                    <option value="Excise Duty">Excise Duty</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>                                
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col">
                             <div class="divider"></div>
@@ -119,7 +185,7 @@
                     </div>
 
                     <div class="row g-2 common-fields hidden">
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-12">
                             <div class="form-group">
                                 <label for="sector">Sector</label>
                                 <select class="form-control select2" id="sector" name="sector">
@@ -144,13 +210,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-9">
                             <div class="form-group">
                                 <label for="product_service">Product or Service</label>
                                 <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required>   
                             </div>
                         </div>
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-3">
                             <div class="form-group">
                                 <label for="">Exports</label>
                                 <select class="form-control select2" id="export" name="export">
@@ -162,7 +228,6 @@
                         </div>
                     </div>
                     
-
                     <div class="row g-2 common-fields hidden">
                         <div class="mb-3 col-md-4">
                             <div class="form-group">
@@ -173,7 +238,7 @@
                         <div class="mb-3 col-md-4">
                             <div class="form-group">
                                 <label for="annual_revenue">Annual Turnover</label>
-                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter  Annual Revenue" required>
+                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter  Annual Turnover" required>
                             </div>
                         </div>
 
@@ -187,7 +252,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-12">
                             <div class="form-group">
-                                <label for="asset_value">Challenges </label>
+                                <label for="asset_value">Challenges</label>
                                 <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>   
                             </div>
                         </div>

@@ -282,3 +282,31 @@ def update_sme_record(request):
     
     else:
         return JsonResponse({'Error': 'Method not allowed'}, status=405)
+
+def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
+                                  type_of_business, product_service, number_of_employees, asset_value, annual_revenue, age,
+                                  sex, export, comments, disability, compliance, registration, tax, training, education):
+    sme = get_object_or_404(SME, id=sme_id)
+    sme.company = company
+    sme.contact_person = contact_person
+    sme.phone_number = phone_number
+    sme.email = email
+    sme.address = address
+    sme.sector = sector
+    sme.type_of_business = type_of_business
+    sme.product_service = product_service
+    sme.number_of_employees = number_of_employees
+    sme.asset_value = asset_value
+    sme.annual_revenue = annual_revenue
+    sme.age = age
+    sme.sex = sex
+    sme.export = export
+    sme.comments = comments
+    sme.disability = disability
+    sme.compliance = compliance
+    sme.registration = registration
+    sme.tax = tax
+    sme.training = training
+    sme.education = education
+    sme.save()
+    return sme
