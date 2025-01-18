@@ -1,71 +1,108 @@
+from ..models import SME, CalculationScale, SizeValue, SectorThreshold
+import logging
 
-from ..models import SME, CalculationScale, SizeValue
+# Initialize a logger for debugging
+logger = logging.getLogger(__name__)
+
+def determine_size_of_employees(number_of_employees, sector):
+    """Determine the size of employees based on the sector-specific thresholds."""
+    thresholds = SectorThreshold.objects.filter(sector=sector).select_related('size')
+
+    if not thresholds.exists():
+        logger.error(f"No thresholds defined for sector: {sector}")
+        raise ValueError(f"No thresholds defined for sector: {sector}")
+
+    try:
+        # Use ordered thresholds to determine the size
+        for threshold in thresholds.order_by('max_employees'):
+            if number_of_employees <= threshold.max_employees:
+                return threshold.size  # Return the linked SizeValue object
+        return SizeValue.objects.get(size='LARGE')  # Default to 'LARGE' if no match
+    except SizeValue.DoesNotExist as e:
+        logger.error(f"SizeValue not configured properly: {e}")
+        raise ValueError(f"Thresholds not configured properly for sector: {sector}") from e
 
 
-def determine_size_of_employees(number_of_employees):
-    """Determine the size of employees based on the number of employees."""
-    if number_of_employees <= 5:
-        return SizeValue.objects.get(size='MICRO')
-    elif 5 <= number_of_employees <= 40:
-        return SizeValue.objects.get(size='SMALL')
-    elif 41 <= number_of_employees <= 75:
-        return SizeValue.objects.get(size='MEDIUM')
-    else:
+def determine_size_of_annual_revenue(annual_revenue, sector):
+    """Determine the size of annual revenue based on the sector-specific thresholds."""
+    thresholds = SectorThreshold.objects.filter(sector=sector).select_related('size')
+
+    if not thresholds.exists():
+        logger.error(f"No thresholds defined for sector: {sector}")
+        raise ValueError(f"No thresholds defined for sector: {sector}")
+
+    try:
+        for threshold in thresholds.order_by('max_annual_revenue'):
+            if annual_revenue <= threshold.max_annual_revenue:
+                return threshold.size
         return SizeValue.objects.get(size='LARGE')
+    except SizeValue.DoesNotExist as e:
+        logger.error(f"SizeValue not configured properly: {e}")
+        raise ValueError(f"Thresholds not configured properly for sector: {sector}") from e
 
 
-def determine_size_of_annual_revenue(annual_revenue):
-    """Determine the size of annual revenue based on the annual revenue."""
-    if annual_revenue <= 30000:
-        return SizeValue.objects.get(size='MICRO')
-    elif annual_revenue <= 500000:
-        return SizeValue.objects.get(size='SMALL')
-    elif annual_revenue <= 1000000:
-        return SizeValue.objects.get(size='MEDIUM')
-    else:
+def determine_size_of_asset_value(asset_value, sector):
+    """Determine the size of asset value based on the sector-specific thresholds."""
+    thresholds = SectorThreshold.objects.filter(sector=sector).select_related('size')
+
+    if not thresholds.exists():
+        logger.error(f"No thresholds defined for sector: {sector}")
+        raise ValueError(f"No thresholds defined for sector: {sector}")
+
+    try:
+        for threshold in thresholds.order_by('max_asset_value'):
+            if asset_value <= threshold.max_asset_value:
+                return threshold.size
         return SizeValue.objects.get(size='LARGE')
-
-
-def determine_size_of_asset_value(asset_value):
-    """Determine the size of asset value based on the asset value."""
-    if asset_value <= 10000:
-        return SizeValue.objects.get(size='MICRO')
-    elif asset_value <= 500000:
-        return SizeValue.objects.get(size='SMALL')
-    elif asset_value <= 1000000:
-        return SizeValue.objects.get(size='MEDIUM')
-    else:
-        return SizeValue.objects.get(size='LARGE')
+    except SizeValue.DoesNotExist as e:
+        logger.error(f"SizeValue not configured properly: {e}")
+        raise ValueError(f"Thresholds not configured properly for sector: {sector}") from e
 
 
 def calculate_rating(size_of_employees, size_of_annual_revenue, size_of_asset_value):
     """Calculate the rating based on the size of employees, annual revenue, and asset value."""
-    return size_of_employees.value + size_of_annual_revenue.value + size_of_asset_value.value
+    try:
+        rating = size_of_employees.value + size_of_annual_revenue.value + size_of_asset_value.value
+        logger.info(f"Calculated rating: {rating}")
+        return rating
+    except Exception as e:
+        logger.error(f"Error calculating rating: {e}")
+        raise
 
 
 def determine_business_size(rating):
     """Determine the size of the business based on the rating."""
-    if rating < 4:
-        return SizeValue.objects.get(size='MICRO')
-    elif rating < 8:
-        return SizeValue.objects.get(size='SMALL')
-    elif rating < 10:
-        return SizeValue.objects.get(size='MEDIUM')
-    else:
-        return SizeValue.objects.get(size='LARGE')
+    try:
+        if rating < 4:
+            return SizeValue.objects.get(size='MICRO')
+        elif rating < 8:
+            return SizeValue.objects.get(size='SMALL')
+        elif rating < 10:
+            return SizeValue.objects.get(size='MEDIUM')
+        else:
+            return SizeValue.objects.get(size='LARGE')
+    except SizeValue.DoesNotExist as e:
+        logger.error(f"Error determining business size: {e}")
+        raise
 
 
-def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, size_of_asset_value,
-                             rating, size_of_business):
+def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, size_of_asset_value, rating, size_of_business):
     """Create a CalculationScale record."""
-    CalculationScale.objects.create(
-        sme=sme,
-        size_of_employees=size_of_employees,
-        size_of_annual_revenue=size_of_annual_revenue,
-        size_of_asset_value=size_of_asset_value,
-        rating=rating,
-        size_of_business=size_of_business
-    )
+    try:
+        scale = CalculationScale.objects.create(
+            sme=sme,
+            size_of_employees=size_of_employees,
+            size_of_annual_revenue=size_of_annual_revenue,
+            size_of_asset_value=size_of_asset_value,
+            rating=rating,
+            size_of_business=size_of_business
+        )
+        logger.info(f"CalculationScale created for SME: {sme}")
+        return scale
+    except Exception as e:
+        logger.error(f"Error creating CalculationScale: {e}")
+        raise
+
     
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,

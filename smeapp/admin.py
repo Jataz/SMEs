@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SME, District, Province, SizeValue, CalculationScale, UserProfile, Ward
+from .models import SME, District, Province, SizeValue, CalculationScale, UserProfile, Ward,Sector,SectorThreshold
 from django.contrib.auth.models import Permission
 from django import forms
 
@@ -56,3 +56,5 @@ admin.site.register(SME, SMEAdmin)
 admin.site.register(CalculationScale,CalculationScaleAdmin)
 admin.site.register(Permission, PermissionAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Sector)
+admin.site.register(SectorThreshold)
