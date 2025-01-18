@@ -97,6 +97,11 @@
             var exportField = $("#export").val();
             var comments = $("#comments").val();
             var disability = $("#disability").val();
+            var compliance = $("#compliance").val().trim();
+            var registration = $("#registration").val().trim();
+            var tax = $("#tax").val();
+            var traning = $("#training").val();
+            var education = $("#education").val();
 
             // Validate company
             if (!wordPattern.test(company)) {
@@ -138,7 +143,12 @@
                 sex: sex,
                 export: exportField,
                 comments: comments,
-                disability: disability 
+                disability: disability ,
+                compliance: compliance,
+                registration: registration,
+                tax: tax,
+                training: traning,
+                education: education
             };
             console.log(formData);
             // Send AJAX request to submit form data
@@ -285,6 +295,12 @@
                     modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);
                     modal.find('.modal-body #disability').text(data.ward.disability);
 
+                    modal.find('.modal-body #compliance').text(data.compliance);
+                    modal.find('.modal-body #registration').text(data.registration);
+                    modal.find('.modal-body #tax').text(data.tax);
+                    modal.find('.modal-body #training').text(data.training);
+                    modal.find('.modal-body #education').text(data.education);
+
                     modal.find('.modal-body #province').text(data.province.province_name);
                     modal.find('.modal-body #district').text(data.district.district_name);
                     modal.find('.modal-body #ward').text(data.ward.ward_name);
@@ -322,6 +338,12 @@
                 modal.find('#product_service').val(data.product_service);
                 modal.find('#export').val(data.export);
                 modal.find('#comments').val(data.comments);
+
+                modal.find('#compliance').val(data.compliance);
+                modal.find('#registration').val(data.registration);
+                modal.find('#tax').val(data.tax);
+                modal.find('#training').val(data.training);
+                modal.find('#education').val(data.education);
     
                 // Populate province dropdown
                 
@@ -388,6 +410,11 @@
         var exportField = form.find('#export').val();
         var comments = form.find('#comments').val();
         var disability = form.find('#disability').val();
+        var compliance = form.find('#compliance').val().trim();
+        var registration = form.find('#registration').val().trim();
+        var tax = form.find('#tax').val();
+        var traning = form.find('#training').val();
+        var education = form.find('#education').val();
 
         // Validate company
         if (!wordPattern.test(company)) {
@@ -413,6 +440,8 @@
             return;
         }
 
+        // Validate compliance
+
         // Create the formData object after validation
         var formData = {
             smeId: smeId,
@@ -431,7 +460,12 @@
             annual_revenue: annual_revenue,
             export: exportField,
             comments: comments,
-            disability: disability
+            disability: disability,
+            compliance: compliance,
+            registration: registration,
+            tax: tax,
+            training: traning,
+            education: education
         };
 
 

@@ -123,6 +123,11 @@ def sme_create_record(request):
         export = form_data.get('export')
         comments = form_data.get('comments')
         disability = form_data.get('disability')
+        compliance = form_data.get('compliance')
+        registration = form_data.get('registration')
+        tax = form_data.get('tax')
+        training = form_data.get('training')
+        education = form_data.get('education')
         
         try:
             annual_revenue = int(form_data.get('annual_revenue'))
@@ -138,7 +143,8 @@ def sme_create_record(request):
         
         # Validate form data
         if not all([company, contact_person, phone_number, email, address, sector, type_of_business, product_service,
-                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments,disability]):
+                    number_of_employees, asset_value, annual_revenue,age,sex,export,comments,
+                    disability,compliance,registration,tax,training,education]):
             return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
@@ -147,7 +153,8 @@ def sme_create_record(request):
                 # Create SME record
                 sme = create_sme_record(company, contact_person, phone_number, email, address, sector,
                                          type_of_business, product_service, province_id, district_id,ward_id,
-                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments,disability,sme_ref_number)
+                                         number_of_employees, asset_value, annual_revenue,age,sex,export,comments,
+                                         disability,sme_ref_number,compliance, registration, tax, training, education)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)
@@ -171,7 +178,7 @@ def sme_create_record(request):
         return JsonResponse({'Error': 'Method not allowed'}, status=405)
 def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
                       province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue, age, sex, 
-                      export, comments, disability, sme_ref_number):
+                      export, comments, disability, sme_ref_number,compliance,registration,tax,training,education):
     
     return SME.objects.create(
         company=company,
@@ -193,7 +200,13 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         export=export,
         comments=comments,
         disability = disability,
-        sme_ref_number=sme_ref_number
+        sme_ref_number=sme_ref_number,
+        compliance=compliance,
+        registration=registration,
+        tax=tax,
+        training=training,
+        education=education
+        
     )
 
     return sme
@@ -223,16 +236,22 @@ def update_sme_record(request):
         export = form_data.get('export')
         comments = form_data.get('comments')
         disability = form_data.get('disability')
+        compliance = form_data.get('compliance')
+        registration = form_data.get('registration')
+        tax = form_data.get('tax')
+        training = form_data.get('training')
+        education = form_data.get('education')
         try:
             number_of_employees = int(form_data.get('number_of_employees'))
             annual_revenue = float(form_data.get('annual_revenue'))
             asset_value = float(form_data.get('asset_value'))
         except ValueError:
-            return JsonResponse({'Error': 'Invalid value for annual revenue or asset value'}, status=400)
+            return JsonResponse({'Error': 'Invalid value for annual turnover or asset value'}, status=400)
 
         # Validate form data
         if not all([sme_id, company, contact_person, phone_number, email, address, sector, type_of_business,
-                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments,disability]):
+                    product_service, number_of_employees, asset_value,annual_revenue, age, sex,export,comments,disability,
+                    compliance,registration,tax,training,education]):
             return JsonResponse({'Error': 'Please fill in all fields'}, status=400)
         
         # Start a database transaction
@@ -240,7 +259,8 @@ def update_sme_record(request):
             try:
                 # Update SME record
                 update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,export,comments,disability)
+                                              type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age,
+                                              sex,export,comments,disability,compliance,registration,tax,training,education)
                 
                 # Determine rating based on number_of_employees, annual_revenue, and asset_value
                 size_of_employees = determine_size_of_employees(number_of_employees)
@@ -262,3 +282,31 @@ def update_sme_record(request):
     
     else:
         return JsonResponse({'Error': 'Method not allowed'}, status=405)
+
+def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
+                                  type_of_business, product_service, number_of_employees, asset_value, annual_revenue, age,
+                                  sex, export, comments, disability, compliance, registration, tax, training, education):
+    sme = get_object_or_404(SME, id=sme_id)
+    sme.company = company
+    sme.contact_person = contact_person
+    sme.phone_number = phone_number
+    sme.email = email
+    sme.address = address
+    sme.sector = sector
+    sme.type_of_business = type_of_business
+    sme.product_service = product_service
+    sme.number_of_employees = number_of_employees
+    sme.asset_value = asset_value
+    sme.annual_revenue = annual_revenue
+    sme.age = age
+    sme.sex = sex
+    sme.export = export
+    sme.comments = comments
+    sme.disability = disability
+    sme.compliance = compliance
+    sme.registration = registration
+    sme.tax = tax
+    sme.training = training
+    sme.education = education
+    sme.save()
+    return sme
