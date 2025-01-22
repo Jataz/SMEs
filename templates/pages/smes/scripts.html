@@ -330,6 +330,8 @@
                     modal.find('.modal-body #tax').text(data.tax);
                     modal.find('.modal-body #training').text(data.training);
                     modal.find('.modal-body #education').text(data.education);
+                    modal.find('.modal-body #source_of_funds').text(data.source_of_funds);
+                    modal.find('.modal-body #training_recieved').text(data.training_recieved);
 
                     modal.find('.modal-body #province').text(data.province.province_name);
                     modal.find('.modal-body #district').text(data.district.district_name);
@@ -380,6 +382,8 @@
                 modal.find('#asset_value').val(data.asset_value);
                 modal.find('#annual_revenue').val(data.annual_revenue);
                 modal.find('#disability').val(data.disability);
+                modal.find('#training_recieved').val(data.training_recieved);
+                modal.find('source_of_funds').val(data.source_of_funds);
 
                 // Populate the sector dropdown dynamically with preselection
                 $.ajax({
@@ -476,6 +480,8 @@
         var tax = form.find('#tax').val();
         var traning = form.find('#training').val();
         var education = form.find('#education').val();
+        var training_recieved = form.find('#training_recieved').val();
+        var source_of_funds = form.find('#source_of_funds').val();
 
         // Validate company
         if (!wordPattern.test(company)) {
@@ -526,7 +532,9 @@
             registration: registration,
             tax: tax,
             training: traning,
-            education: education
+            education: education,
+            training_recieved: training_recieved,
+            source_of_funds: source_of_funds
         };
 
 

@@ -62,6 +62,8 @@ class SME(models.Model):
     tax = models.CharField(max_length=255, default="Presumptive Tax")
     training = models.CharField(max_length=255, default="Received Training")
     education = models.CharField(max_length=255, default="Received Education")
+    training_recieved = models.CharField(max_length=255, default=5)
+    source_of_funds = models.CharField(max_length=255,default="Business grants")
     export = models.CharField()
     comments = models.CharField()
     number_of_employees = models.IntegerField()
