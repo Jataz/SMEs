@@ -47,7 +47,9 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id','user','ward','province', 'district','is_ward_level','is_district_level','is_province_level','is_national_level')
     form = UserProfileAdminForm
 
-
+class SectoThresholdAdmin(admin.ModelAdmin):
+    list_display = ('id','sector','max_employees','max_annual_revenue','max_asset_value','size')
+    
 admin.site.register(Province)
 admin.site.register(District, DistrictAdmin)
 admin.site.register(Ward, WardAdmin)
@@ -57,4 +59,4 @@ admin.site.register(CalculationScale,CalculationScaleAdmin)
 admin.site.register(Permission, PermissionAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Sector)
-admin.site.register(SectorThreshold)
+admin.site.register(SectorThreshold,SectoThresholdAdmin)

@@ -1,276 +1,314 @@
-<!-- Modal -->
 <div class="modal fade" data-backdrop="static" id="editSmeModal" tabindex="-1" role="dialog" aria-labelledby="editSmeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content" style="font-family: 'Trebuchet MS', sans-serif; background-color: #ffffff;">
+            <div class="modal-header" style="background-color: #007bff; color: white; border-top-left-radius: 8px; border-top-right-radius: 8px;">
                 <h4 class="modal-title" id="editSmeModalLabel">UPDATE DETAILS</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="editSMEForm" autocomplete="off" style="font-size:15px">
-                    
-                    <div class="row">
-                        <div class="col">
-                            <div class="divider"></div>
-                        </div>
+            <div class="modal-body" style="padding: 30px;">
+
+                <form id="editSMEForm" autocomplete="off" style="font-size: 15px;">
+
+                    <!-- Business Information Section -->
+                    <div class="section-header bg-gradient text-white py-2 px-3 rounded mb-4" style="background-color: #007bff;">
+                        <h5><i class="fas fa-industry" style="color: #FFD700;"></i> Business Information</h5>
                     </div>
 
-                    <div class="row g-2">
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="company">Company</label>
+                    <!-- First Row: Company, Registration Status, Form of Business, Sector -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="company">Company</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-building" style="color: #007bff;"></i></div>
                                 <input type="text" class="form-control" id="company" name="company" placeholder="Enter Company Name" required>
                             </div>
                         </div>
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="type_of_business">Form of Business</label>
-                                <select class="form-control select2" id="type_of_business" name="type_of_business">
+                        <div class="col-md-6">
+                            <label for="registration">Registration Status</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-check-circle" style="color: #007bff;"></i></div>
+                                <select class="form-control select2" id="registration" name="registration" required>
+                                    <option selected="selected" disabled="disabled">Select</option>
+                                    <option value="Registered">Registered</option>
+                                    <option value="Not-Registered">Not-Registered</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="type_of_business">Form of Business</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-cogs" style="color: #007bff;"></i></div>
+                                <select class="form-control select2" id="type_of_business" name="type_of_business" required>
                                     <option selected="selected" disabled="disabled">Select Form of Business</option>
                                     <option value="Private Limited">Private Limited</option>
-                                    <option value="Private Bussiness Cooperation">Private Business Cooperation</option>
+                                    <option value="Private Business Cooperation">Private Business Cooperation</option>
                                     <option value="Cooperative">Cooperative</option>
                                     <option value="Partnership">Partnership</option>
                                     <option value="Syndicate">Syndicate</option>
                                     <option value="Consortium">Consortium</option>
-                                </select> 
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row g-2 sole-trader-related hidden">
-
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="contact_person">Contact Person</label>
-                                <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name" required>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="address">Physical Address</label>
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Enter Physical Address" required>   
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row g-2 other-select-related hidden">
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="phone_number">Phone Number</label>
-                                <input type="phone" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone  Number 07" required>
-                            </div>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
-                            </div>
-                        </div>
-
-                    </div>
-                    
-                    <div class="row g-2 common-fields hidden">
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="age">Age</label>
-                                <select class="form-control select2" id="age" name="age">
-                                    <option selected="selected" disabled="disabled">Select Age Group</option>
-                                    <option value="18-24">18 to 24</option>
-                                    <option value="25-34">25 to 34</option>
-                                    <option value="35-44">35 to 44</option>
-                                    <option value="45-54">45 to 54</option>
-                                    <option value="55-64">55 to 64</option>
-                                    <option value="65+">65 or over</option>
                                 </select>
                             </div>
                         </div>
-
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="sex">Sex</label>
-                                <select class="form-control select2" id="sex" name="sex">
-                                    <option selected="selected" disabled="disabled">Select Sex</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select> 
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="disability">Disability</label>
-                                <select class="form-control select2" id="disability" name="disability">
-                                    <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="Disabled">Disabled</option>
-                                    <option value="Not Disabled">Not Disabled</option>
+                        <div class="col-md-6">
+                            <label for="sector">Sector</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-industry" style="color: #007bff;"></i></div>
+                                <select class="form-control select2" id="sector" name="sector" required>
+                                    <option selected="selected" disabled="disabled">Select Sector</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row g-2">
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="education">Education Level</label>
-                                <select class="form-control select2" id="education" name="education">
-                                    <option selected="selected" disabled="disabled">Select Education Level</option>
-                                    <option value="Primary">Primary</option>
-                                    <option value="O Level">O Level</option>
-                                    <option value="A Level">A Level</option>
-                                    <option value="Tertiary">Tertiary</option>
-                                    <option value="None">None</option>
-                                </select>
+                    <!-- Last Row: Product or Service, Number of Employees, Exports -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="product_service">Product or Service</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-box" style="color: #007bff;"></i></div>
+                                <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required>
                             </div>
                         </div>
-
-                        <div class="mb-3 col-md-6">
-                            <div class="form-group">
-                                <label for="training">Training</label>
-                                <select class="form-control select2" id="training" name="training">
-                                    <option selected="selected" disabled="disabled">Select Training</option>
-                                    <option value="Trained">Trained</option>
-                                    <option value="Not Trained">Not Trained</option>
-                                </select>
+                        <div class="col-md-4">
+                            <label for="number_of_employees">Number of Employees</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-users" style="color: #007bff;"></i></div>
+                                <input type="number" class="form-control" id="number_of_employees" name="number_of_employees" placeholder="Enter Number of Employees" required>
                             </div>
                         </div>
-                    </div>
-
-
-                    <div class="row g-2">
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="registration">Registration</label>
-                                <select class="form-control select2" id="registration" name="registration">
-                                    <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="Registered">Registered</option>
-                                    <option value="Not Registered">Not Registered</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="compliance">Compliance</label>
-                                <input type="text" class="form-control" id="compliance" name="compliance" placeholder="Enter Compliance e.g ZIMRA,NSSA,EMA ...." required>                                
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="tax">Tax</label>
-                                <select class="form-control select2" id="tax" name="status">
-                                    <option selected="selected" disabled="disabled">Select Tax Type</option>
-                                    <option value="Income Tax">Income Tax</option>
-                                    <option value="Presumptive Tax">Presumptive Tax</option>
-                                    <option value="Value Added Tax (VAT)">Value Added Tax (VAT)</option>
-                                    <option value="Withholding Tax">Withholding Tax</option>
-                                    <option value="Pay As You Earn (PAYE)">Pay As You Earn (PAYE)</option>
-                                    <option value="Capital Gains Tax">Capital Gains Tax</option>
-                                    <option value="Carbon Tax">Carbon Tax</option>
-                                    <option value="Excise Duty">Excise Duty</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>                                
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="divider"></div>
-                        </div>
-                    </div>
-
-                    <div class="row g-2 common-fields hidden">
-                        <div class="mb-3 col-md-12">
-                            <div class="form-group">
-                                <label for="sector">Sector</label>
-                                <select class="form-control select2" id="sector" name="sector">
-                                    <!-- Options will be dynamically added here -->
-                                </select>
-                            </div>
-                            
-                        </div>
-                        <div class="mb-3 col-md-9">
-                            <div class="form-group">
-                                <label for="product_service">Product or Service</label>
-                                <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required>   
-                            </div>
-                        </div>
-                        <div class="mb-3 col-md-3">
-                            <div class="form-group">
-                                <label for="">Exports</label>
-                                <select class="form-control select2" id="export" name="export">
+                        <div class="col-md-4">
+                            <label for="export">Exports</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-arrow-alt-circle-right" style="color: #007bff;"></i></div>
+                                <select class="form-control select2" id="export" name="export" required>
                                     <option selected="selected" disabled="disabled">Select</option>
                                     <option value="Exporter">Exporter</option>
-                                    <option value="Non Exporter">Non Exporter</option>
-                                </select> 
+                                    <option value="Non-Exporter">Non-Exporter</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="row g-2 common-fields hidden">
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="number_of_employees">Number of Employees</label>
-                                <input type="number" class="form-control" id="number_of_employees" name="number_of_employees" placeholder="Enter Number of Employees" required>   
-                            </div>
-                        </div>
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="annual_revenue">Annual Turnover</label>
-                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter  Annual Turnover" required>
-                            </div>
-                        </div>
 
-                        <div class="mb-3 col-md-4">
-                            <div class="form-group">
-                                <label for="asset_value">Assets Value</label>
-                                <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>   
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col-md-12">
-                            <div class="form-group">
-                                <label for="asset_value">Challenges</label>
-                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>   
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-outline-primary btn-sm" id="save-changes">Submit</button>
-                    </div>
-                </form>
+                    <!-- Business Contact Information Section --> 
+<div class="card mb-4" style="border: 1px solid #dee2e6; border-radius: 8px;">
+    <div class="card-header" style="background-color: #28a745; color: #0000FF; font-size: 1.5rem;"> 
+        <i class="fas fa-phone-alt" style="color: #FFD700;"></i> Business Contact Information
+    </div>
+    <div class="card-body" style="background-color: #f9f9f9;">
+        <!-- First Row: Contact Person and Physical Address -->
+        <div class="row g-2 mb-3"> <!-- Reduced the gap between fields -->
+            <div class="col-md-6 mb-2"> <!-- Reduced bottom margin -->
+                <label for="contact_person">Contact Person</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-user" style="color: #28a745;"></i></div>
+                    <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name" required>
+                </div>
+            </div>
+            <div class="col-md-6 mb-2"> <!-- Reduced bottom margin -->
+                <label for="address">Physical Address</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-map-marker-alt" style="color: #28a745;"></i></div>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Enter Physical Address" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row: Phone Number, Email, and Education Level -->
+        <div class="row g-2 mb-3"> <!-- Reduced the gap between fields -->
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="phone_number">Phone Number</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-phone-alt" style="color: #28a745;"></i></div>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone Number" required>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-envelope" style="color: #28a745;"></i></div>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="education">Education Level</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-graduation-cap" style="color: #28a745;"></i></div>
+                    <select class="form-control select2" id="education" name="education">
+                        <option selected="selected" disabled="disabled">Select Education Level</option>
+                        <option value="Primary">Primary</option>
+                        <option value="O Level">O Level</option>
+                        <option value="A Level">A Level</option>
+                        <option value="Tertiary">Tertiary</option>
+                        <option value="None">None</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Row: Age, Sex, and Disability -->
+        <div class="row g-2 mb-3"> <!-- Reduced the gap between fields -->
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="age">Age</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-calendar-alt" style="color: #28a745;"></i></div>
+                    <select class="form-control select2" id="age" name="age">
+                        <option selected="selected" disabled="disabled">Select Age Group</option>
+                        <option value="18-24">18 to 24</option>
+                        <option value="25-34">25 to 34</option>
+                        <option value="35-44">35 to 44</option>
+                        <option value="45-54">45 to 54</option>
+                        <option value="55-64">55 to 64</option>
+                        <option value="65+">65 or over</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="sex">Sex</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-genderless" style="color: #28a745;"></i></div>
+                    <select class="form-control select2" id="sex" name="sex">
+                        <option selected="selected" disabled="disabled">Select Sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2"> <!-- Reduced bottom margin -->
+                <label for="disability">Disability</label>
+                <div class="input-group">
+                    <div class="input-group-text"><i class="fas fa-wheelchair" style="color: #28a745;"></i></div>
+                    <select class="form-control select2" id="disability" name="disability">
+                        <option selected="selected" disabled="disabled">Select</option>
+                        <option value="Disabled">Disabled</option>
+                        <option value="Not-Disabled">Not-Disabled</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 16px; right: 16px; z-index: 9999;"></div>
-    <!-- Popup -->
-    <div class="modal fade" id="numberPlateExistsModal" tabindex="-1" role="dialog" aria-labelledby="numberPlateExistsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="numberPlateExistsModalLabel">Number Plate Already Exists</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>The number plate you entered already exists. Please enter a different number plate.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
+                    <!-- Business Support Services Section -->
+                    <div class="section-header bg-success text-white py-2 px-3 rounded mb-4" style="background-color: #28a745;">
+                        <h5><i class="fas fa-cogs" style="color: #FFD700;"></i> Business Support Services</h5>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="training">Training</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-chalkboard-teacher" style="color: #FFD700;"></i></div>
+                                <select class="form-control select2" id="training" name="training">
+                                    <option selected="selected" disabled="disabled">Select Training</option>
+                                    <option value="Trained">Trained</option>
+                                    <option value="Not-Trained">Not-Trained</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="annual_revenue">Training received</label>
+                            <div class="input-group">
+                                <div class="input-group-text"><i class="fas fa-briefcase" style="color: #FFD700;"></i></div>
+                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter training received" required>
+                            </div>
+                        </div>
+                    </div>
+<!-- Include FontAwesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<style>
+    /* Apply Trebuchet font to the entire form */
+    body, input, select, textarea, label {
+        font-family: 'Trebuchet MS', sans-serif;
+    }
+</style>
+
+<!-- Compliance Section -->
+<div class="section-header bg-info text-white py-2 px-3 rounded mb-3">
+    <h5><i class="fas fa-shield-alt" style="color: #ffffff;"></i> Compliance</h5>
+</div>
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="form-group position-relative">
+            <label for="compliance">Compliance</label>
+            <input type="text" class="form-control" id="compliance" name="compliance" placeholder="Enter Compliance (e.g., ZIMRA, NSSA, EMA)" required> 
+            <i class="fas fa-check-circle position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #17a2b8;"></i> <!-- Compliance Icon -->
         </div>
-      </div>
+    </div>
 
+    <div class="col-md-6">
+        <div class="form-group position-relative">
+            <label for="tax">Tax</label>
+            <input type="text" class="form-control" id="tax" name="tax" placeholder="Enter Tax Type (e.g., Income Tax, PAYE, VAT)" required> 
+            <i class="fas fa-file-invoice position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #17a2b8;"></i> <!-- Tax Icon -->
+        </div>
+    </div>
+</div>
 
-    
+<!-- Financial Information Section -->
+<div class="section-header bg-warning text-white py-2 px-3 rounded mb-3">
+    <h5><i class="fas fa-wallet" style="color: #ffffff;"></i> Financial Information</h5>
+</div>
+
+<div class="row g-3">
+    <!-- Source of Funds -->
+    <div class="col-md-4">
+        <label for="source_of_funds">Source of Funds</label>
+        <div class="form-group position-relative">
+            <select class="form-control select2" id="source_of_funds" name="source_of_funds">
+                <option selected="selected" disabled="disabled">Select Source of Funds</option>
+                <option value="Business grants">Business grants</option>
+                <option value="Venture capital">Venture capital</option>
+                <option value="Angel investors">Angel investors</option>
+                <option value="Friends and Family">Friends and Family</option>
+                <option value="Term loan">Term-loan</option>
+                <option value="Government loan">Government-loan</option>
+            </select>
+            <i class="fas fa-money-bill-wave position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #ffc107;"></i> <!-- Source of Funds Icon -->
+        </div>
+    </div>
+
+    <!-- Annual Turnover -->
+    <div class="col-md-4">
+        <label for="annual_revenue">Annual Turnover</label>
+        <div class="form-group position-relative">
+            <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter Annual Turnover" required>
+            <i class="fas fa-calculator position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #ffc107;"></i> <!-- Turnover Icon -->
+        </div>
+    </div>
+
+    <!-- Assets Value -->
+    <div class="col-md-4">
+        <label for="asset_value">Assets Value</label>
+        <div class="form-group position-relative">
+            <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>
+            <i class="fas fa-piggy-bank position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #ffc107;"></i> <!-- Assets Icon -->
+        </div>
+    </div>
+</div>
+
+<!-- Challenges Section -->
+<div class="section-header bg-danger text-white py-2 px-3 rounded mb-3">
+    <h5><i class="fas fa-exclamation-circle" style="color: #ffffff;"></i> Challenges</h5>
+</div>
+<div class="row g-3">
+    <div class="col-md-12">
+        <div class="form-group position-relative">
+            <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>
+            <i class="fas fa-comment-dots position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); color: #dc3545;"></i> <!-- Comment Icon -->
+        </div>
+    </div>
+</div>
+                    <!-- Modal Footer Buttons -->
+                    <div class="modal-footer" style="background-color: #f9f9f9; border-top: 1px solid #dee2e6;">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm" id="save-changes">Submit</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
