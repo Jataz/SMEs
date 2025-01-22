@@ -134,6 +134,8 @@ def sme_create_record(request):
         tax = form_data.get('tax')
         training = form_data.get('training')
         education = form_data.get('education')
+        source_of_funds = form_data.get('source_of_funds')
+        training_recieved = form_data.get('training_recieved')
 
         # Generate SME reference number
         sme_ref_number = f"SME{datetime.now().strftime('%Y%m%d%H%M%S')}"
@@ -166,7 +168,9 @@ def sme_create_record(request):
                 registration=registration,
                 tax=tax,
                 training=training,
-                education=education
+                education=education,
+                training_recieved=training_recieved,
+                source_of_funds=source_of_funds
             )
 
             # Calculate sizes based on sector thresholds
@@ -204,7 +208,7 @@ def sme_create_record(request):
 
 def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
                       province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue, age, sex, 
-                      export, comments, disability, sme_ref_number,compliance,registration,tax,training,education):
+                      export, comments, disability, sme_ref_number,compliance,registration,tax,training,education, training_recieved, source_of_funds):
     
     return SME.objects.create(
         company=company,
@@ -231,8 +235,9 @@ def create_sme_record(company, contact_person, phone_number, email, address, sec
         registration=registration,
         tax=tax,
         training=training,
-        education=education
-        
+        education=education,
+        source_of_funds=source_of_funds,
+        training_recieved=training_recieved
     )
 
     return sme
@@ -268,6 +273,8 @@ def update_sme_record(request):
         tax = form_data.get('tax')
         training = form_data.get('training')
         education = form_data.get('education')
+        training_recieved = form_data.get('training_recieved')
+        source_of_funds = form_data.get('source_of_funds')
 
         # Validate required fields
         missing_fields = []
@@ -293,7 +300,9 @@ def update_sme_record(request):
         'registration': registration,
         'tax': tax,
         'training': training,
-        'education': education
+        'education': education,
+        'source_of_funds': source_of_funds,
+        'training_recieved': training_recieved
         }
 
         # Check each field explicitly
@@ -335,7 +344,9 @@ def update_sme_record(request):
                 registration=registration,
                 tax=tax,
                 training=training,
-                education=education
+                education=education,
+                training_recieved=training_recieved,
+                source_of_funds=source_of_funds
             )
 
             # Calculate sizes based on sector-specific thresholds
@@ -371,7 +382,7 @@ def update_sme_record(request):
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
                                   type_of_business, product_service, number_of_employees, asset_value, annual_revenue, age,
-                                  sex, export, comments, disability, compliance, registration, tax, training, education):
+                                  sex, export, comments, disability, compliance, registration, tax, training, education, training_recieved, source_of_funds):
     sme = get_object_or_404(SME, id=sme_id)
     sme.company = company
     sme.contact_person = contact_person
@@ -394,5 +405,7 @@ def update_sme_record_in_database(sme_id, company, contact_person, phone_number,
     sme.tax = tax
     sme.training = training
     sme.education = education
+    sme.training_recieved = training_recieved
+    sme.source_of_funds = source_of_funds
     sme.save()
     return sme
