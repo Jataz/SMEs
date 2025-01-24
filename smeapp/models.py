@@ -43,6 +43,12 @@ class UserProfile(models.Model):
     is_district_level = models.BooleanField(default=False)
     is_province_level = models.BooleanField(default=False)
     is_national_level = models.BooleanField(default=False)
+    
+class Sector(models.Model):
+    name = models.CharField(max_length=255, unique=True)  # Sector name (e.g., Agriculture, Mining)
+
+    def __str__(self):
+        return self.name
 
 class SME(models.Model):
     sme_ref_number = models.CharField(unique=True)
@@ -57,13 +63,13 @@ class SME(models.Model):
     disability = models.CharField()
     type_of_business = models.CharField()
     product_service = models.CharField()
-    compliance = models.CharField(max_length=255, default="ZIMRA")
-    registration = models.CharField(max_length=255,default="Registered")
-    tax = models.CharField(max_length=255, default="Presumptive Tax")
-    training = models.CharField(max_length=255, default="Received Training")
-    education = models.CharField(max_length=255, default="Received Education")
-    training_recieved = models.CharField(max_length=255, default=5)
-    source_of_funds = models.CharField(max_length=255,default="Business grants")
+    compliance = models.CharField(max_length=255, null=True, blank=True)
+    registration = models.CharField(max_length=255, null=True, blank=True)
+    tax = models.CharField(max_length=255, null=True, blank=True)
+    training = models.CharField(max_length=255, null=True, blank=True)
+    education = models.CharField(max_length=255, null=True, blank=True)
+    training_recieved = models.CharField(max_length=255, null=True, blank=True)
+    source_of_funds = models.CharField(max_length=255, null=True, blank=True)
     export = models.CharField()
     comments = models.CharField()
     number_of_employees = models.IntegerField()
@@ -88,12 +94,6 @@ class CalculationScale(models.Model):
 
     def __str__(self):
         return f"Business size: {self.sme}, Rating: {self.size_of_employees}"
-
-class Sector(models.Model):
-    name = models.CharField(max_length=255, unique=True)  # Sector name (e.g., Agriculture, Mining)
-
-    def __str__(self):
-        return self.name
 
 
 class SectorThreshold(models.Model):
