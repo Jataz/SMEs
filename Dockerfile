@@ -19,6 +19,7 @@ COPY . /app/
 RUN python manage.py collectstatic --noinput
 
 # Run the application
-CMD ["gunicorn",  "management.wsgi:application","-k","gevent","-w", "4"]
+#CMD ["gunicorn",  "management.wsgi:application","-k","gevent","-w", "4"]
+CMD ["vercel", "start"]
 
 
