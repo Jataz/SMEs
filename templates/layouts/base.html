@@ -24,35 +24,7 @@
 
   <style>
 
-      .toast.error {
-          background-color: #eee8e8; /* Red background for error */
-      }
-    
-      .toast.success {
-          background-color: #ffffff; /* Green background for success */
-      }
-    
-      .toast.danger {
-          background-color: #ededed; /* Yellow background for danger */
-      }
-    
-      /* Error Toast Header */
-    .toast.error .toast-header {
-      background-color: #dc3545; /* Red background */
-      color: #ffffff; /* White text color */
-    }
-    
-    /* Success Toast Header */
-    .toast.success .toast-header {
-      background-color: #28a745; /* Green background */
-      color: #ffffff; /* White text color */
-    }
-    
-    /* Danger Toast Header */
-    .toast.danger .toast-header {
-      background-color: #ffc107; /* Yellow background */
-      color: #212529; /* Dark text color for contrast */
-    }
+  
 
     /* Style DataTables buttons */
     .dataTables_wrapper .dt-buttons .btn {
@@ -150,6 +122,8 @@
 <body  class="{% block bodyclass %}{% endblock bodyclass %}">
 
   <div class="wrapper">
+    <div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;"></div>
+
 
     {% block header %}
       {% include 'includes/navigation-light.html' %}
