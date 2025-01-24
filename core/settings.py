@@ -33,8 +33,9 @@ DEBUG = env.bool('DEBUG', default=True)
 #API_BASE_URL = env('API_BASE_URL', default='https://fleet-management-system-production.up.railway.app')
 API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
 #ALLOWED_HOSTS = ['fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
-ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
+#ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 # Application definition
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     #'material',
@@ -110,12 +111,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-} """
+}
 
 """ DATABASES = {
     'default': {
@@ -128,7 +129,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
     }
 } """
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mwacsmed',
@@ -137,7 +138,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
     }
-}
+} """
 
 
 
