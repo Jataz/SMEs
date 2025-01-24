@@ -53,9 +53,26 @@ class Sector(models.Model):
 class SME(models.Model):
     sme_ref_number = models.CharField(unique=True)
     company = models.CharField()
-    contact_person = models.CharField(unique=True)
-    phone_number = models.CharField(unique=True)
-    email = models.EmailField(unique=True)
+    contact_person = models.CharField(
+        unique=True,
+        error_messages={
+            'unique': 'This contact person already exists. Please use a different name.',
+        },
+    )
+    phone_number = models.CharField(
+        max_length=20,  # Increased max_length to 20
+        unique=True,
+        error_messages={
+            'unique': 'This phone number is already registered. Please use a different number.',
+        },
+    )
+
+    email = models.EmailField(
+        unique=True,
+        error_messages={
+            'unique': 'This email is already registered. Please use a different email address.',
+        },
+    )
     address = models.CharField()
     sector = models.ForeignKey('Sector', on_delete=models.CASCADE,default=1) 
     sex = models.CharField()

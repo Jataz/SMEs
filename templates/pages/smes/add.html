@@ -1,53 +1,5 @@
 <!-- Modal -->
-<style>
-    .section-header {
-        font-weight: bold;
-        background-color: #007bff;
-        border-radius: 5px;
-        margin-top: 20px;
-        padding: 10px;
-        color: white;
-        text-size-adjust: 10px; 
-    }
-    .modal-header {
-        background-color: #007bff;
-        border-bottom: 2px solid #0056b3;
-    }
-    .modal-header .close {
-        color: white;
-        font-size: 1.5rem;
-    }
-    .modal-footer {
-        border-top: 1px solid #ddd;
-        text-align: right;
-    }
-    .form-control {
-        border-radius: 5px;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-    .select2-container--default .select2-selection--single {
-        border-radius: 5px;
-    }
-    .select2-container--default .select2-selection--single:focus {
-        border-color: #007bff;
-    }
-    label {
-        font-weight: 600;
-    }
-    .bg-gradient {
-        background: linear-gradient(45deg, #007bff, #00bcd4);
-    }
-    .bg-primary { background-color: #007bff; font-size: 12px; }
-    .bg-success { background-color: #28a745; font-size: 12px; }
-    .bg-warning { background-color: #ffc107; font-size: 12px; }
-    .bg-danger { background-color: #dc3545; font-size: 12px; }
-    .bg-info { background-color: #17a2b8; font-size: 12px; }
-</style>
+
 
 <div class="modal fade" data-backdrop="static" id="addSmeModal" tabindex="-1" role="dialog" aria-labelledby="addSmeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -59,6 +11,11 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;"></div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="error-alert" style="display: none;">
+                    <strong>Error!</strong> <span id="error-message"></span>
+                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                </div>
                 <form id="addSMEForm" autocomplete="off" style="font-size:15px">            
                     <!-- Business Information Section -->
                     <div class="section-header bg-gradient text-white py-1 px-2 rounded mb-3">
@@ -326,8 +283,6 @@
         </div>
     </div>
 </div>
-<div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;"></div>
-
 <!-- Custom Styles for Attractive Interface -->
 
 <script>

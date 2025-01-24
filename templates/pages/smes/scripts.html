@@ -29,26 +29,39 @@
 
 
 <script>
-    $(document).ready(function () {
-        // Function to get the CSRF token from cookies
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== "") {
-                const cookies = document.cookie.split(";");
-                cookies.forEach(cookie => {
-                    cookie = cookie.trim();
-                    if (cookie.startsWith(name + "=")) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    }
-                });
+        $(document).ready(function () {
+            // Function to get the CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    cookies.forEach(cookie => {
+                        cookie = cookie.trim();
+                        if (cookie.startsWith(name + "=")) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        }
+                    });
+                }
+                return cookieValue;
             }
-            return cookieValue;
-        }
-    
+        
+            // Function to show toast notifications
         // Function to show toast notifications
         function showToast(type, title, message) {
+            const backgroundColor = type === 'success' ? 'green' : 'red';
+            const textColor = 'white';
+    
             const toastHTML = `
-                <div class="toast align-items-center text-bg-${type}" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true" style="
+                    background-color: ${backgroundColor};
+                    color: ${textColor};
+                    position: fixed;
+                    top: 1rem;
+                    right: 1rem;
+                    z-index: 1050;
+                    min-width: 300px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    border-radius: 4px;">
                     <div class="d-flex">
                         <div class="toast-body">
                             <strong>${title}</strong>: ${message}
@@ -56,120 +69,146 @@
                         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                 </div>`;
-            $("#toastContainer").append(toastHTML);
-            $(".toast").toast("show").on("hidden.bs.toast", function () {
-                $(this).remove();
-            });
+    
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) {
+                console.error('Toast container not found. Please add a div with id="toastContainer" to your HTML.');
+                return;
+            }
+    
+            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+            const toastElement = toastContainer.lastElementChild;
+            $(toastElement).toast({ delay: 3000 }).toast('show');
+            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
         }
-    
-        // Populate Provinces dropdown
-        $.ajax({
-            url: '/api/v1/provinces/',
-            dataType: 'json',
-            success: function (data) {
-                const fragment = document.createDocumentFragment();
-                data.provinces.forEach(province => {
-                    const option = document.createElement('option');
-                    option.value = province.id;
-                    option.textContent = province.province_name;
-                    fragment.appendChild(option);
-                });
-                document.getElementById('province-dropdown').appendChild(fragment);
-            }
-        });
-    
-        // Handle change event for provinces dropdown
-        $('#province-dropdown').on('change', function () {
-            const provinceId = this.value;
-            const districtDropdown = $('#district-dropdown');
-            const wardDropdown = $('#ward-dropdown');
-            districtDropdown.empty();
-            wardDropdown.empty();
-            wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
-    
-            if (provinceId) {
-                $.ajax({
-                    url: `/api/v1/districts/?province_id=${provinceId}`,
-                    dataType: 'json',
-                    success: function (data) {
-                        const fragment = document.createDocumentFragment();
-                        data.districts.forEach(district => {
-                            const option = document.createElement('option');
-                            option.value = district.id;
-                            option.textContent = district.district_name;
-                            fragment.appendChild(option);
-                        });
-                        districtDropdown.append(fragment);
-                    }
-                });
-            }
-        });
-    
-        // Form submission
-        $("#addSMEForm").submit(function (event) {
-            event.preventDefault();
-    
-            // Collect form data
-            const formData = {
-                company: $("#company").val().trim().toUpperCase(),
-                contact_person: $("#contact_person").val().trim().toUpperCase(),
-                phone_number: $("#phone_number").val().trim(),
-                email: $("#email").val().trim(),
-                address: $("#address").val().trim().toUpperCase(),
-                sector: $("#sector").val(),
-                type_of_business: $("#type_of_business").val(),
-                product_service: $("#product_service").val().trim().toUpperCase(),
-                number_of_employees: $("#number_of_employees").val(),
-                asset_value: $("#asset_value").val(),
-                annual_revenue: $("#annual_revenue").val(),
-                export: $("#export").val(),
-                age: $("#age").val(),
-                sex: $("#sex").val(),
-                disability: $("#disability").val(),
-                compliance: $("#compliance").val().trim(),
-                registration: $("#registration").val().trim(),
-                tax: $("#tax").val().trim(),
-                training: $("#training").val(),
-                training_recieved: $("#training_recieved").val(),
-                source_of_funds: $("#source_of_funds").val().trim(),
-                comments: $("#comments").val(),
-                education: $("#education").val(),
-            };
-            
-            // AJAX Request
+        
+            // Populate Provinces dropdown
             $.ajax({
-                url: '/api/v1/sme-create/',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken")
-                },
-                success: function () {
-                    showToast("success", "Success", "SME record added successfully.");
-                    $("#addSmeModal").modal("hide");
-                    setTimeout(() => location.reload(), 3000);
-                },
-                error: function (xhr) {
-                    let errorMessage = "Failed to submit SME data.";
-                    if (xhr.responseJSON) {
-                        errorMessage = Object.keys(xhr.responseJSON)
-                            .map(key => `${key}: ${xhr.responseJSON[key]}`)
-                            .join("; ");
-                    }
-                    showToast("danger", "Error", errorMessage);
+                url: '/api/v1/provinces/',
+                dataType: 'json',
+                success: function (data) {
+                    const fragment = document.createDocumentFragment();
+                    data.provinces.forEach(province => {
+                        const option = document.createElement('option');
+                        option.value = province.id;
+                        option.textContent = province.province_name;
+                        fragment.appendChild(option);
+                    });
+                    document.getElementById('province-dropdown').appendChild(fragment);
                 }
             });
+        
+            // Handle change event for provinces dropdown
+            $('#province-dropdown').on('change', function () {
+                const provinceId = this.value;
+                const districtDropdown = $('#district-dropdown');
+                const wardDropdown = $('#ward-dropdown');
+                districtDropdown.empty();
+                wardDropdown.empty();
+                wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
+        
+                if (provinceId) {
+                    $.ajax({
+                        url: `/api/v1/districts/?province_id=${provinceId}`,
+                        dataType: 'json',
+                        success: function (data) {
+                            const fragment = document.createDocumentFragment();
+                            data.districts.forEach(district => {
+                                const option = document.createElement('option');
+                                option.value = district.id;
+                                option.textContent = district.district_name;
+                                fragment.appendChild(option);
+                            });
+                            districtDropdown.append(fragment);
+                        }
+                    });
+                }
+            });
+        
+            // Form submission
+            $("#addSMEForm").submit(function (event) {
+                event.preventDefault();
+    
+                // Validation patterns
+                const wordPattern = /^[A-Za-z\s]+$/;
+                const phonePattern = /^07\d{8}$/; // Ensure phone starts with '07' and has exactly 10 digits
+        
+                // Collect form data
+                const formData = {
+                    company: $("#company").val().trim().toUpperCase(),
+                    contact_person: $("#contact_person").val().trim().toUpperCase(),
+                    phone_number: $("#phone_number").val().trim(),
+                    email: $("#email").val().trim(),
+                    address: $("#address").val().trim().toUpperCase(),
+                    sector: $("#sector").val(),
+                    type_of_business: $("#type_of_business").val(),
+                    product_service: $("#product_service").val().trim().toUpperCase(),
+                    number_of_employees: $("#number_of_employees").val(),
+                    asset_value: $("#asset_value").val(),
+                    annual_revenue: $("#annual_revenue").val(),
+                    export: $("#export").val(),
+                    age: $("#age").val(),
+                    sex: $("#sex").val(),
+                    disability: $("#disability").val(),
+                    compliance: $("#compliance").val().trim(),
+                    registration: $("#registration").val().trim(),
+                    tax: $("#tax").val().trim(),
+                    training: $("#training").val(),
+                    training_recieved: $("#training_recieved").val(),
+                    source_of_funds: $("#source_of_funds").val().trim(),
+                    comments: $("#comments").val(),
+                    education: $("#education").val(),
+                };
+    
+                // Validate inputs
+                if (!wordPattern.test(formData.company)) {
+                    showToast("error", "Error", "Please enter a valid company name containing only letters and spaces.");
+                    return;
+                }
+    
+                if (!wordPattern.test(formData.contact_person)) {
+                    showToast("error", "Error", "Please enter a valid contact person name containing only letters and spaces.");
+                    return;
+                }
+    
+                if (!phonePattern.test(formData.phone_number)) {
+                    showToast("error", "Error", "Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
+                    return;
+                }
+    
+                // AJAX Request
+                $.ajax({
+                    url: '/api/v1/sme-create/',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken")
+                    },
+                    success: function () {
+                        showToast("success", "Success", "SME record added successfully.");
+                        $("#addSmeModal").modal("hide");
+                        setTimeout(() => location.reload(), 3000);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Failed to submit SME data.";
+                        if (xhr.responseJSON) {
+                            errorMessage = Object.keys(xhr.responseJSON)
+                                .map(key => `${key}: ${xhr.responseJSON[key]}`)
+                                .join("; ");
+                        }
+                        showToast("danger", "Error", errorMessage);
+                    }
+                });
+            });
+        
+            // Reset form fields on reset button click
+            $("#resetBtn").click(function () {
+                $("#addSMEForm")[0].reset();
+            });
         });
     
-        // Reset form fields on reset button click
-        $("#resetBtn").click(function () {
-            $("#addSMEForm")[0].reset();
-        });
-    });
-    
-
-
 </script>
 
 <script>
