@@ -117,16 +117,28 @@ WSGI_APPLICATION = 'core.wsgi.application'
     }
 } """
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smes_db',
         'USER': 'postgres',
         'PASSWORD': '9965@jay',
-        'HOST': 'localhost',  # Set to 'localhost' or the address of your database server
-        'PORT': '5432',       # Default PostgreSQL port
+        'HOST': 'localhost',  
+        'PORT': '5432',       
+    }
+} """
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mwacsmed',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
 
 
 
