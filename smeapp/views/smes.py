@@ -63,7 +63,7 @@ class SMEListView(APIView):
         
         # If the user is a superuser, return all SMEs
         if user.is_superuser:
-            matched_smes = SME.objects.all()
+            matched_smes = SME.objects.all().order_by('-created_at')
         else:
             # Get the logged-in user's profile
             user_profile = get_object_or_404(UserProfile, user=user)
@@ -73,13 +73,13 @@ class SMEListView(APIView):
 
             # Filter SMEs based on the user's access level
             if user_profile.is_national_level:
-                matched_smes = SME.objects.all()
+                matched_smes = SME.objects.all().order_by('-created_at')
             elif user_profile.is_province_level:
-                matched_smes = SME.objects.filter(province=user_profile.province)
+                matched_smes = SME.objects.filter(province=user_profile.province).order_by('-created_at')
             elif user_profile.is_district_level:
-                matched_smes = SME.objects.filter(district=user_profile.district)
+                matched_smes = SME.objects.filter(district=user_profile.district).order_by('-created_at')
             elif user_profile.is_ward_level:
-                matched_smes = SME.objects.filter(ward=user_profile.ward)
+                matched_smes = SME.objects.filter(ward=user_profile.ward).order_by('-created_at')
 
         # Serialize SMEs along with related calculation scales and size values
         serializer = SMESerializer(matched_smes, many=True, context={'request': request})
