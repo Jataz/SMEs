@@ -33,8 +33,9 @@ DEBUG = env.bool('DEBUG', default=True)
 #API_BASE_URL = env('API_BASE_URL', default='https://fleet-management-system-production.up.railway.app')
 API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
 #ALLOWED_HOSTS = ['fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
-ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
+#ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 # Application definition
+ALLOWED_HOSTS = ['*','.vercel.app']
 
 INSTALLED_APPS = [
     #'material',
