@@ -30,8 +30,8 @@ SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-#API_BASE_URL = env('API_BASE_URL', default='https://fleet-management-system-production.up.railway.app')
-API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
+API_BASE_URL = env('API_BASE_URL', default='https://king-prawn-app-npu9e.ondigitalocean.app')
+#API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
 #ALLOWED_HOSTS = ['fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 #ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 # Application definition
@@ -67,7 +67,7 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    'https://fleet-management-system-production.up.railway.app',
+    'https://king-prawn-app-npu9e.ondigitalocean.app',
 ]
 
 if DEBUG:
@@ -75,7 +75,7 @@ if DEBUG:
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://fleet-management-system-production.up.railway.app',
+    'https://king-prawn-app-npu9e.ondigitalocean.app',
 ]
 
 #CSRF_COOKIE_HTTPONLY = False
