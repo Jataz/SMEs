@@ -51,18 +51,18 @@ class Sector(models.Model):
         return self.name
 
 class SME(models.Model):
-    sme_ref_number = models.CharField(unique=True)
-    company = models.CharField()
-    contact_person = models.CharField(unique=True)
-    phone_number = models.CharField(unique=True)
+    sme_ref_number = models.CharField(max_length=255, unique=True)
+    company = models.CharField(max_length=255, null=False, blank=False)
+    contact_person = models.CharField(max_length=255, unique=True)
+    phone_number = models.CharField(max_length=20, unique=True)
     email = models.EmailField(unique=True)
-    address = models.CharField()
-    sector = models.ForeignKey('Sector', on_delete=models.CASCADE,default=1) 
-    sex = models.CharField()
-    age = models.CharField()
-    disability = models.CharField()
-    type_of_business = models.CharField()
-    product_service = models.CharField()
+    address = models.TextField()
+    sector = models.ForeignKey('Sector', on_delete=models.CASCADE)  # Removed default=1 to avoid issue
+    sex = models.CharField(max_length=255)
+    age = models.CharField(max_length=255)
+    disability = models.CharField(max_length=255)
+    type_of_business = models.CharField(max_length=255)
+    product_service = models.CharField(max_length=255)
     compliance = models.CharField(max_length=255, null=True, blank=True)
     registration = models.CharField(max_length=255, null=True, blank=True)
     tax = models.CharField(max_length=255, null=True, blank=True)
@@ -70,8 +70,8 @@ class SME(models.Model):
     education = models.CharField(max_length=255, null=True, blank=True)
     training_recieved = models.CharField(max_length=255, null=True, blank=True)
     source_of_funds = models.CharField(max_length=255, null=True, blank=True)
-    export = models.CharField()
-    comments = models.CharField()
+    export = models.CharField(max_length=255)
+    comments = models.TextField()
     number_of_employees = models.IntegerField()
     asset_value = models.DecimalField(max_digits=20, decimal_places=2)
     annual_revenue = models.DecimalField(max_digits=20, decimal_places=2)
@@ -83,6 +83,7 @@ class SME(models.Model):
 
     def __str__(self):
         return self.company
+
 
 class CalculationScale(models.Model):
     sme = models.ForeignKey(SME,related_name='calculation_scale', on_delete=models.CASCADE)
