@@ -126,4 +126,49 @@ sudo systemctl status smes
 After making changes to settings.py, restart the Gunicorn service for the changes to take effect:
     sudo systemctl restart smes
 
+    sudo systemctl restart smes
+
+```
+
+
+## Configuring Mysql
+
+```Bash
+#sudo apt install mysql-server
+
+sudo mysql -u root -p
+CREATE DATABASE smes_db;
+
+CREATE USER 'jataz'@'localhost' IDENTIFIED BY '9965@jay17Freedom';
+GRANT ALL PRIVILEGES ON smes_db.* TO 'jataz'@'localhost';
+FLUSH PRIVILEGES;
+
+sudo apt update
+sudo apt install default-libmysqlclient-dev build-essential
+
+
+use pymysql pip install pymysql
+
+import in DJango settings
+    import pymysql
+    pymysql.install_as_MySQLdb()
+use pip install cryptography for password The cryptography package is required for secure authentication methods like caching_sha2_password
+
+Cheking errors
+sudo tail -f /var/log/mysql/error.log
+
+```
+
+## ALLOW DATABASE CONNECTION OUTSIDE THE LINUX SERVER
+
+```Bash
+Configure MySQL to Allow Remote Access
+Edit the MySQL Configuration File: Open the MySQL configuration file:
+    sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+        Change the bind-address: Look for the line:
+            bind-address = 127.0.0.1
+            bind-address = 0.0.0.0
+    Restart MySQL: Apply the changes by restarting the MySQL service:
+        sudo systemctl restart mysql
+
 ```
