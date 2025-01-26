@@ -168,7 +168,7 @@
         </div>
         <!-- /.row -->
         
-<!--         <div class="row">
+        <div class="row">
           <div class="col-md-6 my-4">
             <div class="card">
               <div class="card-header">
@@ -230,7 +230,7 @@
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <div class="row">
           <!-- Demographic Report -->
@@ -256,9 +256,6 @@
                     <canvas id="demographicPie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="demographicTableBody" hidden></tbody>
-                </table>
                 <p id="demographicInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
@@ -287,14 +284,39 @@
                     <canvas id="genderPie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="genderTableBody" hidden></tbody>
-                </table>
                 <p id="genderInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
           </div>
-      
+        
+          <!-- Age Range Report -->
+          <div class="col-md-6 my-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i> Age Range Report
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#age-range-bar" data-toggle="tab">Bar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#age-range-pie" data-toggle="tab">Pie</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="age-range-bar">
+                    <canvas id="ageRangeBar"></canvas>
+                  </div>
+                  <div class="chart tab-pane" id="age-range-pie">
+                    <canvas id="ageRangePie"></canvas>
+                  </div>
+                </div>
+                <p id="ageRangeInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
+              </div>
+            </div>
+          </div>
+        
           <!-- Business Size Report -->
           <div class="col-md-6 my-4">
             <div class="card">
@@ -318,9 +340,6 @@
                     <canvas id="businessSizePie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="businessSizeTableBody" hidden></tbody>
-                </table>
                 <p id="businessSizeInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
@@ -349,9 +368,6 @@
                     <canvas id="financialPerformancePie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="financialPerformanceTableBody" hidden></tbody>
-                </table>
                 <p id="financialPerformanceInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
@@ -380,9 +396,6 @@
                     <canvas id="exportPie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="exportTableBody" hidden></tbody>
-                </table>
                 <p id="exportInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
@@ -411,9 +424,6 @@
                     <canvas id="trainingEducationPie"></canvas>
                   </div>
                 </div>
-                <table class="table table-striped mt-4">
-                  <tbody id="trainingEducationTableBody" hidden></tbody>
-                </table>
                 <p id="trainingEducationInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
             </div>
@@ -421,6 +431,7 @@
         </div>
         
         
+        <!-- JavaScript -->
         <script>
           // Helper function to fetch data and render charts, tables, and insights
           function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
@@ -431,45 +442,17 @@
                 new Chart(document.getElementById(barCanvasId), {
                   type: 'bar',
                   data: {
-                    labels: data.labels, // X-axis labels
+                    labels: data.labels,
                     datasets: [{
-                      data: data.data, // Y-axis data values
-                      backgroundColor: [
-                      'rgba(0, 255, 0, 0.8)',
-                      'rgba(105, 105, 105, 0.5)',
-                      'rgba(255, 193, 7, 1)',
-                      'rgba(255, 0, 0, 0.5)'
-                    ],
-                    borderColor: [
-                      'rgba(0, 255, 0, 1)',
-                      'rgba(105, 105, 105, 1)',
-                      'rgba(255, 193, 0, 1)',
-                      'rgba(255, 0, 0, 1)'
-                    ],
-                    borderWidth: 1,
+                      label: label,
+                      data: data.data,
+                      backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      borderWidth: 1,
                     }],
                   },
-                  options: {
-                    plugins: {
-                      legend: {
-                        display: false, // Completely disable the legend
-                      },
-                    },
-                    scales: {
-                      x: {
-                        beginAtZero: true,
-                      },
-                      y: {
-                        beginAtZero: true,
-                      },
-                    },
-                     // Hide legend
-                     legend: {
-                      display: false
-                    }
-                  },
                 });
-                
+        
                 // Render pie chart
                 new Chart(document.getElementById(pieCanvasId), {
                   type: 'pie',
@@ -479,18 +462,12 @@
                       label: label,
                       data: data.data,
                       backgroundColor: [
-                      'rgba(0, 255, 0, 0.8)',
-                      'rgba(105, 105, 105, 0.5)',
-                      'rgba(255, 193, 7, 1)',
-                      'rgba(255, 0, 0, 0.5)'
-                    ],
-                    borderColor: [
-                      'rgba(0, 255, 0, 1)',
-                      'rgba(105, 105, 105, 1)',
-                      'rgba(255, 193, 0, 1)',
-                      'rgba(255, 0, 0, 1)'
-                    ],
-                    borderWidth: 1,
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                      ],
                     }],
                   },
                 });

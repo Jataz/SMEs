@@ -1,0 +1,379 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}| Dashboard {% endblock title %}
+
+{% block extrastyle %}
+
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css' %}">
+
+{% endblock extrastyle %}
+
+{% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
+
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Reports</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Reports</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <div class="row">
+      <!-- Demographic Report -->
+      <div class="col-md-12 my-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Demographic Report</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <canvas id="demographicBar"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="demographicPie"></canvas>
+              </div>
+            </div>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th>Province</th>
+                  <th>Number of Businesses</th>
+                  <th>Percentage (%)</th>
+                </tr>
+              </thead>
+              <tbody id="demographicTableBody"></tbody>
+            </table>
+            <p id="demographicInsight" class="text-muted mt-3"></p>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Gender Report -->
+      <div class="col-md-12 my-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-chart-pie mr-1"></i> Gender Report</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <canvas id="genderBar"></canvas>
+              </div>
+              <div class="col-md-6">
+                <canvas id="genderPie"></canvas>
+              </div>
+            </div>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th>Gender</th>
+                  <th>Number of SMEs</th>
+                  <th>Percentage (%)</th>
+                </tr>
+              </thead>
+              <tbody id="genderTableBody"></tbody>
+            </table>
+            <p id="genderInsight" class="text-muted mt-3"></p>
+          </div>
+        </div>
+      </div>
+
+        <!-- Business Size Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Business Size Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <canvas id="businessSizeBar"></canvas>
+                </div>
+                <div class="col-md-6">
+                  <canvas id="businessSizePie"></canvas>
+                </div>
+              </div>
+              <table class="table table-striped mt-4">
+                <thead>
+                  <tr>
+                    <th>Business Size</th>
+                    <th>Number of Businesses</th>
+                    <th>Percentage (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="businessSizeTableBody"></tbody>
+              </table>
+              <p id="businessSizeInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Financial Performance Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Financial Performance Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <canvas id="financialPerformanceBar"></canvas>
+                </div>
+                <div class="col-md-6">
+                  <canvas id="financialPerformancePie"></canvas>
+                </div>
+              </div>
+              <table class="table table-striped mt-4">
+                <thead>
+                  <tr>
+                    <th>Sector</th>
+                    <th>Average Annual Turnover (USD)</th>
+                  </tr>
+                </thead>
+                <tbody id="financialPerformanceTableBody"></tbody>
+              </table>
+              <p id="financialPerformanceInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Export Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Export Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <canvas id="exportBar"></canvas>
+                </div>
+                <div class="col-md-6">
+                  <canvas id="exportPie"></canvas>
+                </div>
+              </div>
+              <table class="table table-striped mt-4">
+                <thead>
+                  <tr>
+                    <th>Export Status</th>
+                    <th>Number of Businesses</th>
+                    <th>Percentage (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="exportTableBody"></tbody>
+              </table>
+              <p id="exportInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Training and Education Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-chart-pie mr-1"></i> Training and Education Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <canvas id="trainingEducationBar"></canvas>
+                </div>
+                <div class="col-md-6">
+                  <canvas id="trainingEducationPie"></canvas>
+                </div>
+              </div>
+              <table class="table table-striped mt-4">
+                <thead>
+                  <tr>
+                    <th>Education Level</th>
+                    <th>Number of SMEs</th>
+                    <th>Percentage (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="trainingEducationTableBody"></tbody>
+              </table>
+              <p id="trainingEducationInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>s
+    </div>
+    
+    <script>
+      // Helper function to fetch data and render charts, tables, and insights
+      function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            // Render bar chart
+            new Chart(document.getElementById(barCanvasId), {
+              type: 'bar',
+              data: {
+                labels: data.labels, // X-axis labels
+                datasets: [{
+                  data: data.data, // Y-axis data values
+                  backgroundColor: [
+                  'rgba(0, 255, 0, 0.8)',
+                  'rgba(105, 105, 105, 0.5)',
+                  'rgba(255, 193, 7, 1)',
+                  'rgba(255, 0, 0, 0.5)'
+                ],
+                borderColor: [
+                  'rgba(0, 255, 0, 1)',
+                  'rgba(105, 105, 105, 1)',
+                  'rgba(255, 193, 0, 1)',
+                  'rgba(255, 0, 0, 1)'
+                ],
+                borderWidth: 1,
+                }],
+              },
+              options: {
+                plugins: {
+                  legend: {
+                    display: false, // Completely disable the legend
+                  },
+                },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                  },
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+                 // Hide legend
+                 legend: {
+                  display: false
+                }
+              },
+            });
+            
+            
+    
+            // Render pie chart
+            new Chart(document.getElementById(pieCanvasId), {
+              type: 'pie',
+              data: {
+                labels: data.labels,
+                datasets: [{
+                  label: label,
+                  data: data.data,
+                  backgroundColor: [
+                  'rgba(0, 255, 0, 0.8)',
+                  'rgba(105, 105, 105, 0.5)',
+                  'rgba(255, 193, 7, 1)',
+                  'rgba(255, 0, 0, 0.5)'
+                ],
+                borderColor: [
+                  'rgba(0, 255, 0, 1)',
+                  'rgba(105, 105, 105, 1)',
+                  'rgba(255, 193, 0, 1)',
+                  'rgba(255, 0, 0, 1)'
+                ],
+                borderWidth: 1,
+                }],
+              },
+            });
+    
+            // Render table
+            const tableBody = document.getElementById(tableBodyId);
+            tableBody.innerHTML = '';
+            let total = data.data.reduce((a, b) => a + b, 0);
+            data.labels.forEach((label, index) => {
+              let percentage = hasPercentage ? ((data.data[index] / total) * 100).toFixed(2) : null;
+              let row = `<tr>
+                <td>${label}</td>
+                <td>${data.data[index]}</td>
+                ${hasPercentage ? `<td>${percentage}</td>` : ''}
+              </tr>`;
+              tableBody.innerHTML += row;
+            });
+    
+            // Render insight
+            const insight = document.getElementById(insightId);
+            const maxIndex = data.data.indexOf(Math.max(...data.data));
+            insight.innerHTML = `Insight: ${data.labels[maxIndex]} has the highest number (${data.data[maxIndex]}).`;
+          });
+      }
+    
+      // Fetch and render data for all reports
+      fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses');
+      fetchReportData('/api/gender/', 'genderBar', 'genderPie', 'genderTableBody', 'genderInsight', 'Gender Distribution');
+      fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution');
+      fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes');
+      fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false);
+      fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status');
+      fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education');
+    </script>
+    
+    </section>
+    <!-- /.content -->
+  </div>
+  {% endblock content %}
+
+  {% block extra_scripts %}
+  
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      $.widget.bridge('uibutton', $.ui.button)
+    </script>
+
+    <!-- ChartJS -->
+    <script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+    <!-- Sparkline -->
+    <script src="{% static 'plugins/sparklines/sparkline.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static 'plugins/jqvmap/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{% static 'plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+    <!-- daterangepicker -->
+    <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+    <script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <!-- Summernote -->
+    <script src="{% static 'plugins/summernote/summernote-bs4.min.js' %}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
+    
+  
+  {% endblock extra_scripts %}
+
