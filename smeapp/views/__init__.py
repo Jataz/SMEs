@@ -3,15 +3,6 @@ from .users import (user_logout_view,UserLoginView)
 from .smes import (SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,
     sme_create_record,get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record)
 
-from .report import (
-    demographic_report_api,
-    business_size_report_api,
-
-    financial_performance_report_api,
-    export_report_api,
-    training_education_report_api
-)
-
 from .reports import (
     demographic_report_api,
     business_size_report_api,
