@@ -41,7 +41,7 @@ urlpatterns =[
     path('login/', views.UserLoginView.as_view(), name='login'),
     path('logout/', views.user_logout_view, name='logout'), 
     
-    #Testing    
+    #Reports   
     path('reports/', SMEReportsView.as_view(), name='sme_reports'),
     path('api/demographic/', demographic_report_api, name='demographic_api'),
     path('api/business-size/', business_size_report_api, name='business_size_api'),
