@@ -20,10 +20,19 @@ def demographic_report_api(request):
         provinces = [sme['province']['province_name'] for sme in sme_data if sme.get('province')]
         province_counts = Counter(provinces)
 
-        labels = list(province_counts.keys())
-        data = list(province_counts.values())
+        total_smes = len(provinces)
+        percentages = {}
+        if total_smes > 0:
+            percentages = {province: round((count / total_smes) * 100, 2) for province, count in province_counts.items()}
+        else:
+            percentages = {province: 0 for province in province_counts.keys()}
 
-        return JsonResponse({'labels': labels, 'data': data})
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(province_counts.values())
+
+        # Return counts alongside other data
+        return JsonResponse({'labels': labels, 'data': data, 'counts': counts})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -64,10 +73,12 @@ def business_size_report_api(request):
         # Prepare data for Chart.js
         labels = list(percentages.keys())
         data = list(percentages.values())
+        counts = list(size_of_business_counts.values())
 
         context = {
             'labels': labels,
             'data': data,
+            'counts': counts
         }
 
         return JsonResponse(context)
@@ -97,10 +108,18 @@ def financial_performance_report_api(request):
             if sme.get('sector') and sme.get('annual_revenue'):
                 sector_revenue[sme['sector']['name']] += float(sme['annual_revenue'])
 
-        labels = list(sector_revenue.keys())
-        data = list(sector_revenue.values())
+        total_revenue = sum(sector_revenue.values())
+        percentages = {}
+        if total_revenue > 0:
+            percentages = {sector: round((revenue / total_revenue) * 100, 2) for sector, revenue in sector_revenue.items()}
+        else:
+            percentages = {sector: 0 for sector in sector_revenue.keys()}
 
-        return JsonResponse({'labels': labels, 'data': data})
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(sector_revenue.values())
+
+        return JsonResponse({'labels': labels, 'data': data, 'counts': counts})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -122,10 +141,18 @@ def export_report_api(request):
         export_status = [sme['export'] for sme in sme_data if sme.get('export')]
         export_counts = Counter(export_status)
 
-        labels = list(export_counts.keys())
-        data = list(export_counts.values())
+        total_smes = len(export_status)
+        percentages = {}
+        if total_smes > 0:
+            percentages = {status: round((count / total_smes) * 100, 2) for status, count in export_counts.items()}
+        else:
+            percentages = {status: 0 for status in export_counts.keys()}
 
-        return JsonResponse({'labels': labels, 'data': data})
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(export_counts.values())
+
+        return JsonResponse({'labels': labels, 'data': data, 'counts': counts})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -161,16 +188,17 @@ def training_education_report_api(request):
         # Calculate percentages for each education level
         percentages = {}
         if total_smes > 0:
-            percentages = {level: round (count / total_smes) * 100 for level, count in education_counts.items()}
+            percentages = {level: round((count / total_smes) * 100, 2) for level, count in education_counts.items()}
         else:
             percentages = {level: 0 for level in education_counts.keys()}
 
         # Prepare data for Chart.js
         labels = list(percentages.keys())  # Unique education levels
         data = list(percentages.values())  # Corresponding percentages
+        counts = list(education_counts.values())  # Corresponding counts
 
         # Return the data as a JSON response
-        return JsonResponse({'labels': labels, 'data': data})
+        return JsonResponse({'labels': labels, 'data': data,'counts':counts})
 
     except requests.exceptions.RequestException as req_err:
         # Handle request-related errors (e.g., network issues)
@@ -214,10 +242,12 @@ def gender_api(request):
         # Prepare data for Chart.js
         labels = list(percentages.keys())
         data = list(percentages.values())
+        counts = list(sex_counts.values())
 
         context = {
             'labels': labels,
             'data': data,
+            'counts': counts
         }
 
         return JsonResponse(context)

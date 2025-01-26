@@ -267,12 +267,23 @@
                   },
                 },
                 scales: {
-                  x: {
-                    beginAtZero: true,
-                  },
-                  y: {
-                    beginAtZero: true,
-                  },
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true,
+                      stepSize: 10,
+                      callback: function(value) {
+                        return Number(value).toLocaleString();
+                      }
+                    },
+                    scaleLabel: {
+                      display: true,
+                    }
+                  }],
+                  xAxes: [{
+                    scaleLabel: {
+                      display: true,
+                    }
+                  }]
                 },
                  // Hide legend
                  legend: {
@@ -281,8 +292,6 @@
               },
             });
             
-            
-    
             // Render pie chart
             new Chart(document.getElementById(pieCanvasId), {
               type: 'pie',
@@ -311,21 +320,22 @@
             // Render table
             const tableBody = document.getElementById(tableBodyId);
             tableBody.innerHTML = '';
-            let total = data.data.reduce((a, b) => a + b, 0);
+            let total = data.counts.reduce((a, b) => a + b, 0); // Use `counts` for total calculation
             data.labels.forEach((label, index) => {
-              let percentage = hasPercentage ? ((data.data[index] / total) * 100).toFixed(2) : null;
+              let percentage = hasPercentage ? ((data.counts[index] / total) * 100).toFixed(2) : null; // Calculate percentage using `counts`
               let row = `<tr>
                 <td>${label}</td>
-                <td>${data.data[index]}</td>
+                <td>${data.counts[index]}</td> 
                 ${hasPercentage ? `<td>${percentage}</td>` : ''}
               </tr>`;
               tableBody.innerHTML += row;
             });
+            
     
             // Render insight
             const insight = document.getElementById(insightId);
             const maxIndex = data.data.indexOf(Math.max(...data.data));
-            insight.innerHTML = `Insight: ${data.labels[maxIndex]} has the highest number (${data.data[maxIndex]}).`;
+            insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex]}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex]}</span>%.`;
           });
       }
     

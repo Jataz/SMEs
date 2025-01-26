@@ -456,12 +456,23 @@
                       },
                     },
                     scales: {
-                      x: {
-                        beginAtZero: true,
-                      },
-                      y: {
-                        beginAtZero: true,
-                      },
+                      yAxes: [{
+                        ticks: {
+                          beginAtZero: true,
+                          stepSize: 20,
+                          callback: function(value) {
+                            return Number(value).toLocaleString();
+                          }
+                        },
+                        scaleLabel: {
+                          display: true,
+                        }
+                      }],
+                      xAxes: [{
+                        scaleLabel: {
+                          display: true,
+                        }
+                      }]
                     },
                      // Hide legend
                      legend: {
@@ -512,7 +523,7 @@
                 // Render insight
                 const insight = document.getElementById(insightId);
                 const maxIndex = data.data.indexOf(Math.max(...data.data));
-                insight.innerHTML = `Insight: ${data.labels[maxIndex]} has the highest number (${data.data[maxIndex]}).`;
+                insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex]}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex]}</span>%.`;
               });
           }
         
