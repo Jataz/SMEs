@@ -420,385 +420,143 @@
           </div>
         </div>
         
-        
-        <script>
+                <script>
           // Helper function to fetch data and render charts, tables, and insights
-          function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
-            fetch(apiUrl)
-              .then(response => response.json())
-              .then(data => {
+          async function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
                 // Render bar chart
-                new Chart(document.getElementById(barCanvasId), {
-                  type: 'bar',
-                  data: {
-                    labels: data.labels, // X-axis labels
-                    datasets: [{
-                      data: data.data, // Y-axis data values
-                      backgroundColor: [
-                      'rgba(0, 255, 0, 0.8)',
-                      'rgba(105, 105, 105, 0.5)',
-                      'rgba(255, 193, 7, 1)',
-                      'rgba(255, 0, 0, 0.5)'
-                    ],
-                    borderColor: [
-                      'rgba(0, 255, 0, 1)',
-                      'rgba(105, 105, 105, 1)',
-                      'rgba(255, 193, 0, 1)',
-                      'rgba(255, 0, 0, 1)'
-                    ],
-                    borderWidth: 1,
-                    }],
-                  },
-                  options: {
-                    plugins: {
-                      legend: {
-                        display: false, // Completely disable the legend
-                      },
-                    },
-                    scales: {
-                      yAxes: [{
-                        ticks: {
-                          beginAtZero: true,
-                          stepSize: 20,
-                          callback: function(value) {
-                            return Number(value).toLocaleString();
-                          }
-                        },
-                        scaleLabel: {
-                          display: true,
-                        }
-                      }],
-                      xAxes: [{
-                        scaleLabel: {
-                          display: true,
-                        }
-                      }]
-                    },
-                     // Hide legend
-                     legend: {
-                      display: false
-                    }
-                  },
-                });
-                
+                renderBarChart(barCanvasId, data, label);
+
                 // Render pie chart
-                new Chart(document.getElementById(pieCanvasId), {
-                  type: 'pie',
-                  data: {
+                renderPieChart(pieCanvasId, data, label);
+
+                // Render table
+                renderTable(tableBodyId, data, hasPercentage);
+
+                // Render insight
+                renderInsight(insightId, data);
+            } catch (error) {
+                console.error('Error fetching or rendering data:', error);
+            }
+          }
+
+          function renderBarChart(canvasId, data, label) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'bar',
+                data: {
                     labels: data.labels,
                     datasets: [{
-                      label: label,
-                      data: data.data,
-                      backgroundColor: [
-                      'rgba(0, 255, 0, 0.8)',
-                      'rgba(105, 105, 105, 0.5)',
-                      'rgba(255, 193, 7, 1)',
-                      'rgba(255, 0, 0, 0.5)'
-                    ],
-                    borderColor: [
-                      'rgba(0, 255, 0, 1)',
-                      'rgba(105, 105, 105, 1)',
-                      'rgba(255, 193, 0, 1)',
-                      'rgba(255, 0, 0, 1)'
-                    ],
-                    borderWidth: 1,
+                        data: data.data,
+                        backgroundColor: [
+                            'rgba(0, 255, 0, 0.8)',
+                            'rgba(105, 105, 105, 0.5)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 0, 0, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 255, 0, 1)',
+                            'rgba(105, 105, 105, 1)',
+                            'rgba(255, 193, 0, 1)',
+                            'rgba(255, 0, 0, 1)'
+                        ],
+                        borderWidth: 1,
                     }],
-                  },
-                });
-        
-                // Render table
-                const tableBody = document.getElementById(tableBodyId);
-                tableBody.innerHTML = '';
-                let total = data.data.reduce((a, b) => a + b, 0);
-                data.labels.forEach((label, index) => {
-                  let percentage = hasPercentage ? ((data.data[index] / total) * 100).toFixed(2) : null;
-                  let row = `<tr>
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return Number(value).toLocaleString();
+                                }
+                            },
+                            scaleLabel: {
+                                display: true,
+                            }
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+            });
+          }
+
+          function renderPieChart(canvasId, data, label) {
+            new Chart(document.getElementById(canvasId), {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: label,
+                        data: data.data,
+                        backgroundColor: [
+                            'rgba(0, 255, 0, 0.8)',
+                            'rgba(105, 105, 105, 0.5)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 0, 0, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 255, 0, 1)',
+                            'rgba(105, 105, 105, 1)',
+                            'rgba(255, 193, 0, 1)',
+                            'rgba(255, 0, 0, 1)'
+                        ],
+                        borderWidth: 1,
+                    }],
+                },
+            });
+          }
+
+          function renderTable(tableBodyId, data, hasPercentage) {
+            const tableBody = document.getElementById(tableBodyId);
+            let total = data.data.reduce((a, b) => a + b, 0);
+            let rows = data.labels.map((label, index) => {
+                let percentage = hasPercentage ? ((data.data[index] / total) * 100).toFixed(2) : null;
+                return `<tr>
                     <td>${label}</td>
                     <td>${data.data[index]}</td>
                     ${hasPercentage ? `<td>${percentage}</td>` : ''}
-                  </tr>`;
-                  tableBody.innerHTML += row;
-                });
-        
-                // Render insight
-                const insight = document.getElementById(insightId);
-                const maxIndex = data.data.indexOf(Math.max(...data.data));
-                insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex] || '0'}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex] ?? '0'}</span>%.`;
-              });
+                </tr>`;
+            }).join('');
+            tableBody.innerHTML = rows;
           }
-        
-          // Fetch and render data for all reports
-          fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses');
-          fetchReportData('/api/gender/', 'genderBar', 'genderPie', 'genderTableBody', 'genderInsight', 'Gender Distribution');
-          fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution');
-          fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes');
-          fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false);
-          fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status');
-          fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education');
-        </script>
-        
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-            // Fetch data and render bar chart
-            function fetchDataAndRenderSizeBarChart() {
-              fetch("{% url 'size_of_business_data' %}")
-                .then(response => response.json())
-                .then(data => {
-                  if (data.labels.length === 0) {
-                    document.getElementById('size-business-bar-chart-canvas').innerHTML = 'No data available';
-                  } else {
-                    var ctx = document.getElementById('size-business-bar-chart-canvas').getContext('2d');
-                    var barChart = new Chart(ctx, {
-                      type: 'bar',
-                      data: {
-                        labels: data.labels,
-                        datasets: [{
-                          label: '', // Set label to an empty string
-                          data: data.data,
-                          backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                          ],
-                          borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                          ],
-                          borderWidth: 1,
-                        }]
-                      },
-                      options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                          yAxes: [{
-                            ticks: {
-                              beginAtZero: true,
-                              stepSize: 20,
-                              callback: function(value) {
-                                return Number(value).toLocaleString();
-                              }
-                            },
-                            scaleLabel: {
-                              display: true,
-                              labelString: 'Number of SMEs in %'
-                            }
-                          }],
-                          xAxes: [{
-                            scaleLabel: {
-                              display: true,
-                              labelString: 'Size of Business'
-                            }
-                          }]
-                        },
-                        // Hide legend
-                        legend: {
-                          display: false
-                        }
-                      }
-                    });
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching data:', error);
-                  document.getElementById('size-business-bar-chart-canvas').innerHTML = 'Error fetching data';
-                });
-            }
-        
-            // Fetch data and render pie chart
-            function fetchDataAndRenderSizePieChart() {
-              fetch("{% url 'size_of_business_data' %}")
-                .then(response => response.json())
-                .then(data => {
-                  if (data.labels.length === 0) {
-                    var noDataText = document.createTextNode("No data available");
-                    var chartContainer = document.getElementById('size-business-pie-chart-canvas');
-                    chartContainer.innerHTML = ''; // Clear any existing content
-                    chartContainer.appendChild(noDataText);
-                  } else {
-                    var ctx = document.getElementById('size-business-pie-chart-canvas').getContext('2d');
-                    var pieChart = new Chart(ctx, {
-                      type: 'pie',
-                      data: {
-                        labels: data.labels,
-                        datasets: [{
-                          data: data.data,
-                          backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                          ],
-                          borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                          ],
-                          borderWidth: 1
-                        }]
-                      },
-                      options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                      }
-                    });
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching data:', error);
-                  document.getElementById('size-business-pie-chart-canvas').innerHTML = 'Error fetching data';
-                });
-            }
-        
-            fetchDataAndRenderSizeBarChart();
-            fetchDataAndRenderSizePieChart();
-        
-            // Ensure charts are re-rendered when switching tabs
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-              var target = $(e.target).attr("href"); // activated tab
-              if (target === '#size-business-bar-chart') {
-                fetchDataAndRenderSizeBarChart();
-              } else if (target === '#size-business-pie-chart') {
-                fetchDataAndRenderSizePieChart();
-              }
-            });
-          });
 
-          document.addEventListener("DOMContentLoaded", function() {
-            // Fetch data and render bar chart
-            function fetchDataAndRenderGenderBarChart() {
-              fetch("{% url 'sex_data' %}")
-                .then(response => response.json())
-                .then(data => {
-                  if (data.labels.length === 0) {
-                    document.getElementById('gender-bar-chart-canvas').innerHTML = 'No data available';
-                  } else {
-                    var ctx = document.getElementById('gender-bar-chart-canvas').getContext('2d');
-                    var barChart = new Chart(ctx, {
-                      type: 'bar',
-                      data: {
-                        labels: data.labels,
-                        datasets: [{
-                          label: '', // Set label to an empty string
-                          data: data.data,
-                          backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                          ],
-                          borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                          ],
-                          borderWidth: 1,
-                        }]
-                      },
-                      options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                          yAxes: [{
-                            ticks: {
-                              beginAtZero: true,
-                              stepSize: 20,
-                              callback: function(value) {
-                                return Number(value).toLocaleString();
-                              }
-                            },
-                            scaleLabel: {
-                              display: true,
-                              labelString: 'Total Number in %'
-                            }
-                          }],
-                          xAxes: [{
-                            scaleLabel: {
-                              display: true,
-                              labelString: 'Sex'
-                            }
-                          }]
-                        },
-                        // Hide legend
-                        legend: {
-                          display: false
-                        }
-                      }
-                    });
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching data:', error);
-                  document.getElementById('gender-bar-chart-canvas').innerHTML = 'Error fetching data';
-                });
-            }
-        
-            // Fetch data and render pie chart
-            function fetchDataAndRenderGenderPieChart() {
-              fetch("{% url 'sex_data' %}")
-                .then(response => response.json())
-                .then(data => {
-                  if (data.labels.length === 0) {
-                    var noDataText = document.createTextNode("No data available");
-                    var chartContainer = document.getElementById('gender-pie-chart-canvas');
-                    chartContainer.innerHTML = ''; // Clear any existing content
-                    chartContainer.appendChild(noDataText);
-                  } else {
-                    var ctx = document.getElementById('gender-pie-chart-canvas').getContext('2d');
-                    var pieChart = new Chart(ctx, {
-                      type: 'pie',
-                      data: {
-                        labels: data.labels,
-                        datasets: [{
-                          data: data.data,
-                          backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                          ],
-                          borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                          ],
-                          borderWidth: 1
-                        }]
-                      },
-                      options: {
-                        responsive: true,
-                        maintainAspectRatio: false
-                      }
-                    });
-                  }
-                })
-                .catch(error => {
-                  console.error('Error fetching data:', error);
-                  document.getElementById('gender-pie-chart-canvas').innerHTML = 'Error fetching data';
-                });
-            }
-        
-            fetchDataAndRenderGenderBarChart();
-            fetchDataAndRenderGenderPieChart();
-        
-            // Ensure charts are re-rendered when switching tabs
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-              var target = $(e.target).attr("href"); // activated tab
-              if (target === '#gender-bar-chart') {
-                fetchDataAndRenderGenderBarChart();
-              } else if (target === '#gender-pie-chart') {
-                fetchDataAndRenderGenderPieChart();
-              }
-            });
+          function renderInsight(insightId, data) {
+            const insight = document.getElementById(insightId);
+            const maxIndex = data.data.indexOf(Math.max(...data.data));
+            insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex] || '0'}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex] ?? '0'}</span>%.`;
+          }
+
+          // Fetch and render data for all reports
+          Promise.all([
+            fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses'),
+            fetchReportData('/api/gender/', 'genderBar', 'genderPie', 'genderTableBody', 'genderInsight', 'Gender Distribution'),
+            fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution'),
+            fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes'),
+            fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false),
+            fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status'),
+            fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education')
+          ]).catch(error => {
+            console.error('Error in fetching report data:', error);
           });
         </script>
-        
+               
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
