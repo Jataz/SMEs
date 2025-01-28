@@ -1,8 +1,16 @@
 
 from django.urls import path
 
-from .views import SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_create_record,size_of_business_data,\
-            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record,sex_data,get_sectors
+from .views import ( SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_create_record,size_of_business_data,
+            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record,sex_data,get_sectors,SMEReportsView, 
+            demographic_report_api,
+            business_size_report_api,
+            financial_performance_report_api,
+            export_report_api,
+            training_education_report_api,
+            gender_api,
+            age_api,
+            )
 from . import views
 
 urlpatterns =[
@@ -33,6 +41,14 @@ urlpatterns =[
     path('login/', views.UserLoginView.as_view(), name='login'),
     path('logout/', views.user_logout_view, name='logout'), 
     
-    #Testing    
+    #Reports   
+    path('reports/', SMEReportsView.as_view(), name='sme_reports'),
+    path('api/demographic/', demographic_report_api, name='demographic_api'),
+    path('api/business-size/', business_size_report_api, name='business_size_api'),
+    path('api/financial-performance/', financial_performance_report_api, name='financial_performance_api'),
+    path('api/export/', export_report_api, name='export_api'),
+    path('api/training-education/', training_education_report_api, name='training_education_api'),
+    path('api/gender/', gender_api, name='gender_api'),
+    path('api/age/', age_api, name='age_api'),
 
 ]

@@ -8,6 +8,9 @@ from django.conf import settings
 from ..models import SME, CalculationScale,SizeValue,Sector
 from django.http import JsonResponse
 from collections import Counter
+from django.db.models import Count, Avg, F
+from django.views import View
+
 
 
 # Create your views here.
@@ -121,7 +124,7 @@ def size_of_business_data(request):
         # Calculate percentages for each size category
         percentages = {}
         if total_smes > 0:
-            percentages = {size: (count / total_smes) * 100 for size, count in size_of_business_counts.items()}
+            percentages = {size: round((count / total_smes) * 100, 2) for size, count in size_of_business_counts.items()}
         else:
             percentages = {size: 0 for size in size_of_business_counts.keys()}
 
@@ -220,3 +223,57 @@ def age_range_report_filtered_view(request):
         return JsonResponse({'age_range_report': age_range_data}, safe=False)
     except Exception as e:
         return JsonResponse({'Error': str(e)}, status=400)
+
+class SMEReportsView(View):
+    template_name = 'reports.html'
+
+    def get_demographic_report(self):
+        total_businesses = SME.objects.count()
+        return SME.objects.values(province_name=F('province__province_name')).annotate(
+            number_of_businesses=Count('id'),
+            percentage=(Count('id') * 100.0 / total_businesses)
+        ).order_by('-number_of_businesses')
+
+    def get_business_size_report(self):
+        total_businesses = SME.objects.count()
+        return CalculationScale.objects.values(size_name=F('size_of_business__size')).annotate(
+            number_of_businesses=Count('id'),
+            percentage=(Count('id') * 100.0 / total_businesses)
+        ).order_by('-number_of_businesses')
+
+    def get_compliance_report(self):
+        total_businesses = SME.objects.count()
+        return SME.objects.values(compliance_status=F('tax')).annotate(
+            number_of_businesses=Count('id'),
+            percentage=(Count('id') * 100.0 / total_businesses)
+        ).order_by('-number_of_businesses')
+
+    def get_financial_performance_report(self):
+        return SME.objects.values(sector_name=F('sector__name')).annotate(
+            avg_annual_turnover=Avg('annual_revenue')
+        ).order_by('-avg_annual_turnover')
+
+    def get_export_report(self):
+        total_businesses = SME.objects.count()
+        return SME.objects.values(export_status=F('export')).annotate(
+            number_of_businesses=Count('id'),
+            percentage=(Count('id') * 100.0 / total_businesses)
+        ).order_by('-number_of_businesses')
+
+    def get_training_education_report(self):
+        total_business_owners = SME.objects.count()
+        return SME.objects.values(education_level=F('education')).annotate(
+            number_of_business_owners=Count('id'),
+            percentage=(Count('id') * 100.0 / total_business_owners)
+        ).order_by('-number_of_business_owners')
+
+    def get(self, request, *args, **kwargs):
+        reports = {
+            'demographic': self.get_demographic_report(),
+            'business_size': self.get_business_size_report(),
+            'compliance': self.get_compliance_report(),
+            'financial_performance': self.get_financial_performance_report(),
+            'export': self.get_export_report(),
+            'training_education': self.get_training_education_report(),
+        }
+        return render(request, self.template_name, {'reports': reports})

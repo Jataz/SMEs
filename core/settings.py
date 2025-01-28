@@ -30,8 +30,8 @@ SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-API_BASE_URL = env('API_BASE_URL', default='https://king-prawn-app-npu9e.ondigitalocean.app')
-#API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
+#API_BASE_URL = env('API_BASE_URL', default='https://king-prawn-app-npu9e.ondigitalocean.app')
+API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
 #ALLOWED_HOSTS = ['fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 #ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
 # Application definition
@@ -111,14 +111,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-""" DATABASES = {
+ """
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'smes_db',
@@ -127,7 +127,7 @@ DATABASES = {
         'HOST': 'localhost',  
         'PORT': '5432',       
     }
-} """
+}
 
 """ DATABASES = {
     'default': {
