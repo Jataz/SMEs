@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 import environ
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,12 +32,10 @@ SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-#API_BASE_URL = env('API_BASE_URL', default='https://king-prawn-app-npu9e.ondigitalocean.app')
-API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
-#ALLOWED_HOSTS = ['fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
-#ALLOWED_HOSTS = ['127.0.0.1','fleet-management-system-production.up.railway.app', 'www.fleet-management-system-production.up.railway.app']
+API_BASE_URL = env('API_BASE_URL', default='http://173.249.5.188')
+
 # Application definition
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['173.249.5.188']
 
 INSTALLED_APPS = [
     #'material',
@@ -67,7 +67,7 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    'https://king-prawn-app-npu9e.ondigitalocean.app',
+      'http://173.249.5.188',
 ]
 
 if DEBUG:
@@ -75,7 +75,7 @@ if DEBUG:
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://king-prawn-app-npu9e.ondigitalocean.app',
+        'http://173.249.5.188',
 ]
 
 #CSRF_COOKIE_HTTPONLY = False
@@ -118,27 +118,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
     }
 }
  """
+ 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smes_db',
-        'USER': 'postgres',
-        'PASSWORD': '9965@jay',
-        'HOST': 'localhost',  
-        'PORT': '5432',       
-    }
-}
-
-""" DATABASES = {
-    'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mwacsmed',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'smes_db',
+        'USER': 'jataz',
+        'PASSWORD': '9965@jay17Freedom',
         'HOST': 'localhost',
         'PORT': '3306',
     }
-} """
+} 
 
 
 
