@@ -30,12 +30,12 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=False)
 
 API_BASE_URL = env('API_BASE_URL', default='http://173.249.5.188')
 
 # Application definition
-ALLOWED_HOSTS = ['173.249.5.188']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','173.249.5.188']
 
 INSTALLED_APPS = [
     #'material',
@@ -67,6 +67,7 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
+	'http://127.0.0.1',
       'http://173.249.5.188',
 ]
 
@@ -75,6 +76,7 @@ if DEBUG:
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
+	'http://127.0.0.1',
         'http://173.249.5.188',
 ]
 
@@ -125,7 +127,7 @@ DATABASES = {
         'NAME': 'smes_db',
         'USER': 'jataz',
         'PASSWORD': '9965@jay17Freedom',
-        'HOST': 'localhost',
+        'HOST': '173.249.5.188',
         'PORT': '3306',
     }
 } 
@@ -183,3 +185,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGOUT_REDIRECT_URL = '/login'
+
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
