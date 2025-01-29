@@ -234,119 +234,139 @@
     
     <script>
       // Helper function to fetch data and render charts, tables, and insights
-      function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
-        fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
+      async function fetchReportData(apiUrl, barCanvasId, pieCanvasId, tableBodyId, insightId, label, hasPercentage = true) {
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
             // Render bar chart
-            new Chart(document.getElementById(barCanvasId), {
-              type: 'bar',
-              data: {
-                labels: data.labels, // X-axis labels
-                datasets: [{
-                  data: data.data, // Y-axis data values
-                  backgroundColor: [
-                  'rgba(0, 255, 0, 0.8)',
-                  'rgba(105, 105, 105, 0.5)',
-                  'rgba(255, 193, 7, 1)',
-                  'rgba(255, 0, 0, 0.5)'
-                ],
-                borderColor: [
-                  'rgba(0, 255, 0, 1)',
-                  'rgba(105, 105, 105, 1)',
-                  'rgba(255, 193, 0, 1)',
-                  'rgba(255, 0, 0, 1)'
-                ],
-                borderWidth: 1,
-                }],
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display: false, // Completely disable the legend
-                  },
-                },
-                scales: {
-                  yAxes: [{
-                    ticks: {
-                      beginAtZero: true,
-                      stepSize: 10,
-                      callback: function(value) {
-                        return Number(value).toLocaleString();
-                      }
-                    },
-                    scaleLabel: {
-                      display: true,
-                    }
-                  }],
-                  xAxes: [{
-                    scaleLabel: {
-                      display: true,
-                    }
-                  }]
-                },
-                 // Hide legend
-                 legend: {
-                  display: false
-                }
-              },
-            });
-            
+            renderBarChart(barCanvasId, data, label);
+
             // Render pie chart
-            new Chart(document.getElementById(pieCanvasId), {
-              type: 'pie',
-              data: {
+            renderPieChart(pieCanvasId, data, label);
+
+            // Render table
+            renderTable(tableBodyId, data, hasPercentage);
+
+            // Render insight
+            renderInsight(insightId, data);
+        } catch (error) {
+            console.error('Error fetching or rendering data:', error);
+        }
+      }
+
+      function renderBarChart(canvasId, data, label) {
+        new Chart(document.getElementById(canvasId), {
+            type: 'bar',
+            data: {
                 labels: data.labels,
                 datasets: [{
-                  label: label,
-                  data: data.data,
-                  backgroundColor: [
-                  'rgba(0, 255, 0, 0.8)',
-                  'rgba(105, 105, 105, 0.5)',
-                  'rgba(255, 193, 7, 1)',
-                  'rgba(255, 0, 0, 0.5)'
-                ],
-                borderColor: [
-                  'rgba(0, 255, 0, 1)',
-                  'rgba(105, 105, 105, 1)',
-                  'rgba(255, 193, 0, 1)',
-                  'rgba(255, 0, 0, 1)'
-                ],
-                borderWidth: 1,
+                    data: data.data,
+                    backgroundColor: [
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(105, 105, 105, 0.5)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(255, 0, 0, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(105, 105, 105, 1)',
+                        'rgba(255, 193, 0, 1)',
+                        'rgba(255, 0, 0, 1)'
+                    ],
+                    borderWidth: 1,
                 }],
-              },
-            });
-    
-            // Render table
-            const tableBody = document.getElementById(tableBodyId);
-            tableBody.innerHTML = '';
-            let total = data.counts.reduce((a, b) => a + b, 0); // Use `counts` for total calculation
-            data.labels.forEach((label, index) => {
-              let percentage = hasPercentage ? ((data.counts[index] / total) * 100).toFixed(2) : null; // Calculate percentage using `counts`
-              let row = `<tr>
-                <td>${label}</td>
-                <td>${data.counts[index]}</td> 
-                ${hasPercentage ? `<td>${percentage}</td>` : ''}
-              </tr>`;
-              tableBody.innerHTML += row;
-            });
-            
-    
-            // Render insight
-            const insight = document.getElementById(insightId);
-            const maxIndex = data.data.indexOf(Math.max(...data.data));
-            insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex] ?? '0'}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex] ?? '0'}</span>%.`;
-          });
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 20,
+                            callback: function(value) {
+                                return Number(value).toLocaleString();
+                            }
+                        },
+                        scaleLabel: {
+                            display: true,
+                        }
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                }
+            },
+        });
       }
-    
+
+      function renderPieChart(canvasId, data, label) {
+        new Chart(document.getElementById(canvasId), {
+            type: 'pie',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: label,
+                    data: data.data,
+                    backgroundColor: [
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(105, 105, 105, 0.5)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(255, 0, 0, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(105, 105, 105, 1)',
+                        'rgba(255, 193, 0, 1)',
+                        'rgba(255, 0, 0, 1)'
+                    ],
+                    borderWidth: 1,
+                }],
+            },
+        });
+      }
+      function renderTable(tableBodyId, data, hasPercentage) {
+        const tableBody = document.getElementById(tableBodyId);
+        let total = data.counts.reduce((a, b) => a + b, 0);
+        let rows = data.labels.map((label, index) => {
+            let percentage = hasPercentage ? ((data.counts[index] / total) * 100).toFixed(2) : null;
+            return `<tr>
+                <td>${label}</td>
+                <td>${data.counts[index]}</td>
+                ${hasPercentage ? `<td>${percentage}</td>` : ''
+                }
+            </tr>`;
+        }).join('');
+        tableBody.innerHTML = rows;
+      }
+
+      function renderInsight(insightId, data) {
+        const insight = document.getElementById(insightId);
+        const maxIndex = data.data.indexOf(Math.max(...data.data));
+        insight.innerHTML = `Insight: <span style="color: blue;">${data.labels[maxIndex] || '0'}</span> has the highest by Percentage <span style="color: red;">${data.data[maxIndex] ?? '0'}</span>%.`;
+      }
+
       // Fetch and render data for all reports
-      fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses');
-      fetchReportData('/api/gender/', 'genderBar', 'genderPie', 'genderTableBody', 'genderInsight', 'Gender Distribution');
-      fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution');
-      fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes');
-      fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false);
-      fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status');
-      fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education');
+      Promise.all([
+        fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses'),
+        fetchReportData('/api/gender/', 'genderBar', 'genderPie', 'genderTableBody', 'genderInsight', 'Gender Distribution'),
+        fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution'),
+        fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes'),
+        fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false),
+        fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status'),
+        fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education')
+      ]).catch(error => {
+        console.error('Error in fetching report data:', error);
+      });
     </script>
     
     </section>

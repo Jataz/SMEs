@@ -67,7 +67,7 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    'https://king-prawn-app-npu9e.ondigitalocean.app',
+    'http://127.0.0.1:8000',
 ]
 
 if DEBUG:
@@ -75,7 +75,7 @@ if DEBUG:
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
-    'https://king-prawn-app-npu9e.ondigitalocean.app',
+    'http://127.0.0.1:8000',
 ]
 
 #CSRF_COOKIE_HTTPONLY = False
@@ -116,8 +116,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
- """
+} """
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -187,9 +187,30 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGOUT_REDIRECT_URL = '/login'
+
+#For error loggings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'errors.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
