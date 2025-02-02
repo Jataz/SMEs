@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views import ( SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme_create_record,size_of_business_data,
-            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record,sex_data,get_sectors,SMEReportsView, 
+            get_districts,get_wards,SmeDetail,SMEUpdateView,update_sme_record,sex_data,get_sectors,SMEReportsView, update_session,
             demographic_report_api,
             business_size_report_api,
             financial_performance_report_api,
@@ -40,6 +40,7 @@ urlpatterns =[
     path('sme-list/', views.sme_list, name='sme-list'),
     path('login/', views.UserLoginView.as_view(), name='login'),
     path('logout/', views.user_logout_view, name='logout'), 
+    path('update-session/', update_session, name='update_session'),
     
     #Reports   
     path('reports/', SMEReportsView.as_view(), name='sme_reports'),

@@ -63,7 +63,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.AutoLogoutMiddleware',  # Add this middleware
 ]
+
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
@@ -185,6 +187,12 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/dashboard'
 LOGOUT_REDIRECT_URL = '/login'
+
+# Set session expiry to 10 minutes (600 seconds)
+SESSION_COOKIE_AGE = 600  # 10 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Expires when the browser is closed
+SESSION_SAVE_EVERY_REQUEST = True  # Reset expiry time on each request
+
 
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True

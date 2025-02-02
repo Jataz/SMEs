@@ -7,11 +7,15 @@ from django.conf import settings
 
 from ..models import SME, CalculationScale,SizeValue,Sector
 from django.http import JsonResponse
+from datetime import datetime
 from collections import Counter
 from django.db.models import Count, Avg, F
 from django.views import View
 
-
+def update_session(request):
+    if request.user.is_authenticated:
+        request.session['last_activity'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return JsonResponse({"status": "session updated"})
 
 # Create your views here.
 @login_required(login_url="/login")

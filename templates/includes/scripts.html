@@ -30,30 +30,33 @@
       }).buttons().container().appendTo('#dataTable_wrapper .col-md-6:eq(0)');
     });
 
-        // Set a timeout period (60 seconds)
-        var TIMEOUT_PERIOD = 60000 * 1000; // 60 * 10000 (30 seconds in milliseconds)
-        var timeout;
-        
-        function redirectToLogin() {
-            window.location.href = '/login/';
-        }
-        
-        function resetTimeout() {
-            clearTimeout(timeout);
-            timeout = setTimeout(redirectToLogin, TIMEOUT_PERIOD);
-        }
-        
-        // Listen for any of these events and reset the timeout on occurrence
-        document.onload = resetTimeout;
-        document.onmousemove = resetTimeout;
-        document.onmousedown = resetTimeout; // catches touchscreen presses
-        document.onclick = resetTimeout;     // catches touchpad clicks
-        document.onscroll = resetTimeout;    // catches scrolling with arrow keys
-        document.onkeypress = resetTimeout;
-        
-        // Initialize the timeout timer
+    // Set a timeout period (10 minutes = 600,000 milliseconds)
+    var TIMEOUT_PERIOD = 10 * 60 * 1000; // 10 minutes
+
+    var timeout;
+
+    function redirectToLogin() {
+        alert("You have been logged out due to inactivity.");
+        window.location.href = '/logout/';
+    }
+
+    function resetTimeout() {
+        clearTimeout(timeout);
+        timeout = setTimeout(redirectToLogin, TIMEOUT_PERIOD);
+    }
+
+    // Listen for user activity events and reset the timeout
+    function setupActivityListeners() {
+        ['mousemove', 'mousedown', 'click', 'scroll', 'keypress', 'touchstart', 'touchmove'].forEach(event => {
+            document.addEventListener(event, resetTimeout);
+        });
+    }
+
+    // Initialize timeout after the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        setupActivityListeners();
         resetTimeout();
-        
+    });        
   </script>
 
     
