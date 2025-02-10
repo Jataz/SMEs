@@ -54,6 +54,7 @@
                                     <option value="Partnership">Partnership</option>
                                     <option value="Syndicate">Syndicate</option>
                                     <option value="Consortium">Consortium</option>
+                                    <option value="Not Applicable">Not Applicable</option>
                                 </select>
                             </div>
                         </div>
@@ -307,27 +308,5 @@
         }
     });
     
-    
-    
 
-// Event listener for Training Status
-document.getElementById('training').addEventListener('change', function() {
-    const trainingStatus = this.value;
-    if (trainingStatus === 'Not-Trained') {
-        // Fill with 'Not applicable' and make the field read-only
-        document.getElementById('annual_revenue').value = '0';
-
-        // Make the field read-only (applies only to <input> fields)
-        document.getElementById('annual_revenue').readOnly = true;
-    } else {
-        // Clear the field and make it editable
-        document.getElementById('annual_revenue').value = '';
-
-        // Make the field editable
-        document.getElementById('annual_revenue').readOnly = false;
-    }
-});
 </script>
-
-
-    
