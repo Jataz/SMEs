@@ -162,13 +162,53 @@ sudo tail -f /var/log/mysql/error.log
 ## ALLOW DATABASE CONNECTION OUTSIDE THE LINUX SERVER
 
 ```Bash
-Configure MySQL to Allow Remote Access
-Edit the MySQL Configuration File: Open the MySQL configuration file:
-    sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
-        Change the bind-address: Look for the line:
-            bind-address = 127.0.0.1
-            bind-address = 0.0.0.0
-    Restart MySQL: Apply the changes by restarting the MySQL service:
-        sudo systemctl restart mysql
+## Step 3 Mysql optimization
+    sudo nano /etc/mysql/my.cnf
 
+    Add the following configuration to your my.cnf file:
+        [mysqld]
+        # General settings
+        max_connections = 1000 # increased to handle more concurrent users
+        thread_cache_size = 128 # increased to handle more concurrent users
+        table_open_cache = 5000 
+        table_definitions_cache = 4000
+
+        #Temporary Table Optimization
+        tmp_table_size = 512M
+        max_heap_table_size = 512M
+
+        #InnoDB Optimization
+        innodb_buffer_pool_size = 4G # increased buffer pool for better performance
+        innodb_buffer_pool_instances = 4 # improves parallel query execution
+        innodb_log_file_size = 512M # Larger log file for heavy transactions
+        innodb_flush_log_at_trx_commit = 2 # increased commit speed
+        innodb_flush_method = O_DIRECT # improves write performance
+        innodb_io_capacity = 2000 # increased I/O capacity
+        innodb_io_capacity_max = 4000 # increased I/O capacity
+        innodb_read_io_threads = 16 # improves read performance
+        innodb_write_io_threads = 16 # improves write performance
+
+
+        # Query Performance Optimization
+        join_buffer_size = 8M # increased join buffer size
+        sort_buffer_size = 8M # increased sort buffer size
+        read_rnd_buffer_size = 8M # increased read random buffer size
+
+        # Log Slow Queries (Debuggin)
+        slow_query_log = 1
+        slow_query_log_file = /var/log/mysql/slow.log
+        long_query_time = 1 # increased threshold for slow queries
+
+        # Connection Timeout (Prevents Long Held Connections)
+        wait_timeout = 28800 # increased timeout to 30 minutes
+        interative_timeout = 28800 # increased interactive timeout to 30 minutes
+
+## step 4 Configure MySQL to Allow Remote Access
+    Edit the MySQL Configuration File: Open the MySQL configuration file:
+        sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+            Change the bind-address: Look for the line:
+    
+                bind-address = 0.0.0.0
+        Restart MySQL: Apply the changes by restarting the MySQL service:
+            sudo systemctl restart mysql
 ```
