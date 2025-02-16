@@ -1,6 +1,4 @@
 <!-- Modal -->
-
-
 <div class="modal fade" data-backdrop="static" id="addSmeModal" tabindex="-1" role="dialog" aria-labelledby="addSmeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -22,24 +20,13 @@
                         <h5><i class="fas fa-industry"></i> Business Information</h5>
                     </div>
     
-                    <!-- First Row: Company, Registration Status, Form of Business, Sector -->
-                    <div class="row g-5 mb-4"> <!-- Added margin-bottom to create space between first and second rows -->
+                    <!-- First Row: Company, Form of Business, Registration Status, Sector -->
+                    <div class="row g-5 mb-4">
                         <div class="col-md-6">
                             <label for="company" class="mb-1">Company</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-gradient text-white"><i class="fas fa-building"></i></span>
                                 <input type="text" class="form-control" id="company" name="company" placeholder="Enter Company Name" required style="background-color: #f8f9fa;">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="registration" class="mb-1">Registration Status</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-clipboard-check"></i></span>
-                                <select class="form-control select2" id="registration" name="registration" required style="background-color: #f8f9fa;">
-                                    <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="Registered">Registered</option>
-                                    <option value="Not-Registered">Not-Registered</option>
-                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -54,7 +41,19 @@
                                     <option value="Partnership">Partnership</option>
                                     <option value="Syndicate">Syndicate</option>
                                     <option value="Consortium">Consortium</option>
-                                    <option value="Not Applicable">Not Applicable</option>
+                                    <option value="Sole Proprietorship">Sole Proprietorship</option>
+                                    <option value="Group">Group</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="registration" class="mb-1">Registration Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-clipboard-check"></i></span>
+                                <select class="form-control select2" id="registration" name="registration" required style="background-color: #f8f9fa;">
+                                    <option selected="selected" disabled="disabled">Select</option>
+                                    <option value="Registered">Registered</option>
+                                    <option value="Not-Registered">Not-Registered</option>
                                 </select>
                             </div>
                         </div>
@@ -69,25 +68,37 @@
                         </div>
                     </div>
     
-                    <!-- Last Row: Product or Service, Number of Employees, Exports -->
-                    <div class="row g-5 mb-4" style="margin-top: 20px;"> <!-- Added margin-top for extra space -->
-                        <div class="col-md-4">
+                    <!-- Second Row: Ownership, Product or Service, Number of Employees, Exports -->
+                    <div class="row g-5 mb-4" style="margin-top: 20px;">
+                        <div class="col-md-6">
+                            <label for="ownership" class="mb-1">Ownership</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-user-tie"></i></span>
+                                <select class="form-control select2" id="ownership" name="ownership" required style="background-color: #f8f9fa;">
+                                    <option selected="selected" disabled="disabled">Select Ownership</option>
+                                    <option value="Youth Owned">Youth Owned</option>
+                                    <option value="Women Owned">Women Owned</option>
+                                    <option value="Men Owned">Men Owned</option>
+                                    <option value="War Veterans Owned">War Veterans Owned</option>
+                                    <option value="Disabled Owned">Disabled Owned</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <label for="product_service" class="mb-1">Product or Service</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-gradient text-white"><i class="fas fa-cogs"></i></span>
                                 <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required style="background-color: #f8f9fa;">
                             </div>
                         </div>
-                        
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="number_of_employees" class="mb-1">Number of Employees</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-gradient text-white"><i class="fas fa-users"></i></span>
                                 <input type="number" class="form-control" id="number_of_employees" name="number_of_employees" placeholder="Enter Number of Employees" required style="background-color: #f8f9fa;">
                             </div>
                         </div>
-    
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="export" class="mb-1">Exports</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-gradient text-white"><i class="fas fa-ship"></i></span>
@@ -99,56 +110,25 @@
                             </div>
                         </div>
                     </div>
+    
                     <!-- Business Contact Information Section --> 
                     <div class="section-header bg-info text-white py-1 px-2 rounded mb-3">
                         <h5><i class="fas fa-user"></i> Business Contact Information</h5>
                     </div>
     
-                    <!-- First Row: Contact Person, Physical Address -->
+                    <!-- First Row: Contact Person, Business Physical Address -->
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label for="contact_person"><i class="fas fa-user-circle text-info"></i> Contact Person</label>
                             <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="address"><i class="fas fa-map-marker-alt text-info"></i> Physical Address</label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter Physical Address" required>
+                            <label for="address"><i class="fas fa-map-marker-alt text-info"></i> Business Physical Address</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter Business Physical Address" required>
                         </div>
                     </div>
     
-                    <!-- Second Row: Age, Sex, Disability -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label for="age"><i class="fas fa-calendar-alt text-info"></i> Age</label>
-                            <select class="form-control select2" id="age" name="age">
-                                <option selected="selected" disabled="disabled">Select Age Group</option>
-                                <option value="18-24">18 to 24</option>
-                                <option value="25-34">25 to 34</option>
-                                <option value="35-44">35 to 44</option>
-                                <option value="45-54">45 to 54</option>
-                                <option value="55-64">55 to 64</option>
-                                <option value="65+">65 or over</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="sex"><i class="fas fa-venus-mars text-info"></i> Sex</label>
-                            <select class="form-control select2" id="sex" name="sex">
-                                <option selected="selected" disabled="disabled">Select Sex</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select> 
-                        </div>
-                        <div class="col-md-4">
-                            <label for="disability"><i class="fas fa-wheelchair text-info"></i> Disability</label>
-                            <select class="form-control select2" id="disability" name="disability">
-                                <option selected="selected" disabled="disabled">Select</option>
-                                <option value="Disabled">Disabled</option>
-                                <option value="Not-Disabled">Not-Disabled</option>
-                            </select>
-                        </div>
-                    </div>
-    
-                    <!-- Third Row: Phone Number, Email, Education Level -->
+                    <!-- Second Row: Phone Number, Email, Managerial Education Level -->
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
                             <label for="phone_number"><i class="fas fa-phone-alt text-info"></i> Phone Number</label>
@@ -159,7 +139,7 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
                         </div>
                         <div class="col-md-4">
-                            <label for="education"><i class="fas fa-graduation-cap text-info"></i> Education Level</label>
+                            <label for="education"><i class="fas fa-graduation-cap text-info"></i> Managerial Education Level</label>
                             <select class="form-control select2" id="education" name="education">
                                 <option selected="selected" disabled="disabled">Select Education Level</option>
                                 <option value="Primary">Primary</option>
@@ -197,7 +177,6 @@
                         </div>
                     </div>
     
-    
                     <!-- Compliance Section -->
                     <div class="section-header bg-info text-white py-1 px-2 rounded mb-3">
                         <h5><i class="fas fa-shield-alt"></i> Compliance</h5>
@@ -218,7 +197,7 @@
                         </div>
                     </div>
     
-                                    <!-- Financial Information Section -->
+                    <!-- Financial Information Section -->
                     <div class="section-header bg-warning text-white py-1 px-2 rounded mb-3">
                         <h5><i class="fas fa-wallet"></i> Financial Information</h5>
                     </div>
@@ -240,73 +219,82 @@
                             </select>
                         </div>
     
-                            <!-- Annual Turnover -->
-                            <div class="col-md-4">
-                                <label for="annual_revenue">
-                                    <i class="fas fa-dollar-sign text-warning"></i> Annual Turnover (USD - $)
-                                </label>
-                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter Annual Turnover" required>
-                            </div>
-    
-                            <!-- Assets Value -->
-                            <div class="col-md-4">
-                                <label for="asset_value">
-                                    <i class="fas fa-warehouse text-warning"></i> Assets Value (USD - $)
-                                </label>
-                                <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>
-                            </div>
-                        </div>
-                        <!-- Challenges Section -->
-                        <div class="section-header bg-danger text-white py-1 px-2 rounded mb-3">
-                            <h5><i class="fas fa-exclamation-circle"></i> Challenges</h5>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <label for="comments"></label>
-                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>
-                            </div>
+                        <!-- Annual Turnover -->
+                        <div class="col-md-4">
+                            <label for="annual_revenue">
+                                <i class="fas fa-dollar-sign text-warning"></i> Annual Turnover (USD - $)
+                            </label>
+                            <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter Annual Turnover" required>
                         </div>
     
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">
-                                <i class="fas fa-times"></i> Close
-                            </button>
-                            <button type="button" class="btn btn-outline-warning btn-sm" id="resetBtn">
-                                <i class="fas fa-undo"></i> Reset
-                            </button>
-                            <button type="submit" class="btn btn-outline-primary btn-sm" id="submitBtn">
-                                <i class="fas fa-paper-plane"></i> Submit
-                            </button>
+                        <!-- Assets Value -->
+                        <div class="col-md-4">
+                            <label for="asset_value">
+                                <i class="fas fa-warehouse text-warning"></i> Assets Value (USD - $)
+                            </label>
+                            <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>
                         </div>
+                    </div>
+    
+                    <!-- Challenges Section -->
+                    <div class="section-header bg-danger text-white py-1 px-2 rounded mb-3">
+                        <h5><i class="fas fa-exclamation-circle"></i> Challenges</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="comments"></label>
+                            <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>
+                        </div>
+                    </div>
+    
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                        <button type="button" class="btn btn-outline-warning btn-sm" id="resetBtn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i> Submit
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<!-- Custom Styles for Attractive Interface -->
 
+<!-- Custom Script for Form Logic -->
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formOfBusiness = document.getElementById('type_of_business');
+        const registrationStatus = document.getElementById('registration');
 
-    document.getElementById('registration').addEventListener('change', function() {
-        const registrationStatus = this.value;
-        if (registrationStatus === 'Not-Registered') {
-            // Fill with 'Not applicable' and make fields disabled
-            document.getElementById('compliance').value = 'Not applicable';
-            document.getElementById('tax').value = 'Not applicable';
-    
-            // Disable fields to make them non-editable
-            document.getElementById('compliance').disabled = true;
-            document.getElementById('tax').disabled = true;
-        } else {
-            // Clear fields and enable them for editing
-            document.getElementById('compliance').value = '';
-            document.getElementById('tax').value = '';
-    
-            document.getElementById('compliance').disabled = false;
-            document.getElementById('tax').disabled = false;
-        }
+        formOfBusiness.addEventListener('change', function () {
+            const selectedValue = this.value;
+            if (selectedValue === 'Sole Proprietorship' || selectedValue === 'Group') {
+                registrationStatus.disabled = false;
+                registrationStatus.value = '';
+            } else {
+                registrationStatus.disabled = true;
+                registrationStatus.value = 'Registered';
+            }
+        });
+
+        registrationStatus.addEventListener('change', function () {
+            const registrationValue = this.value;
+            if (registrationValue === 'Not-Registered') {
+                document.getElementById('compliance').value = 'Not applicable';
+                document.getElementById('tax').value = 'Not applicable';
+                document.getElementById('compliance').disabled = true;
+                document.getElementById('tax').disabled = true;
+            } else {
+                document.getElementById('compliance').value = '';
+                document.getElementById('tax').value = '';
+                document.getElementById('compliance').disabled = false;
+                document.getElementById('tax').disabled = false;
+            }
+        });
     });
-    
-
 </script>

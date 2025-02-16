@@ -1,0 +1,121 @@
+<!-- Modal -->
+<div class="modal fade" data-backdrop="static" id="addSmeModal" tabindex="-1" role="dialog" aria-labelledby="addSmeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addSmeModalLabel">CREATE SME</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addSMEForm" autocomplete="off" style="font-size:15px">            
+                    <!-- Business Information Section -->
+                    <div class="section-header bg-gradient text-white py-1 px-2 rounded mb-3">
+                        <h5><i class="fas fa-industry"></i> Business Information</h5>
+                    </div>
+                    
+                    <!-- First Row: Form of Business, Registration Status -->
+                    <div class="row g-5 mb-4">
+                        <div class="col-md-6">
+                            <label for="type_of_business" class="mb-1">Form of Business</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-building"></i></span>
+                                <select class="form-control select2" id="type_of_business" name="type_of_business" required>
+                                    <option selected disabled>Select Form of Business</option>
+                                    <option value="Private Limited">Private Limited</option>
+                                    <option value="Private Business Cooperation">Private Business Cooperation</option>
+                                    <option value="Cooperative">Cooperative</option>
+                                    <option value="Partnership">Partnership</option>
+                                    <option value="Syndicate">Syndicate</option>
+                                    <option value="Consortium">Consortium</option>
+                                    <option value="Sole Proprietorship">Sole Proprietorship</option>
+                                    <option value="Group">Group</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="registration" class="mb-1">Registration Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-clipboard-check"></i></span>
+                                <select class="form-control select2" id="registration" name="registration" required>
+                                    <option selected disabled>Select</option>
+                                    <option value="Registered">Registered</option>
+                                    <option value="Not-Registered">Not-Registered</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Second Row: Ownership, Sector -->
+                    <div class="row g-5 mb-4">
+                        <div class="col-md-6">
+                            <label for="ownership" class="mb-1">Ownership</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-user-tie"></i></span>
+                                <select class="form-control select2" id="ownership" name="ownership" required>
+                                    <option selected disabled>Select Ownership</option>
+                                    <option value="Youth Owned">Youth Owned</option>
+                                    <option value="Women Owned">Women Owned</option>
+                                    <option value="Men Owned">Men Owned</option>
+                                    <option value="Warvets Owned">Warvets Owned</option>
+                                    <option value="Disabled Owned">Disabled Owned</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sector" class="mb-1">Sector</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-sitemap"></i></span>
+                                <select class="form-control select2" id="sector" name="sector" required>
+                                    <option selected disabled>Select Sector</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business Support Services Section -->
+                    <div class="section-header bg-success text-white py-1 px-2 rounded mb-3">
+                        <h5><i class="fas fa-cogs"></i> Business Support Services Received</h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="support_services"><i class="fas fa-handshake text-success"></i> Support Services</label>
+                            <select class="form-control select2" id="support_services" name="support_services">
+                                <option selected disabled>Select Support Services</option>
+                                <option value="Funding">Funding</option>
+                                <option value="Registration">Registration</option>
+                                <option value="Workspace">Workspace</option>
+                                <option value="Training">Training</option>
+                                <option value="Market Access">Market Access</option>
+                                <option value="Standards Development">Standards Development</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="training_funding_received"><i class="fas fa-chart-line text-success"></i> Training/Funding Received</label>
+                            <input type="text" class="form-control" id="training_funding_received" name="training_funding_received" placeholder="Enter received details" disabled>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('support_services').addEventListener('change', function() {
+        let receivedField = document.getElementById('training_funding_received');
+        receivedField.disabled = (this.value !== 'Training' && this.value !== 'Funding') ? true : false;
+        if (this.value !== 'Training' && this.value !== 'Funding') {
+            receivedField.value = 'Not Applicable';
+        } else {
+            receivedField.value = '';
+        }
+    });
+</script>
