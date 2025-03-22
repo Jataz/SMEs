@@ -218,8 +218,8 @@
                     modal.find('.modal-body #export').text(data.export);
                     modal.find('.modal-body #comments').text(data.comments);
 
-                    modal.find('.modal-body #training_received').text(data.training_received);
-                    modal.find('.modal-body #funding_received').text(data.funding_received);
+                    modal.find('.modal-body #training_received').text(data.training_received || 'N/A');
+                    modal.find('.modal-body #funding_received').text(data.funding_received || 'N/A');
                     modal.find('.modal-body #support_service').text((data.support_service || []).join(', '));
 
                     modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);

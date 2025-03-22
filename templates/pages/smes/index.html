@@ -44,109 +44,109 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <div class="card">
-              <div class="card-header">
-              <!--   <h1 class="card-title">SMEs</h1> -->
-                <div class="d-flex justify-content-end">
-                  
-                  {% if perms.smeapp.add_sme  %}
-                  <a class="btn btn-success btn-sm" href="#" data-toggle="modal" data-target="#addSmeModal"><i class="fas fa-plus-circle"></i> Add New SME </a>
+            <div class="card shadow-lg"></div>
+              <div class="card-header bg-gradient-info text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h3 class="card-title mb-0">SMEs Database</h3>
+                  {% if perms.smeapp.add_sme %}
+                  <a class="btn btn-light btn-sm rounded-pill shadow-sm" href="#" data-toggle="modal" data-target="#addSmeModal">
+                    <i class="fas fa-plus-circle"></i> Add New SME
+                  </a>
                   {% endif %}
                 </div>
               </div>
-              <!-- /.card-header -->
               <div class="card-body">
-                <table id="dataTable" class="table table-striped dt-responsive nowrap table-sm" style="font-size:15px">
-                  <thead style="background-color: lightblue;">
-                    <tr>
-                      <th>No.</th>
-                      <th>Reference Number</th>
-                      <th>Company</th>
-                      <th hidden>Contact Person</th>
-                      <th hidden>Phone Number</th>
-                      <th hidden>Email</th>
-                      <th hidden>Address</th>
-                      <th hidden>Sector</th>
-                      <th>Sex</th>
-                      <th hidden>Age</th>
-                      <th hidden>Disability</th>
-                      <th>Type of Business</th>
-                      <th>Product/Service</th>
-                      <th>Province</th>
-                      <th hidden>District</th>
-                      <th hidden>Ward</th>
-                      <th hidden>Compliance</th>
-                      <th>Registration</th>
-                      <th hidden>Tax</th>
-                      <th hidden>Training</th>
-                      <th hidden>Educcation Level</th>
-                      <th>Export</th>
-                      <th hidden>Comments</th>
-                      <th hidden>Number of Employees</th>
-                      <th hidden>Asset Value</th>
-                      <th hidden>Annual Turnover</th>
-                      <th>Size of Business</th>
-                      <th>Actions</th>
-                    </tr>
+                <table id="dataTable" class="table table-hover table-bordered dt-responsive nowrap" style="width:100%">
+                  <thead>
+                  <tr class="bg-light"></tr>
+                    <th class="text-center">#</th>
+                    <th>Reference Number</th>
+                    <th>Company</th>
+                    <th>Contact Person</th>
+                    <th>Phone Number</th>
+                    <th>Sector</th>
+                    <!-- Hidden columns -->
+                    <th class="d-none">Type of Business</th>
+                    <th class="d-none">Registration</th>
+                    <th class="d-none">Product/Service</th>
+                    <th class="d-none">Number of Employees</th>
+                    <th class="d-none">Export</th>
+                    <th class="d-none">Ownership</th>
+                    <th class="d-none">Address</th>
+                    <th class="d-none">Email</th>
+                    <th class="d-none">Education</th>
+                    <th class="d-none">Support Service</th>
+                    <th class="d-none">Training Received</th>
+                    <th class="d-none">Funding Received</th>
+                    <th class="d-none">Compliance</th>
+                    <th class="d-none">Tax</th>
+                    <th class="d-none">Source of Funds</th>
+                    <th class="d-none">Annual Revenue</th>
+                    <th class="d-none">Asset Value</th>
+                    <th class="d-none">Comments</th>
+                    <th class="d-none">Province</th>
+                    <th class="d-none">District</th>
+                    <th class="d-none">Ward</th>
+                    <th class="d-none">Size of Business</th>
+                    <th class="text-center">Actions</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    {% for sme in smes %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ sme.sme_ref_number }}</td>
-                        <td>{{ sme.company }}</td>
-                        <td hidden>{{ sme.contact_person }}</td>
-                        <td hidden>{{ sme.phone_number }}</td>
-                        <td hidden>{{ sme.email }}</td>
-                        <td hidden>{{ sme.address }}</td>
-                        <td hidden>{{ sme.sector }}</td>
-                        <td>{{ sme.sex }}</td>
-                        <td hidden>{{ sme.age }}</td>
-                        <td hidden>{{ sme.disability }}</td>
-                        <td>{{ sme.type_of_business }}</td>
-                        <td>{{ sme.product_service }}</td>
-                        <td>{{ sme.province.province_name }}</td>
-                        <td hidden>{{ sme.district.district_name }}</td>
-                        <td hidden>{{ sme.ward.ward_name }}</td>
-                        <td hidden>{{ sme.compliance }}</td>
-                        <td>{{ sme.registration }}</td>
-                        <td hidden>{{ sme.tax }}</td>
-                        <td hidden>{{ sme.training}}</td>
-                        <td hidden>{{ sme.education}}</td>
-                        <td>{{ sme.export }}</td>
-                        <td hidden>{{ sme.comments }}</td>
-                        <td hidden>{{ sme.number_of_employees }}</td>
-                        <td hidden>{{ sme.asset_value }}</td>
-                        <td hidden>{{ sme.annual_revenue }}</td>
-                        {% for scale in sme.calculation_scale %}
-                        <!-- Access size_of_business for each scale -->
-                        <td>{{ scale.size_of_business.size }}</td>
-                        {% endfor %}
-
-                        {% if perms.smeapp.sme_actions  %}
-                        <td class="project-actions">
-                          {% if perms.smeapp.view_sme  %}
-                          <a class="btn btn-outline-info btn-sm view-details" href="#" data-toggle="modal" data-target="#viewSmeModal" data-sme-id="{{ sme.id }}" style="padding: 0px 1px; font-size: 13px; color: #232121;">
-                            <i class="fas fa-eye"></i> View
-                          </a>
-                          {% endif %}
-                          {% if perms.smeapp.change_sme  %}
-                          <a class="btn btn-outline-info btn-sm edit-vehicle-link" href="#" data-toggle="modal" data-target="#editSmeModal" data-sme-id="{{ sme.id }}" style="padding: 0px 1px; font-size: 13px; color: #232121;">
-                            <i class="fas fa-pencil-alt"></i> Edit
-                          </a>
-                          {% endif %}
-                        </td>
-                        {% endif %}
-                    </tr>
+                  {% for sme in smes %}
+                  <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td><span class="badge badge-info">{{ sme.sme_ref_number }}</span></td>
+                    <td>{{ sme.company }}</td>
+                    <td>{{ sme.contact_person }}</td>
+                    <td>{{ sme.phone_number }}</td>
+                    <td>{{ sme.sector.name }}</td>
+                    <!-- Hidden columns data -->
+                    <td class="d-none">{{ sme.type_of_business }}</td>
+                    <td class="d-none">{{ sme.registration }}</td>
+                    <td class="d-none">{{ sme.product_service }}</td>
+                    <td class="d-none">{{ sme.number_of_employees }}</td>
+                    <td class="d-none">{{ sme.export }}</td>
+                    <td class="d-none">{{ sme.ownership }}</td>
+                    <td class="d-none">{{ sme.address }}</td>
+                    <td class="d-none">{{ sme.email }}</td>
+                    <td class="d-none">{{ sme.education }}</td>
+                    <td class="d-none">{{ sme.support_service }}</td>
+                    <td class="d-none">{{ sme.training_received }}</td>
+                    <td class="d-none">{{ sme.funding_received }}</td>
+                    <td class="d-none">{{ sme.compliance }}</td>
+                    <td class="d-none">{{ sme.tax }}</td>
+                    <td class="d-none">{{ sme.source_of_funds }}</td>
+                    <td class="d-none">{{ sme.annual_revenue }}</td>
+                    <td class="d-none">{{ sme.asset_value }}</td>
+                    <td class="d-none">{{ sme.comments }}</td>
+                    <td class="d-none">{{ sme.province.province_name }}</td>
+                    <td class="d-none">{{ sme.district.district_name }}</td>
+                    <td class="d-none">{{ sme.ward.ward_name }}</td>
+                    {% for scale in sme.calculation_scale %}
+                    <td class="d-none">{{ scale.size_of_business.size }}</td>
                     {% endfor %}
+
+                    {% if perms.smeapp.sme_actions %}
+                      <td class="text-center">
+                        {% if perms.smeapp.view_sme %}
+                          <button class="btn btn-outline-primary btn-sm view-details mx-1" data-toggle="modal" data-target="#viewSmeModal" data-sme-id="{{ sme.id }}">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        {% endif %}
+                        {% if perms.smeapp.change_sme %}
+                          <button class="btn btn-outline-success btn-sm edit-vehicle-link mx-1" data-toggle="modal" data-target="#editSmeModal" data-sme-id="{{ sme.id }}">
+                            <i class="fas fa-pencil-alt"></i>
+                          </button>
+                        {% endif %}
+                      </td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
                   </tbody>
                 </table>
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
         </div>
         <!-- /.row -->
       </div>
