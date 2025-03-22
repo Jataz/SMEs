@@ -9,49 +9,53 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <!-- Business Information -->
-                <div class="card mb-2 shadow-sm rounded">
-                    <div class="card-header bg-secondary text-white bg-opacity-80">
-                        <h5 class="mb-0"><i class="fas fa-building fa-sm me-2 text-warning"></i> Business Information</h5>
+                <div class="card mb-2 shadow-sm rounded"></div>
+                    <div class="card-header bg-gradient text-white">
+                        <h5 class="mb-0"><i class="fas fa-industry fa-sm me-2"></i> Business Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-building text-success"></i> Company:</label>
+                                <label class="font-weight-bold"><i class="fas fa-building"></i> Company:</label>
                                 <span id="company" class="form-control-static text-muted"></span>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-check-circle text-info"></i> Registration Status:</label>
-                                <span id="registration" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-briefcase text-danger"></i> Form of Business:</label>
+                                <label class="font-weight-bold"><i class="fas fa-briefcase"></i> Form of Business:</label>
                                 <span id="type-of-business" class="form-control-static text-muted"></span>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-industry text-warning"></i> Sector:</label>
+                                <label class="font-weight-bold"><i class="fas fa-check-circle"></i> Registration Status:</label>
+                                <span id="registration" class="form-control-static text-muted"></span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-industry"></i> Sector:</label>
                                 <span id="sector" class="form-control-static text-muted"></span>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-box text-primary"></i> Product or Service:</label>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-box"></i> Product or Service:</label>
                                 <span id="product-service" class="form-control-static text-muted"></span>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-truck text-success"></i> Exports:</label>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-users"></i> Number of Employees:</label>
+                                <span id="number-of-employees" class="form-control-static text-muted"></span>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-truck"></i> Exports:</label>
                                 <span id="export" class="form-control-static text-muted"></span>
                             </div>
                             <div class="col-md-4 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-users text-danger"></i> Number of Employees:</label>
-                                <span id="number-of-employees" class="form-control-static text-muted"></span>
+                                <label class="font-weight-bold"><i class="fas fa-users"></i> Ownership:</label>
+                                <span id="ownership" class="form-control-static text-muted"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                                <!-- Contact and Personal Information -->
+
+                <!-- Contact Information -->
                 <div class="card mb-2 shadow-sm rounded">
-                    <div class="card-header bg-info text-white bg-opacity-50">
-                        <h5 class="mb-0"><i class="fas fa-user fa-sm me-2"></i> Business and Contact Information</h5>
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-user fa-sm me-2"></i> Business Contact Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
@@ -60,65 +64,43 @@
                                 <span id="contact-person" class="form-control-static text-muted"></span>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-map-pin"></i> Physical Address:</label>
+                                <label class="font-weight-bold"><i class="fas fa-map-marker-alt"></i> Business Physical Address:</label>
                                 <span id="address" class="form-control-static text-muted"></span>
                             </div>
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-4 mb-2">
                                 <label class="font-weight-bold"><i class="fas fa-phone"></i> Phone Number:</label>
                                 <span id="phone-number" class="form-control-static text-muted"></span>
                             </div>
-                            <div class="col-md-6 mb-2">
+                            <div class="col-md-4 mb-2">
                                 <label class="font-weight-bold"><i class="fas fa-envelope"></i> Email:</label>
                                 <span id="email" class="form-control-static text-muted"></span>
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-calendar"></i> Age Group:</label>
-                                <span id="age" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-genderless"></i> Sex:</label>
-                                <span id="sex" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-wheelchair"></i> Disability:</label>
-                                <span id="disability" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-calendar"></i> Education Level:</label>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-graduation-cap"></i> Managerial Education Level:</label>
                                 <span id="education" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-map-marker-alt"></i> Province:</label>
-                                <span id="province" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-map-pin"></i> District:</label>
-                                <span id="district" class="form-control-static text-muted"></span>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-location-arrow"></i> Ward:</label>
-                                <span id="ward" class="form-control-static text-muted"></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Business Support Services Section -->
+                <!-- Business Support Services -->
                 <div class="card mb-2 shadow-sm rounded">
-                    <div class="card-header bg-info text-white">
+                    <div class="card-header bg-success text-white">
                         <h5 class="mb-0"><i class="fas fa-cogs fa-sm me-2"></i> Business Support Services</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row g-2">
+                        <div class="row g-3">
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-chalkboard-teacher"></i> Training:</label>
-                                <span id="training" class="form-control-static text-muted"></span>
-                                <!-- <p id="training" class="form-control-static text-muted">Trained</p> -->
+                                <label class="font-weight-bold"><i class="fas fa-hands-helping"></i> Support Service:</label>
+                                <span id="support-service" class="form-control-static text-muted"></span>
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-chalkboard"></i> Training Received (Number of Sessions): </label>
-                                <span id="training_recieved" class="form-control-static text-muted"></span>
-                                <!-- <p id="training_received" class="form-control-static text-muted">5</p> -->
+                                <label class="font-weight-bold"><i class="fas fa-chalkboard-teacher"></i> Training Received:</label>
+                                <span id="training-received" class="form-control-static text-muted"></span>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-dollar-sign"></i> Funding Received:</label>
+                                <span id="funding-received" class="form-control-static text-muted"></span>
                             </div>
                         </div>
                     </div>
@@ -126,53 +108,41 @@
 
                 <!-- Compliance Information -->
                 <div class="card mb-2 shadow-sm rounded">
-                    <div class="card-header bg-success text-white bg-opacity-80">
-                        <h5 class="mb-0"><i class="fas fa-shield-alt fa-sm me-2"></i> Compliance Information</h5>
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-shield-alt fa-sm me-2"></i> Compliance</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-check-circle"></i> Compliance: </label>
+                                <label class="font-weight-bold"><i class="fas fa-check-circle"></i> Compliance:</label>
                                 <span id="compliance" class="form-control-static text-muted"></span>
-                                <!-- <p id="compliance" class="form-control-static text-muted">---</p> -->
                             </div>
                             <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-receipt"></i> Tax Type: </label>
+                                <label class="font-weight-bold"><i class="fas fa-receipt"></i> Tax:</label>
                                 <span id="tax" class="form-control-static text-muted"></span>
-                                <!-- <p id="tax" class="form-control-static text-muted">---</p> -->
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Financial Information -->
-                <div class="card mb-2 shadow-sm">
-                    <div class="card-header bg-warning text-dark bg-opacity-75">
-                        <h5 class="mb-0"><i class="fas fa-chart-line"></i> Financial Information</h5>
+                <div class="card mb-2 shadow-sm rounded">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-wallet fa-sm me-2"></i> Financial Information</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-dollar-sign"></i> Annual Turnover:</label>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-money-bill"></i> Source of Capital Funds:</label>
+                                <span id="source-of-funds" class="form-control-static text-muted"></span>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-chart-line"></i> Annual Turnover (USD):</label>
                                 <span id="annual-revenue" class="form-control-static text-muted"></span>
-                                <!-- <p id="annual-revenue" class="form-control-static text-muted">---</p> -->
                             </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-wallet"></i> Asset Value:</label>
+                            <div class="col-md-4 mb-2">
+                                <label class="font-weight-bold"><i class="fas fa-coins"></i> Assets Value (USD):</label>
                                 <span id="asset-value" class="form-control-static text-muted"></span>
-                                <!-- <p id="asset-value" class="form-control-static text-muted">---</p> -->
-                            </div>
-                            <!-- New field for Source of Funds -->
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-money-check-alt"></i> Source of Funds:</label>
-                                <span id="source_of_funds" class="form-control-static text-muted"></span>
-                                <!-- <p id="source-of-funds" class="form-control-static text-muted">---</p> -->
-                            </div>
-                            <!-- Existing field for Size of Business -->
-                            <div class="col-md-6 mb-2">
-                                <label class="font-weight-bold"><i class="fas fa-sitemap"></i> Size of Business:</label>
-                                <span id="size-of-business" class="form-control-static text-muted"></span>
-                                <!-- <p id="business-size" class="form-control-static text-muted">---</p> -->
                             </div>
                         </div>
                     </div>
@@ -180,20 +150,18 @@
 
                 <!-- Challenges -->
                 <div class="card mb-2 shadow-sm rounded">
-                    <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle fa-sm me-2"></i> Challenges</h5>
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-circle fa-sm me-2"></i> Challenges</h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <label class="font-weight-bold"><i class="fas fa-comments"></i> :</label>
+                                <label class="font-weight-bold"><i class="fas fa-comments"></i> Challenges:</label>
                                 <span id="comments" class="form-control-static text-muted"></span>
-                                <!-- <p id="comments" class="form-control-static text-muted">---</p> -->
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="modal-footer">

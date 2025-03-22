@@ -1,388 +1,219 @@
 <script>
     $(document).ready(function () {
-        // Fetch and populate sectors dropdown
-        function populateSectors() {
+        // CSRF token helper
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                cookies.forEach(cookie => {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    }
+                });
+            }
+            return cookieValue;
+        }
+
+        // Alert function
+        function showAlert(type, title, message) {
+            $('.custom-alert').remove();
+
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed custom-alert`;
+            alertDiv.style.cssText = `
+                top: 20px;
+                right: 20px;
+                min-width: 300px;
+                max-width: 400px;
+                z-index: 1050;
+                background-color: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+                padding: 15px;
+            `;
+
+            const icon = type === 'success' ? 'bx-check-circle' : 'bx-x-circle';
+
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bx ${icon} bx-md me-2"></i>
+                    <div class="flex-grow-1">
+                        <h6 class="text-white-100 mb-1 fw-bold">${title}</h6>
+                        <div class="text-white-100 small">${message}</div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white p-0 ms-3"
+                        data-bs-dismiss="alert" aria-label="Close" style="opacity: 0.8; font-size: 12px;"></button>
+                </div>
+            `;
+
+            document.body.appendChild(alertDiv);
+
+            alertDiv.animate([{ transform: 'translateX(100%)', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], {
+                duration: 300,
+                easing: 'ease-out'
+            });
+
+            setTimeout(() => {
+                const animation = alertDiv.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: 'translateX(100%)', opacity: 0 }], {
+                    duration: 300,
+                    easing: 'ease-in'
+                });
+                animation.onfinish = () => alertDiv.remove();
+            }, 5000);
+
+            alertDiv.querySelector('.btn-close').addEventListener('click', () => {
+                const animation = alertDiv.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: 'translateX(100%)', opacity: 0 }], {
+                    duration: 300,
+                    easing: 'ease-in'
+                });
+                animation.onfinish = () => alertDiv.remove();
+            });
+        }
+
+        // Populate sectors
+        function populateSectors(dropdownSelector, selectedId = null) {
             $.ajax({
                 url: '/api/v1/sectors/',
                 dataType: 'json',
                 success: function (data) {
-                    const sectorDropdown = $('#sector');
-                    sectorDropdown.empty();
-                    sectorDropdown.append('<option value="" selected disabled>Select Sector</option>');
-                    $.each(data, function (index, sector) {
-                        sectorDropdown.append('<option value="' + sector.id + '">' + sector.name + '</option>');
+                    const dropdown = $(dropdownSelector);
+                    dropdown.empty().append('<option value="" selected disabled>Select Sector</option>');
+                    data.forEach(sector => {
+                        const option = $('<option></option>').val(sector.id).text(sector.name);
+                        if (sector.id == selectedId) option.prop('selected', true);
+                        dropdown.append(option);
                     });
                 },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching sectors:', error);
-                    showToast('error', 'Error', 'Failed to load sectors. Please refresh the page.');
-                }
+                error: () => showAlert('danger', 'Error', 'Failed to load sectors. Please refresh.')
             });
         }
 
-        // Call populateSectors when the modal is shown
+        // Show sectors when add modal opens
         $('#addSmeModal').on('show.bs.modal', function () {
-            populateSectors();
+            populateSectors('#sector');
         });
-    });
-</script>
 
+        // Handle SME form submission
+        $("#addSMEForm").submit(function (e) {
+            e.preventDefault();
 
-<script>
-        $(document).ready(function () {
-            // Function to get the CSRF token from cookies
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== "") {
-                    const cookies = document.cookie.split(";");
-                    cookies.forEach(cookie => {
-                        cookie = cookie.trim();
-                        if (cookie.startsWith(name + "=")) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        }
-                    });
-                }
-                return cookieValue;
-            }
-        
-            // Function to show toast notifications
-        // Function to show toast notifications
-        function showToast(type, title, message) {
-            const backgroundColor = type === 'success' ? 'green' : 'red';
-            const textColor = 'white';
-    
-            const toastHTML = `
-                <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true" style="
-                    background-color: ${backgroundColor};
-                    color: ${textColor};
-                    position: fixed;
-                    top: 1rem;
-                    right: 1rem;
-                    z-index: 1050;
-                    min-width: 300px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                    border-radius: 4px;">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <strong>${title}</strong>: ${message}
-                        </div>
-                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>`;
-    
-            const toastContainer = document.getElementById('toastContainer');
-            if (!toastContainer) {
-                console.error('Toast container not found. Please add a div with id="toastContainer" to your HTML.');
+            const wordPattern = /^[A-Za-z\s]+$/;
+            const phonePattern = /^07\d{8}$/;
+
+            const formData = {
+                company: $("#company").val().trim().toUpperCase(),
+                type_of_business: $("#type_of_business").val(),
+                registration: $("#registration").val().trim(),
+                sector: $("#sector").val(),
+                product_service: $("#product_service").val().trim().toUpperCase(),
+                number_of_employees: $("#number_of_employees").val(),
+                export: $("#export").val(),
+                ownership: $("#ownership").val(),
+                contact_person: $("#contact_person").val().trim().toUpperCase(),
+                address: $("#address").val().trim().toUpperCase(),
+                phone_number: $("#phone_number").val().trim(),
+                email: $("#email").val().trim(),
+                education: $("#education").val(),
+                support_service: $("#support_service").val(),
+                training_received: $("#training_received").val(),
+                funding_received: $("#funding_received").val(),
+                compliance: $("#compliance").val().trim(),
+                tax: $("#tax").val().trim(),
+                source_of_funds: $("#source_of_funds").val().trim(),
+                annual_revenue: $("#annual_revenue").val(),
+                asset_value: $("#asset_value").val(),
+                comments: $("#comments").val()
+            };
+
+            if (!wordPattern.test(formData.company)) {
+                showAlert("danger", "Error", "Invalid company name.");
                 return;
             }
-    
-            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-            const toastElement = toastContainer.lastElementChild;
-            $(toastElement).toast({ delay: 3000 }).toast('show');
-            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
-        }
-        
-            // Populate Provinces dropdown
+            if (!wordPattern.test(formData.contact_person)) {
+                showAlert("danger", "Error", "Invalid contact person.");
+                return;
+            }
+            if (!phonePattern.test(formData.phone_number)) {
+                showAlert("danger", "Error", "Phone must start with 07 and be 10 digits.");
+                return;
+            }
+
             $.ajax({
-                url: '/api/v1/provinces/',
-                dataType: 'json',
-                success: function (data) {
-                    const fragment = document.createDocumentFragment();
-                    data.provinces.forEach(province => {
-                        const option = document.createElement('option');
-                        option.value = province.id;
-                        option.textContent = province.province_name;
-                        fragment.appendChild(option);
-                    });
-                    document.getElementById('province-dropdown').appendChild(fragment);
-                }
-            });
-        
-            // Handle change event for provinces dropdown
-            $('#province-dropdown').on('change', function () {
-                const provinceId = this.value;
-                const districtDropdown = $('#district-dropdown');
-                const wardDropdown = $('#ward-dropdown');
-                districtDropdown.empty();
-                wardDropdown.empty();
-                wardDropdown.append('<option value="" selected disabled>Select Ward</option>');
-        
-                if (provinceId) {
-                    $.ajax({
-                        url: `/api/v1/districts/?province_id=${provinceId}`,
-                        dataType: 'json',
-                        success: function (data) {
-                            const fragment = document.createDocumentFragment();
-                            data.districts.forEach(district => {
-                                const option = document.createElement('option');
-                                option.value = district.id;
-                                option.textContent = district.district_name;
-                                fragment.appendChild(option);
-                            });
-                            districtDropdown.append(fragment);
-                        }
-                    });
-                }
-            });
-        
-            // Form submission
-            $("#addSMEForm").submit(function (event) {
-                event.preventDefault();
-    
-                // Validation patterns
-                const wordPattern = /^[A-Za-z\s]+$/;
-                const phonePattern = /^07\d{8}$/; // Ensure phone starts with '07' and has exactly 10 digits
-        
-                // Collect form data
-                const formData = {
-                    company: $("#company").val().trim().toUpperCase(),
-                    contact_person: $("#contact_person").val().trim().toUpperCase(),
-                    phone_number: $("#phone_number").val().trim(),
-                    email: $("#email").val().trim(),
-                    address: $("#address").val().trim().toUpperCase(),
-                    sector: $("#sector").val(),
-                    type_of_business: $("#type_of_business").val(),
-                    product_service: $("#product_service").val().trim().toUpperCase(),
-                    number_of_employees: $("#number_of_employees").val(),
-                    asset_value: $("#asset_value").val(),
-                    annual_revenue: $("#annual_revenue").val(),
-                    export: $("#export").val(),
-                    age: $("#age").val(),
-                    sex: $("#sex").val(),
-                    disability: $("#disability").val(),
-                    compliance: $("#compliance").val().trim(),
-                    registration: $("#registration").val().trim(),
-                    tax: $("#tax").val().trim(),
-                    training: $("#training").val(),
-                    training_recieved: $("#training_recieved").val(),
-                    source_of_funds: $("#source_of_funds").val().trim(),
-                    comments: $("#comments").val(),
-                    education: $("#education").val(),
-                };
-    
-                // Validate inputs
-                if (!wordPattern.test(formData.company)) {
-                    showToast("error", "Error", "Please enter a valid company name containing only letters and spaces.");
-                    return;
-                }
-    
-                if (!wordPattern.test(formData.contact_person)) {
-                    showToast("error", "Error", "Please enter a valid contact person name containing only letters and spaces.");
-                    return;
-                }
-    
-                if (!phonePattern.test(formData.phone_number)) {
-                    showToast("error", "Error", "Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
-                    return;
-                }
-    
-                // AJAX Request
-                $.ajax({
-                    url: '/api/v1/sme-create/',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    headers: {
-                        "X-CSRFToken": getCookie("csrftoken")
-                    },
-                    success: function () {
-                        showToast("success", "Success", "SME record added successfully.");
-                        $("#addSmeModal").modal("hide");
-                        setTimeout(() => location.reload(), 3000);
-                    },
-                    error: function (xhr) {
-                        let errorMessage = "Failed to submit SME data.";
-                        if (xhr.responseJSON) {
-                            errorMessage = Object.keys(xhr.responseJSON)
-                                .map(key => `${key}: ${xhr.responseJSON[key]}`)
-                                .join("; ");
-                        }
-                        showToast("danger", "Error", errorMessage);
+                url: '/api/v1/sme-create/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                headers: { "X-CSRFToken": getCookie("csrftoken") },
+                success: function () {
+                    showAlert("success", "Success", "SME added successfully.");
+                    $("#addSmeModal").modal("hide");
+                    setTimeout(() => location.reload(), 3000);
+                },
+                error: function (xhr) {
+                    let errorMessage = "Failed to submit SME data.";
+                    if (xhr.responseJSON) {
+                        errorMessage = Object.entries(xhr.responseJSON)
+                            .map(([k, v]) => `${k}: ${v}`).join("; ");
                     }
-                });
-            });
-        
-            // Reset form fields on reset button click
-            $("#resetBtn").click(function () {
-                $("#addSMEForm")[0].reset();
+                    showAlert("danger", "Error", errorMessage);
+                }
             });
         });
-    
-</script>
 
-<script>
-    $(document).ready(function() {
+        // Reset button
+        $("#resetBtn").click(function () {
+            $("#addSMEForm")[0].reset();
+        });
+
+        // View modal
         $('#viewSmeModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var smeId = button.data('sme-id'); // Extract info from data-* attributes
-            var modal = $(this);
-            var url = `/api/v1/sme-detail/${smeId}/`;
+            const smeId = $(event.relatedTarget).data('sme-id');
+            const modal = $(this);
 
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
+            fetch(`/api/v1/sme-detail/${smeId}/`)
+                .then(res => res.ok ? res.json() : Promise.reject(res.statusText))
                 .then(data => {
-                    modal.find('.modal-title').text(data.sme_ref_number);
-                    modal.find('.modal-body #company').text(data.company);
-                    modal.find('.modal-body #contact-person').text(data.contact_person);
-                    modal.find('.modal-body #phone-number').text(data.phone_number);
-                    modal.find('.modal-body #email').text(data.email);
-                    modal.find('.modal-body #address').text(data.address);
-                    modal.find('.modal-body #age').text(data.age);
-                    modal.find('.modal-body #sex').text(data.sex);
-
-                    modal.find('.modal-body #sector').text(data.sector.name);
-                    modal.find('.modal-body #type-of-business').text(data.type_of_business);
-                    modal.find('.modal-body #product-service').text(data.product_service);
-                    modal.find('.modal-body #number-of-employees').text(data.number_of_employees);
-                    modal.find('.modal-body #asset-value').text(data.asset_value);
-                    modal.find('.modal-body #annual-revenue').text(data.annual_revenue);
-                    modal.find('.modal-body #export').text(data.export);
-                    modal.find('.modal-body #comments').text(data.comments);
-
-                    modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);
-                    modal.find('.modal-body #disability').text(data.disability);
-
-                    modal.find('.modal-body #compliance').text(data.compliance);
-                    modal.find('.modal-body #registration').text(data.registration);
-                    modal.find('.modal-body #tax').text(data.tax);
-                    modal.find('.modal-body #training').text(data.training);
-                    modal.find('.modal-body #education').text(data.education);
-                    modal.find('.modal-body #source_of_funds').text(data.source_of_funds);
-                    modal.find('.modal-body #training_recieved').text(data.training_recieved);
-                    modal.find('.modal-body #size-of-business').text(data.calculation_scale[0].size_of_business.size);
-
-                    modal.find('.modal-body #province').text(data.province.province_name);
-                    modal.find('.modal-body #district').text(data.district.district_name);
-                    modal.find('.modal-body #ward').text(data.ward.ward_name);
+                    for (const [key, value] of Object.entries(data)) {
+                        const val = typeof value === 'object' ? value.name || value.size || '' : value;
+                        modal.find(`#${key}`).text(val || '');
+                    }
                 })
                 .catch(error => {
-                    modal.find('.modal-body').html(`<p>Error: ${error.message}</p>`);
+                    modal.find('.modal-body').html(`<p>Error: ${error}</p>`);
                 });
         });
-    });
-</script>
 
-
-
-<script>
-    $(document).ready(function () {
-        // Updating details modal for edit functionality
+        // Edit modal
         $('#editSmeModal').on('show.bs.modal', function (event) {
-            const button = $(event.relatedTarget); // Button that triggered the modal
-            const smeId = button.data('sme-id'); // Extract SME ID from data attribute
+            const smeId = $(event.relatedTarget).data('sme-id');
             const modal = $(this);
-    
-            // Store smeId in the form as a data attribute
             $('#editSMEForm').data('sme-id', smeId);
-    
-            // Fetch SME details from the server
+
             $.ajax({
                 url: `/api/v1/sme-update/${smeId}/`,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    // Populate modal fields with retrieved data
-                    modal.find('#company').val(data.company);
-                    modal.find('#contact_person').val(data.contact_person);
-                    modal.find('#phone_number').val(data.phone_number);
-                    modal.find('#email').val(data.email);
-                    modal.find('#address').val(data.address);
-                    modal.find('#sex').val(data.sex);
-                    modal.find('#age').val(data.age);
-                    modal.find('#type_of_business').val(data.type_of_business);
-                    modal.find('#product_service').val(data.product_service);
-                    modal.find('#export').val(data.export);
-                    modal.find('#comments').val(data.comments);
-                    modal.find('#compliance').val(data.compliance);
-                    modal.find('#registration').val(data.registration);
-                    modal.find('#tax').val(data.tax);
-                    modal.find('#training').val(data.training);
-                    modal.find('#education').val(data.education);
-                    modal.find('#number_of_employees').val(data.number_of_employees);
-                    modal.find('#asset_value').val(data.asset_value);
-                    modal.find('#annual_revenue').val(data.annual_revenue);
-                    modal.find('#disability').val(data.disability);
-                    modal.find('#training_recieved').val(data.training_recieved);
-                    modal.find('#source_of_funds').val(data.source_of_funds);
-    
-                    // Populate the sector dropdown dynamically with preselection
-                    $.ajax({
-                        url: '/api/v1/sectors/',
-                        dataType: 'json',
-                        success: function (sectors) {
-                            const sectorDropdown = modal.find('#sector');
-                            sectorDropdown.empty();
-                            sectorDropdown.append('<option value="" selected disabled>Select Sector</option>');
-    
-                            // Loop through the sectors and append options
-                            $.each(sectors, function (index, sector) {
-                                const option = $('<option></option>')
-                                    .val(sector.id)
-                                    .text(sector.name);
-    
-                                // Preselect the sector if it matches the current SME's sector
-                                if (sector.id === data.sector.id) {
-                                    option.attr('selected', 'selected');
-                                }
-                                sectorDropdown.append(option);
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error fetching sectors:', error);
-                            showToast('error', 'Error', 'Failed to load sectors. Please refresh the page.');
-                        }
+                    Object.entries(data).forEach(([key, value]) => {
+                        const val = typeof value === 'object' ? value.id || value.name || '' : value;
+                        modal.find(`#${key}`).val(val);
                     });
+                    populateSectors('#editSmeModal #sector', data.sector.id);
                 },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching SME data:', error);
-                    showToast('error', 'Error', 'Failed to load SME details.');
-                }
+                error: () => showAlert('danger', 'Error', 'Failed to load SME details.')
             });
         });
-    
-        // Function to get the CSRF token from the cookie
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    
-        // Set up jQuery to include the CSRF token in the headers of all AJAX requests
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-            }
-        });
-    
-        // Event listener for edit form submission
-        $('#editSMEForm').on('submit', function (event) {
-            event.preventDefault(); // Prevent the form from submitting via the browser
-    
-            const smeId = $(this).data('sme-id'); // Get the SME ID from the form data attribute
+
+        // Handle SME edit submission
+        $('#editSMEForm').submit(function (e) {
+            e.preventDefault();
+
+            const smeId = $(this).data('sme-id');
             const form = $(this);
-    
-            // Validation patterns
-            const wordPattern = /^[A-Za-z\s]+$/;
-            const phonePattern = /^07\d{8}$/;
-    
-            // Get the form values
+
             const formData = {
                 smeId: smeId,
                 company: form.find('#company').val().trim().toUpperCase(),
@@ -409,90 +240,36 @@
                 training_recieved: form.find('#training_recieved').val(),
                 source_of_funds: form.find('#source_of_funds').val()
             };
-    
-            // Validate inputs
-            if (!wordPattern.test(formData.company)) {
-                showToast("error", "Error", "Please enter a valid company name containing only letters and spaces.");
+
+            if (!/^[A-Za-z\s]+$/.test(formData.company) || !/^[A-Za-z\s]+$/.test(formData.contact_person)) {
+                showAlert("danger", "Error", "Names must contain only letters and spaces.");
                 return;
             }
-    
-            if (!wordPattern.test(formData.contact_person)) {
-                showToast("error", "Error", "Please enter a valid contact person name containing only letters and spaces.");
+            if (!/^07\d{8}$/.test(formData.phone_number)) {
+                showAlert("danger", "Error", "Phone must start with 07 and be 10 digits.");
                 return;
             }
-    
-            if (!phonePattern.test(formData.phone_number)) {
-                showToast("error", "Error", "Please enter a valid phone number starting with 07 and containing exactly 10 digits.");
-                return;
-            }
-    
-            // Send AJAX request to update SME data
+
             $.ajax({
                 url: `/api/v1/sme/update/`,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
-                success: function (response) {
-                    console.log('SME updated successfully:', response);
-                    showToast('success', 'Success', 'SME Record updated successfully.');
+                success: () => {
+                    showAlert('success', 'Success', 'SME updated successfully.');
                     $('#editSmeModal').modal('hide');
-                    $('#editSMEForm')[0].reset();
-                    setTimeout(function () {
-                        location.reload();
-                    }, 3000);
+                    setTimeout(() => location.reload(), 3000);
                 },
-                error: function (xhr, status, error) {
-                    console.error('Error updating SME data:', error);
-                    let errorMessage = 'Failed to update SME data. Please try again.';
+                error: function (xhr) {
+                    let errorMessage = 'Failed to update SME.';
                     if (xhr.responseJSON) {
-                        const responseErrors = xhr.responseJSON;
-                        const errorMessages = Object.keys(responseErrors).map(
-                            key => `${key}: ${responseErrors[key]}`
-                        ).join('; ');
-                        errorMessage = errorMessages;
+                        errorMessage = Object.entries(xhr.responseJSON)
+                            .map(([k, v]) => `${k}: ${v}`).join('; ');
                     }
-                    showToast('error', 'Error', errorMessage);
+                    showAlert('danger', 'Error', errorMessage);
                 }
             });
         });
-    
-        // Function to show toast notifications
-        function showToast(type, title, message) {
-            const backgroundColor = type === 'success' ? 'green' : 'red';
-            const textColor = 'white';
-    
-            const toastHTML = `
-                <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true" style="
-                    background-color: ${backgroundColor};
-                    color: ${textColor};
-                    position: fixed;
-                    top: 1rem;
-                    right: 1rem;
-                    z-index: 1050;
-                    min-width: 300px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                    border-radius: 4px;">
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <strong>${title}</strong>: ${message}
-                        </div>
-                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>`;
-    
-            const toastContainer = document.getElementById('toastContainer');
-            if (!toastContainer) {
-                console.error('Toast container not found. Please add a div with id="toastContainer" to your HTML.');
-                return;
-            }
-    
-            toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-            const toastElement = toastContainer.lastElementChild;
-            $(toastElement).toast({ delay: 3000 }).toast('show');
-            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
-        }
-    });
 
-    
+    });
 </script>

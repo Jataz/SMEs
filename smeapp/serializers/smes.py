@@ -72,10 +72,12 @@ class SMESerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SME
-        fields = ('id','company', 'contact_person', 'phone_number', 'email', 'address', 'sector', 'type_of_business', 
-                  'product_service', 'province', 'district','ward', 'number_of_employees','compliance','registration','tax',
-                  'asset_value', 'annual_revenue', 'calculation_scale','user_profile','age','sex','export','comments','training','education',
-                  'disability','sme_ref_number','source_of_funds','training_recieved')
+        fields = ('id', 'sme_ref_number', 'company', 'type_of_business', 'registration', 'sector', 
+             'product_service', 'number_of_employees', 'export', 'ownership', 'contact_person', 
+             'address', 'phone_number', 'email', 'education', 'support_service', 'training_received', 
+             'funding_received', 'compliance', 'tax', 'source_of_funds', 'annual_revenue', 
+             'asset_value', 'comments', 'province', 'district', 'ward', 'calculation_scale', 
+             'user_profile')
         
     def validate_phone_number(self, value):
         """

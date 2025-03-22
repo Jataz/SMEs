@@ -30,9 +30,9 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.bool('DEBUG', default=True)
 
-API_BASE_URL = env('API_BASE_URL', default='http://173.249.5.188')
+API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
 
 # Application definition
 ALLOWED_HOSTS = ['127.0.0.1','localhost','173.249.5.188']
@@ -126,10 +126,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'smes_db',
-        'USER': 'jataz',
-        'PASSWORD': '9965@jay17Freedom',
-        'HOST': '173.249.5.188',
+        'NAME': 'mwacsmed',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 } 
@@ -197,7 +197,7 @@ SESSION_SAVE_EVERY_REQUEST = True  # Reset expiry time on each request
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
-CACHES = {
+""" CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
@@ -207,5 +207,5 @@ CACHES = {
             "SOCKET_CONNECT_TIMEOUT": 5,
         }
     }
-}
+} """
 
