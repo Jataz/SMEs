@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="type_of_business" class="form-label">Form of Business</label>
-                            <select class="form-control select2" id="type_of_business" name="type_of_business" required>
+                            <select class="form-control " id="type_of_business" name="type_of_business" required>
                                 <option selected disabled>Select Form of Business</option>
                                 <option value="Private Limited">Private Limited</option>
                                 <option value="Private Business Cooperation">Private Business Cooperation</option>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="registration" class="form-label">Registration Status</label>
-                            <select class="form-control select2" id="registration" name="registration" required>
+                            <select class="form-control " id="registration" name="registration" required>
                                 <option selected disabled>Select Registration Status</option>
                                 <option value="Registered">Registered</option>
                                 <option value="Not-Registered">Not Registered</option>
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="sector" class="form-label">Sector</label>
-                            <select class="form-control select2" id="sector" name="sector" required>
+                            <select class="form-control " id="sector" name="sector" required>
                                 <option selected disabled>Select Sector</option>
                                 <!-- Sector Options -->
                             </select>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="export" class="form-label">Exports</label>
-                            <select class="form-control select2" id="export" name="export" required>
+                            <select class="form-control " id="export" name="export" required>
                                 <option selected disabled>Select Exports Status</option>
                                 <option value="Exporter">Exporter</option>
                                 <option value="Non-Exporter">Non-Exporter</option>
@@ -78,7 +78,7 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-4">
                             <label for="ownership" class="form-label">Ownership</label>
-                            <select class="form-control select2" id="ownership" name="ownership" required>
+                            <select class="form-control " id="ownership" name="ownership" required>
                                 <option selected disabled>Select Ownership</option>
                                 <option value="Youth owned">Youth Owned</option>
                                 <option value="Women Owned">Women Owned</option>
@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="education" class="form-label">Managerial Education Level</label>
-                            <select class="form-control select2" id="education" name="education" required>
+                            <select class="form-control " id="education" name="education" required>
                                 <option selected disabled>Select Education Level</option>
                                 <option value="Primary">Primary</option>
                                 <option value="O Level">O Level</option>
@@ -183,7 +183,7 @@
                     <div class="row g-4 mb-4">
                         <div class="col-md-4">
                             <label for="source_of_funds" class="form-label">Source of Capital Funds</label>
-                            <select class="form-control select2" id="source_of_funds" name="source_of_funds" required>
+                            <select class="form-control " id="source_of_funds" name="source_of_funds" required>
                                 <option selected disabled>Select Source</option>
                                 <option value="Government loan">Government loan</option>
                                 <option value="Venture capital">Venture capital</option>
@@ -230,13 +230,19 @@
     .form-control {
         border-radius: 0.25rem;
     }
-    .select2-container {
+    .-container {
         width: 100% !important;
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Select2
+        $('#support_service').select2({
+            placeholder: "Select support services",
+            width: '100%'
+        });
+
         const supportSelect = document.getElementById('support_service');
         const trainingField = document.getElementById('training_field');
         const fundingField = document.getElementById('funding_field');
@@ -244,7 +250,7 @@
         const fundingInput = document.getElementById('funding_received');
 
         function toggleFields() {
-            const selectedValues = Array.from(supportSelect.selectedOptions).map(opt => opt.value);
+            const selectedValues = $('#support_service').val() || [];
 
             // Show/hide training field
             if (selectedValues.includes('Training')) {
@@ -263,11 +269,11 @@
             }
         }
 
-        // Initialize visibility on page load (useful if editing pre-filled form)
+        // Initialize visibility on page load
         toggleFields();
 
-        // Attach event listener
-        supportSelect.addEventListener('change', toggleFields);
+        // Attach event listener using Select2's change event
+        $('#support_service').on('change', toggleFields);
     });
 </script>
 
