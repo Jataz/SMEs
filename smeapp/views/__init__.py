@@ -10,5 +10,7 @@ from .reports import (
     export_report_api,
     training_education_report_api,
     ownership_api,
-    age_api
+    asset_performance_report_api,
+    business_support_api,
+    employees_by_sector_api,
     )

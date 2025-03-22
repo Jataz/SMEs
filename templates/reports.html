@@ -63,7 +63,7 @@
               <thead>
                 <tr>
                   <th>Province</th>
-                  <th>Number of Businesses</th>
+                  <th>Number of SMEs</th>
                   <th>Percentage (%)</th>
                 </tr>
               </thead>
@@ -125,7 +125,7 @@
                 <thead>
                   <tr>
                     <th>Business Size</th>
-                    <th>Number of Businesses</th>
+                    <th>Number of SMEs</th>
                     <th>Percentage (%)</th>
                   </tr>
                 </thead>
@@ -157,7 +157,8 @@
                 <thead>
                   <tr>
                     <th>Sector</th>
-                    <th>Average Annual Turnover (USD)</th>
+                    <th>Total Annual Turnover (USD)</th>
+                    <th>Percentage (%)</th>
                   </tr>
                 </thead>
                 <tbody id="financialPerformanceTableBody"></tbody>
@@ -188,7 +189,7 @@
                 <thead>
                   <tr>
                     <th>Export Status</th>
-                    <th>Number of Businesses</th>
+                    <th>Number of SMEs</th>
                     <th>Percentage (%)</th>
                   </tr>
                 </thead>
@@ -204,33 +205,130 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">
-                <i class="fas fa-chart-pie mr-1"></i> Managerial Education Report
+          <i class="fas fa-chart-pie mr-1"></i> Managerial Education Report
               </h3>
             </div>
             <div class="card-body">
               <div class="row">
-                <div class="col-md-6">
-                  <canvas id="trainingEducationBar"></canvas>
-                </div>
-                <div class="col-md-6">
-                  <canvas id="trainingEducationPie"></canvas>
-                </div>
+          <div class="col-md-6">
+            <canvas id="trainingEducationBar"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="trainingEducationPie"></canvas>
+          </div>
               </div>
               <table class="table table-striped mt-4">
-                <thead>
-                  <tr>
-                    <th>Education Level</th>
-                    <th>Number of SMEs</th>
-                    <th>Percentage (%)</th>
-                  </tr>
-                </thead>
-                <tbody id="trainingEducationTableBody"></tbody>
+          <thead>
+            <tr>
+              <th>Education Level</th>
+              <th>Number of SMEs</th>
+              <th>Percentage (%)</th>
+            </tr>
+          </thead>
+          <tbody id="trainingEducationTableBody"></tbody>
               </table>
               <p id="trainingEducationInsight" class="text-muted mt-3"></p>
             </div>
           </div>
-        </div>s
+        </div>
+
+        <!-- Business Support Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i> Business Support Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+          <div class="col-md-6">
+            <canvas id="businessSupportBar"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="businessSupportPie"></canvas>
+          </div>
+              </div>
+              <table class="table table-striped mt-4">
+          <thead>
+            <tr>
+              <th>Support Type</th>
+              <th>Number of SMEs</th>
+              <th>Percentage (%)</th>
+            </tr>
+          </thead>
+          <tbody id="businessSupportTableBody"></tbody>
+              </table>
+              <p id="businessSupportInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset Performance Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i> Asset Performance Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+          <div class="col-md-6">
+            <canvas id="assetPerformanceBar"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="assetPerformancePie"></canvas>
+          </div>
+              </div>
+              <table class="table table-striped mt-4">
+          <thead>
+            <tr>
+              <th>Asset Type</th>
+              <th>Total Asset Value</th>
+              <th>Percentage (%)</th>
+            </tr>
+          </thead>
+          <tbody id="assetPerformanceTableBody"></tbody>
+              </table>
+              <p id="assetPerformanceInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employees by Sector Report -->
+        <div class="col-md-12 my-4">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i> Employees by Sector Report
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+          <div class="col-md-6">
+            <canvas id="employeesBySectorBar"></canvas>
+          </div>
+          <div class="col-md-6">
+            <canvas id="employeesBySectorPie"></canvas>
+          </div>
+              </div>
+              <table class="table table-striped mt-4">
+          <thead>
+            <tr>
+              <th>Sector</th>
+              <th>Number of Employees</th>
+              <th>Percentage (%)</th>
+            </tr>
+          </thead>
+          <tbody id="employeesBySectorTableBody"></tbody>
+              </table>
+              <p id="employeesBySectorInsight" class="text-muted mt-3"></p>
+            </div>
+          </div>
+        </div>
     </div>
+
     
     <script>
       // Helper function to fetch data and render charts, tables, and insights
@@ -263,16 +361,22 @@
                 datasets: [{
                     data: data.data,
                     backgroundColor: [
-                        'rgba(0, 255, 0, 0.8)',
-                        'rgba(105, 105, 105, 0.5)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 0, 0, 0.5)'
+                      'rgba(0, 255, 0, 0.8)',
+                      'rgba(105, 105, 105, 0.5)', 
+                      'rgba(255, 193, 7, 1)',
+                      'rgba(255, 0, 0, 0.5)',
+                      'rgba(54, 162, 235, 0.8)',
+                      'rgba(153, 102, 255, 0.8)',
+                      'rgba(255, 159, 64, 0.8)'
                     ],
                     borderColor: [
-                        'rgba(0, 255, 0, 1)',
-                        'rgba(105, 105, 105, 1)',
-                        'rgba(255, 193, 0, 1)',
-                        'rgba(255, 0, 0, 1)'
+                      'rgba(0, 255, 0, 1)',
+                      'rgba(105, 105, 105, 1)',
+                      'rgba(255, 193, 0, 1)', 
+                      'rgba(255, 0, 0, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
                     ],
                     borderWidth: 1,
                 }],
@@ -318,16 +422,22 @@
                     label: label,
                     data: data.data,
                     backgroundColor: [
-                        'rgba(0, 255, 0, 0.8)',
-                        'rgba(105, 105, 105, 0.5)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(255, 0, 0, 0.5)'
+                      'rgba(0, 255, 0, 0.8)',
+                      'rgba(105, 105, 105, 0.5)', 
+                      'rgba(255, 193, 7, 1)',
+                      'rgba(255, 0, 0, 0.5)',
+                      'rgba(54, 162, 235, 0.8)',
+                      'rgba(153, 102, 255, 0.8)',
+                      'rgba(255, 159, 64, 0.8)'
                     ],
                     borderColor: [
-                        'rgba(0, 255, 0, 1)',
-                        'rgba(105, 105, 105, 1)',
-                        'rgba(255, 193, 0, 1)',
-                        'rgba(255, 0, 0, 1)'
+                      'rgba(0, 255, 0, 1)',
+                      'rgba(105, 105, 105, 1)',
+                      'rgba(255, 193, 0, 1)', 
+                      'rgba(255, 0, 0, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
                     ],
                     borderWidth: 1,
                 }],
@@ -382,11 +492,13 @@
       Promise.all([
         fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses'),
         fetchReportData('/api/ownership/', 'ownershipBar', 'ownershipPie', 'ownershipTableBody', 'ownershipInsight', 'ownership Distribution'),
-        fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution'),
         fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes'),
-        fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false),
+        fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover'),
         fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status'),
-        fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education')
+        fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education'),
+        fetchReportData('/api/business-support/', 'businessSupportBar', 'businessSupportPie', 'businessSupportTableBody', 'businessSupportInsight', 'Business Support'),
+        fetchReportData('/api/asset-performance/', 'assetPerformanceBar', 'assetPerformancePie', 'assetPerformanceTableBody', 'assetPerformanceInsight', 'Asset Performance'),
+        fetchReportData('/api/employees-by-sector/', 'employeesBySectorBar', 'employeesBySectorPie', 'employeesBySectorTableBody', 'employeesBySectorInsight', 'Employees by Sector')
       ]).catch(error => {
         console.error('Error in fetching report data:', error);
       });

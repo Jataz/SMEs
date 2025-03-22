@@ -156,7 +156,7 @@
                   </div>
                 </div>
                 <div class="text-center">
-                  <p class="text-white mb-0">LARGE</p>
+                  <p class="text-white mb-0">GRADUATED</p>
                 </div>
               </div>
               <div class="icon">
@@ -261,7 +261,7 @@
                 </table>
                 <p id="demographicInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
-            </div>
+          </div>
           </div>
         
           <!-- ownership Report -->
@@ -292,7 +292,7 @@
                 </table>
                 <p id="ownershipInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
               </div>
-            </div>
+          </div>
           </div>
       
           <!-- Business Size Report -->
@@ -418,6 +418,99 @@
               </div>
             </div>
           </div>
+
+          <!-- Business Support Report -->
+          <div class="col-md-6 my-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i> Business Support Report
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#business-support-bar" data-toggle="tab">Bar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#business-support-pie" data-toggle="tab">Pie</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="business-support-bar">
+                    <canvas id="businessSupportBar"></canvas>
+                  </div>
+                  <div class="chart tab-pane" id="business-support-pie">
+                    <canvas id="businessSupportPie"></canvas>
+                  </div>
+                </div>
+                <table class="table table-striped mt-4">
+                  <tbody id="businessSupportTableBody" hidden></tbody>
+                </table>
+                <p id="businessSupportInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Asset Performance Report -->
+          <div class="col-md-6 my-4">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i> Asset Performance Report
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#asset-performance-bar" data-toggle="tab">Bar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#asset-performance-pie" data-toggle="tab">Pie</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="asset-performance-bar">
+                    <canvas id="assetPerformanceBar"></canvas>
+                  </div>
+                  <div class="chart tab-pane" id="asset-performance-pie">
+                    <canvas id="assetPerformancePie"></canvas>
+                  </div>
+                </div>
+                <table class="table table-striped mt-4">
+                  <tbody id="assetPerformanceTableBody" hidden></tbody>
+                </table>
+                <p id="assetPerformanceInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employee Report By Sector-->
+            <div class="col-md-6 my-4">
+              <div class="card">
+                <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-chart-pie mr-1"></i> Employee Report By Sector
+                </h3>
+                <div class="card-tools">
+                  <ul class="nav nav-pills ml-auto">
+                  <li class="nav-item"><a class="nav-link active" href="#employees-by-sector-bar" data-toggle="tab">Bar</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#employees-by-sector-pie" data-toggle="tab">Pie</a></li>
+                  </ul>
+                </div>
+                </div>
+                <div class="card-body">
+                <div class="tab-content p-0">
+                  <div class="chart tab-pane active" id="employees-by-sector-bar">
+                  <canvas id="employeesBySectorBar"></canvas>
+                  </div>
+                  <div class="chart tab-pane" id="employees-by-sector-pie">
+                  <canvas id="employeesBySectorPie"></canvas>
+                  </div>
+                </div>
+                <table class="table table-striped mt-4">
+                  <tbody id="employeesBySectorTableBody" hidden></tbody>
+                </table>
+                <p id="employeesBySectorInsight" class="text-muted mt-3"><strong>Insight:</strong> Loading...</p>
+                </div>
+              </div>
+            </div>
         </div>
         
         <script>
@@ -451,17 +544,23 @@
                     datasets: [{
                         data: data.data,
                         backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                        ],
-                        borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                        ],
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(105, 105, 105, 0.5)', 
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(255, 0, 0, 0.5)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)'
+                      ],
+                      borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(105, 105, 105, 1)',
+                        'rgba(255, 193, 0, 1)', 
+                        'rgba(255, 0, 0, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                      ],
                         borderWidth: 1,
                     }],
                 },
@@ -506,17 +605,23 @@
                         label: label,
                         data: data.data,
                         backgroundColor: [
-                            'rgba(0, 255, 0, 0.8)',
-                            'rgba(105, 105, 105, 0.5)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(255, 0, 0, 0.5)'
-                        ],
-                        borderColor: [
-                            'rgba(0, 255, 0, 1)',
-                            'rgba(105, 105, 105, 1)',
-                            'rgba(255, 193, 0, 1)',
-                            'rgba(255, 0, 0, 1)'
-                        ],
+                        'rgba(0, 255, 0, 0.8)',
+                        'rgba(105, 105, 105, 0.5)', 
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(255, 0, 0, 0.5)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(153, 102, 255, 0.8)',
+                        'rgba(255, 159, 64, 0.8)'
+                      ],
+                      borderColor: [
+                        'rgba(0, 255, 0, 1)',
+                        'rgba(105, 105, 105, 1)',
+                        'rgba(255, 193, 0, 1)', 
+                        'rgba(255, 0, 0, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                      ],
                         borderWidth: 1,
                     }],
                 },
@@ -567,17 +672,19 @@
           }
 
           // Fetch and render data for all reports
-          Promise.all([
+            Promise.all([
             fetchReportData('/api/demographic/', 'demographicBar', 'demographicPie', 'demographicTableBody', 'demographicInsight', 'Number of Businesses'),
             fetchReportData('/api/ownership/', 'ownershipBar', 'ownershipPie', 'ownershipTableBody', 'ownershipInsight', 'ownership Distribution'),
-            fetchReportData('/api/age/', 'ageRangeBar', 'ageRangePie', 'ageRangeTableBody', 'ageRangeInsight', 'Age Range Distribution'),
             fetchReportData('/api/business-size/', 'businessSizeBar', 'businessSizePie', 'businessSizeTableBody', 'businessSizeInsight', 'Business Sizes'),
             fetchReportData('/api/financial-performance/', 'financialPerformanceBar', 'financialPerformancePie', 'financialPerformanceTableBody', 'financialPerformanceInsight', 'Average Turnover', false),
             fetchReportData('/api/export/', 'exportBar', 'exportPie', 'exportTableBody', 'exportInsight', 'Export Status'),
-            fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education')
-          ]).catch(error => {
+            fetchReportData('/api/training-education/', 'trainingEducationBar', 'trainingEducationPie', 'trainingEducationTableBody', 'trainingEducationInsight', 'Training and Education'),
+            fetchReportData('/api/business-support/', 'businessSupportBar', 'businessSupportPie', 'businessSupportTableBody', 'businessSupportInsight', 'Business Support'),
+            fetchReportData('/api/asset-performance/', 'assetPerformanceBar', 'assetPerformancePie', 'assetPerformanceTableBody', 'assetPerformanceInsight', 'Asset Performance'),
+            fetchReportData('/api/employees-by-sector/', 'employeesBySectorBar', 'employeesBySectorPie', 'employeesBySectorTableBody', 'employeesBySectorInsight', 'Employees by Sector')
+            ]).catch(error => {
             console.error('Error in fetching report data:', error);
-          });
+            });
         </script>
                
       </div><!-- /.container-fluid -->
