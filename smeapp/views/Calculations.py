@@ -106,32 +106,35 @@ def create_calculation_scale(sme, size_of_employees, size_of_annual_revenue, siz
     
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                  type_of_business, product_service,number_of_employees, asset_value, annual_revenue, age, sex,
-                                  export,comments,disability,compliance, registration, tax, training, education):
+                                  type_of_business, product_service,number_of_employees, asset_value, annual_revenue,
+                                  export,comments,ownership, support_service, training_received, funding_received,
+                                  source_of_funds,compliance, registration, tax, education):
     # Assuming you have a model for SME records and CalculationScale records
     sme = SME.objects.get(id=sme_id)
     sme.company = company
-    sme.contact_person = contact_person
-    sme.phone_number = phone_number
-    sme.email = email
-    sme.address = address
-    sme.sector = sector
     sme.type_of_business = type_of_business
+    sme.registration = registration
+    sme.sector = sector
     sme.product_service = product_service
     sme.number_of_employees = number_of_employees
-    sme.asset_value = asset_value
-    sme.annual_revenue = annual_revenue
-    sme.age = age
-    sme.sex = sex
     sme.export = export
-    sme.comments = comments
-    sme.disability = disability
-    sme.compliance = compliance
-    sme.registration = registration
-    sme.tax = tax
-    sme.training = training
+    sme.ownership = ownership
+    sme.contact_person = contact_person
+    sme.address = address
+    sme.phone_number = phone_number
+    sme.email = email
     sme.education = education
+    sme.support_service = support_service
+    sme.training_received = training_received
+    sme.funding_received = funding_received
+    sme.compliance = compliance
+    sme.tax = tax
+    sme.source_of_funds = source_of_funds
+    sme.annual_revenue = annual_revenue
+    sme.asset_value = asset_value
+    sme.comments = comments
     sme.save()
+    
     return sme
 
 def update_calculation_scale(sme_id, size_of_employees, size_of_annual_revenue, size_of_asset_value,

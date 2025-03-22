@@ -118,23 +118,24 @@ def sme_create_record(request):
         contact_person = form_data.get('contact_person')
         phone_number = form_data.get('phone_number')
         email = form_data.get('email')
-        address = form_data.get('address') 
+        address = form_data.get('address')
         type_of_business = form_data.get('type_of_business')
         product_service = form_data.get('product_service')
         number_of_employees = int(form_data.get('number_of_employees'))
-        asset_value = float(form_data.get('asset_value'))
-        annual_revenue = float(form_data.get('annual_revenue'))
+        asset_value = int(form_data.get('asset_value'))
+        annual_revenue = int(form_data.get('annual_revenue'))
+        age = form_data.get('age')
+        sex = form_data.get('sex')
         export = form_data.get('export')
         comments = form_data.get('comments')
+        disability = form_data.get('disability')
         compliance = form_data.get('compliance')
         registration = form_data.get('registration')
         tax = form_data.get('tax')
+        training = form_data.get('training')
         education = form_data.get('education')
-        training_received = form_data.get('training_received')
         source_of_funds = form_data.get('source_of_funds')
-        ownership = form_data.get('ownership')
-        support_service = form_data.get('support_service')
-        funding_received = form_data.get('funding_received')
+        training_recieved = form_data.get('training_recieved')
 
         # Generate SME reference number
         sme_ref_number = f"SME{datetime.now().strftime('%Y%m%d%H%M%S')}"
@@ -144,31 +145,32 @@ def sme_create_record(request):
             # Create the SME record
             sme = SME.objects.create(
                 company=company,
-                type_of_business=type_of_business,
-                registration=registration,
-                sector=sector,
-                product_service=product_service,
-                number_of_employees=number_of_employees, 
-                export=export,
-                ownership=ownership,  # New field, setting default None
                 contact_person=contact_person,
-                address=address,
                 phone_number=phone_number,
                 email=email,
-                education=education,
-                support_service=support_service,  # New field, setting default None
-                training_received=training_received,  # Note spelling fixed from received
-                funding_received=funding_received,  # New field, setting default None
-                compliance=compliance,
-                tax=tax,
-                source_of_funds=source_of_funds,
-                annual_revenue=annual_revenue,
-                asset_value=asset_value,
-                comments=comments,
+                address=address,
+                sector=sector,
+                type_of_business=type_of_business,
+                product_service=product_service,
                 province_id=province_id,
                 district_id=district_id,
                 ward_id=ward_id,
-                sme_ref_number=sme_ref_number
+                number_of_employees=number_of_employees,
+                asset_value=asset_value,
+                annual_revenue=annual_revenue,
+                age=age,
+                sex=sex,
+                export=export,
+                comments=comments,
+                disability=disability,
+                sme_ref_number=sme_ref_number,
+                compliance=compliance,
+                registration=registration,
+                tax=tax,
+                training=training,
+                education=education,
+                training_recieved=training_recieved,
+                source_of_funds=source_of_funds
             )
 
             # Calculate sizes based on sector thresholds
@@ -193,7 +195,7 @@ def sme_create_record(request):
         return JsonResponse({'success': 'SME added successfully'}, status=201)
 
     except UserProfile.DoesNotExist:
-        return JsonResponse({'Error': 'User profile not found. Please contact the Administrator to set up your account.'}, status=400)
+        return JsonResponse({'Error': 'User profile does not exist. Please create a profile first.'}, status=400)
 
     except Sector.DoesNotExist:
         return JsonResponse({'Error': 'Invalid sector provided.'}, status=400)
@@ -204,7 +206,41 @@ def sme_create_record(request):
     except Exception as e:
         return JsonResponse({'Error': f'An unexpected error occurred: {e}'}, status=400)
 
+def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
+                      province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue, age, sex, 
+                      export, comments, disability, sme_ref_number,compliance,registration,tax,training,education, training_recieved, source_of_funds):
+    
+    return SME.objects.create(
+        company=company,
+        contact_person=contact_person,
+        phone_number=phone_number,
+        email=email,
+        address=address,
+        sector=sector,
+        type_of_business=type_of_business,
+        product_service=product_service,
+        province_id=province_id,
+        district_id=district_id,
+        ward_id=ward_id,
+        number_of_employees=number_of_employees,
+        asset_value=asset_value,
+        annual_revenue=annual_revenue,
+        age=age,
+        sex=sex,
+        export=export,
+        comments=comments,
+        disability = disability,
+        sme_ref_number=sme_ref_number,
+        compliance=compliance,
+        registration=registration,
+        tax=tax,
+        training=training,
+        education=education,
+        source_of_funds=source_of_funds,
+        training_recieved=training_recieved
+    )
 
+    return sme
 
 
 def update_sme_record(request):
@@ -227,42 +263,46 @@ def update_sme_record(request):
         number_of_employees = int(form_data.get('number_of_employees'))
         asset_value = float(form_data.get('asset_value'))
         annual_revenue = float(form_data.get('annual_revenue'))
+        age = form_data.get('age')
+        sex = form_data.get('sex')
         export = form_data.get('export')
         comments = form_data.get('comments')
+        disability = form_data.get('disability')
         compliance = form_data.get('compliance')
         registration = form_data.get('registration')
         tax = form_data.get('tax')
+        training = form_data.get('training')
         education = form_data.get('education')
-        training_received = form_data.get('training_received')
+        training_recieved = form_data.get('training_recieved')
         source_of_funds = form_data.get('source_of_funds')
-        ownership = form_data.get('ownership')
-        support_service = form_data.get('support_service')
-        funding_received = form_data.get('funding_received')
 
         # Validate required fields
         missing_fields = []
         required_fields = {
-            'sme_id': sme_id,
-            'company': company,
-            'contact_person': contact_person,
-            'phone_number': phone_number,
-            'email': email,
-            'address': address,
-            'sector': sector,
-            'type_of_business': type_of_business,
-            'product_service': product_service,
-            'number_of_employees': number_of_employees,
-            'asset_value': asset_value,
-            'annual_revenue': annual_revenue,
-            'export': export,
-            'comments': comments,
-            'compliance': compliance,
-            'registration': registration,
-            'tax': tax,
-            'education': education,
-            'source_of_funds': source_of_funds,
-            'ownership': ownership,
-            'support_service': support_service,
+        'sme_id': sme_id,
+        'company': company,
+        'contact_person': contact_person,
+        'phone_number': phone_number,
+        'email': email,
+        'address': address,
+        'sector': sector,
+        'type_of_business': type_of_business,
+        'product_service': product_service,
+        'number_of_employees': number_of_employees,
+        'asset_value': asset_value,
+        'annual_revenue': annual_revenue,
+        'age': age,
+        'sex': sex,
+        'export': export,
+        'comments': comments,
+        'disability': disability,
+        'compliance': compliance,
+        'registration': registration,
+        'tax': tax,
+        'training': training,
+        'education': education,
+        'source_of_funds': source_of_funds,
+        'training_recieved': training_recieved
         }
 
         # Check each field explicitly
@@ -270,8 +310,9 @@ def update_sme_record(request):
             if value is None or value == '':
                 missing_fields.append(field)
 
-        if missing_fields:
-            return JsonResponse({'Error': f'Missing required fields: {", ".join(missing_fields)}'}, status=400)
+            if missing_fields:
+                return JsonResponse({'Error': f'Missing required fields: {", ".join(missing_fields)}'}, status=400)
+
 
         try:
             # Retrieve the sector object
@@ -284,27 +325,28 @@ def update_sme_record(request):
             # Update SME record
             SME.objects.filter(id=sme_id).update(
                 company=company,
-                type_of_business=type_of_business,
-                registration=registration,
-                sector=sector,
-                product_service=product_service,
-                number_of_employees=number_of_employees,
-                export=export,
-                ownership=ownership,
                 contact_person=contact_person,
-                address=address,
                 phone_number=phone_number,
                 email=email,
-                education=education,
-                support_service=support_service,
-                training_received=training_received,
-                funding_received=funding_received,
-                compliance=compliance,
-                tax=tax,
-                source_of_funds=source_of_funds,
-                annual_revenue=annual_revenue,
+                address=address,
+                sector=sector,
+                type_of_business=type_of_business,
+                product_service=product_service,
+                number_of_employees=number_of_employees,
                 asset_value=asset_value,
-                comments=comments
+                annual_revenue=annual_revenue,
+                age=age,
+                sex=sex,
+                export=export,
+                comments=comments,
+                disability=disability,
+                compliance=compliance,
+                registration=registration,
+                tax=tax,
+                training=training,
+                education=education,
+                training_recieved=training_recieved,
+                source_of_funds=source_of_funds
             )
 
             # Calculate sizes based on sector-specific thresholds
@@ -339,33 +381,31 @@ def update_sme_record(request):
     
 
 def update_sme_record_in_database(sme_id, company, contact_person, phone_number, email, address, sector,
-                                  type_of_business, product_service,number_of_employees, asset_value, annual_revenue,
-                                  export,comments,ownership, support_service, training_received, funding_received,
-                                  source_of_funds,compliance, registration, tax, education):
-    # Assuming you have a model for SME records and CalculationScale records
-    sme = SME.objects.get(id=sme_id)
+                                  type_of_business, product_service, number_of_employees, asset_value, annual_revenue, age,
+                                  sex, export, comments, disability, compliance, registration, tax, training, education, training_recieved, source_of_funds):
+    sme = get_object_or_404(SME, id=sme_id)
     sme.company = company
-    sme.type_of_business = type_of_business
-    sme.registration = registration
-    sme.sector = sector
-    sme.product_service = product_service
-    sme.number_of_employees = number_of_employees
-    sme.export = export
-    sme.ownership = ownership
     sme.contact_person = contact_person
-    sme.address = address
     sme.phone_number = phone_number
     sme.email = email
-    sme.education = education
-    sme.support_service = support_service
-    sme.training_received = training_received
-    sme.funding_received = funding_received
-    sme.compliance = compliance
-    sme.tax = tax
-    sme.source_of_funds = source_of_funds
-    sme.annual_revenue = annual_revenue
+    sme.address = address
+    sme.sector = sector
+    sme.type_of_business = type_of_business
+    sme.product_service = product_service
+    sme.number_of_employees = number_of_employees
     sme.asset_value = asset_value
+    sme.annual_revenue = annual_revenue
+    sme.age = age
+    sme.sex = sex
+    sme.export = export
     sme.comments = comments
+    sme.disability = disability
+    sme.compliance = compliance
+    sme.registration = registration
+    sme.tax = tax
+    sme.training = training
+    sme.education = education
+    sme.training_recieved = training_recieved
+    sme.source_of_funds = source_of_funds
     sme.save()
-    
     return sme

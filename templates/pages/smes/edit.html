@@ -1,215 +1,118 @@
-<!-- Modal -->
-<style>
-    .section-header {
-        font-weight: bold;
-        background-color: #007bff;
-        border-radius: 5px;
-        margin-top: 20px;
-        padding: 10px;
-        color: white;
-        text-size-adjust: 10px; 
-    }
-    .modal-header {
-        background-color: #007bff;
-        border-bottom: 2px solid #0056b3;
-    }
-    .modal-header .close {
-        color: white;
-        font-size: 1.5rem;
-    }
-    .modal-footer {
-        border-top: 1px solid #ddd;
-        text-align: right;
-    }
-    .form-control {
-        border-radius: 5px;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-    .select2-container--default .select2-selection--single {
-        border-radius: 5px;
-    }
-    .select2-container--default .select2-selection--single:focus {
-        border-color: #007bff;
-    }
-    label {
-        font-weight: 600;
-    }
-    .bg-gradient {
-        background: linear-gradient(45deg, #007bff, #00bcd4);
-    }
-    .bg-primary { background-color: #007bff; font-size: 12px; }
-    .bg-success { background-color: #28a745; font-size: 12px; }
-    .bg-warning { background-color: #ffc107; font-size: 12px; }
-    .bg-danger { background-color: #dc3545; font-size: 12px; }
-    .bg-info { background-color: #17a2b8; font-size: 12px; }
-</style>
-
-<div class="modal fade" data-backdrop="static" id="editSmeModal" tabindex="-1" role="dialog" aria-labelledby="editSmeModalLabel" aria-hidden="true">
+<!-- Modal: Edit SME Details -->
+<div class="modal fade" id="editSmeModal" tabindex="-1" role="dialog" aria-labelledby="editSmeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <div class="modal-content" style="font-family: 'Trebuchet MS', sans-serif; background-color: #ffffff;">
-            <div class="modal-header" style="background-color: #007bff; color: white; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-                <h4 class="modal-title" id="editSmeModalLabel">UPDATE DETAILS</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white shadow-sm rounded-top">
+                <h4 class="modal-title" id="editSmeModalLabel"><i class="fas fa-edit text-white"></i> Edit SME</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="padding: 30px;">
-                <div id="toastContainer" aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;"></div>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="error-alert" style="display: none;">
-                    <strong>Error!</strong> <span id="error-message"></span>
-                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <form id="editSMEForm" autocomplete="off" style="font-size: 15px;">
+            <div class="modal-body">
+                <form id="editSMEForm" autocomplete="off" class="px-4 py-3">
+
                     <!-- Business Information Section -->
-                    <div class="section-header bg-gradient text-white py-1 px-2 rounded mb-3">
-                        <h5><i class="fas fa-industry"></i> Business Information</h5>
+                    <div class="section-header bg-dark text-white  py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-industry text-white"></i> Business Information</h5>
                     </div>
-    
-                    <!-- First Row: Company, Registration Status, Form of Business, Sector -->
-                    <div class="row g-5 mb-4"> <!-- Added margin-bottom to create space between first and second rows -->
+
+                    <div class="row g-4 mb-4">
                         <div class="col-md-6">
-                            <label for="company" class="mb-1">Company</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-building"></i></span>
-                                <input type="text" class="form-control" id="company" name="company" placeholder="Enter Company Name" required style="background-color: #f8f9fa;">
-                            </div>
+                            <label for="company" class="form-label">Company Name</label>
+                            <input type="text" class="form-control" id="company" name="company" placeholder="Enter Company Name">
                         </div>
                         <div class="col-md-6">
-                            <label for="registration" class="mb-1">Registration Status</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-clipboard-check"></i></span>
-                                <select class="form-control select2" id="registration" name="registration" required style="background-color: #f8f9fa;">
-                                    <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="Registered">Registered</option>
-                                    <option value="Not-Registered">Not-Registered</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="type_of_business" class="mb-1">Form of Business</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-building"></i></span>
-                                <select class="form-control select2" id="type_of_business" name="type_of_business" required style="background-color: #f8f9fa;">
-                                    <option selected="selected" disabled="disabled">Select Form of Business</option>
-                                    <option value="Private Limited">Private Limited</option>
-                                    <option value="Private Business Cooperation">Private Business Cooperation</option>
-                                    <option value="Cooperative">Cooperative</option>
-                                    <option value="Partnership">Partnership</option>
-                                    <option value="Syndicate">Syndicate</option>
-                                    <option value="Consortium">Consortium</option>
-                                    <option value="Not Applicable">Not Applicable</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="sector" class="mb-1">Sector</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-sitemap"></i></span>
-                                <select class="form-control select2" id="sector" name="sector" required style="background-color: #f8f9fa;">
-                                    <option selected="selected" disabled="disabled">Select Sector</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- Last Row: Product or Service, Number of Employees, Exports -->
-                    <div class="row g-5 mb-4" style="margin-top: 20px;"> <!-- Added margin-top for extra space -->
-                        <div class="col-md-4">
-                            <label for="product_service" class="mb-1">Product or Service</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-cogs"></i></span>
-                                <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service" required style="background-color: #f8f9fa;">
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <label for="number_of_employees" class="mb-1">Number of Employees</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-users"></i></span>
-                                <input type="number" class="form-control" id="number_of_employees" name="number_of_employees" placeholder="Enter Number of Employees" required style="background-color: #f8f9fa;">
-                            </div>
-                        </div>
-    
-                        <div class="col-md-4">
-                            <label for="export" class="mb-1">Exports</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-gradient text-white"><i class="fas fa-ship"></i></span>
-                                <select class="form-control select2" id="export" name="export" required style="background-color: #f8f9fa;">
-                                    <option selected="selected" disabled="disabled">Select</option>
-                                    <option value="Exporter">Exporter</option>
-                                    <option value="Non-Exporter">Non-Exporter</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Business Contact Information Section --> 
-                    <div class="section-header bg-info text-white py-1 px-2 rounded mb-3">
-                        <h5><i class="fas fa-user"></i> Business Contact Information</h5>
-                    </div>
-    
-                    <!-- First Row: Contact Person, Physical Address -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <label for="contact_person"><i class="fas fa-user-circle text-info"></i> Contact Person</label>
-                            <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="address"><i class="fas fa-map-marker-alt text-info"></i> Physical Address</label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter Physical Address" required>
-                        </div>
-                    </div>
-    
-                    <!-- Second Row: Age, Sex, Disability -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label for="age"><i class="fas fa-calendar-alt text-info"></i> Age</label>
-                            <select class="form-control select2" id="age" name="age">
-                                <option selected="selected" disabled="disabled">Select Age Group</option>
-                                <option value="18-24">18 to 24</option>
-                                <option value="25-34">25 to 34</option>
-                                <option value="35-44">35 to 44</option>
-                                <option value="45-54">45 to 54</option>
-                                <option value="55-64">55 to 64</option>
-                                <option value="65+">65 or over</option>
+                            <label for="type_of_business" class="form-label">Form of Business</label>
+                            <select class="form-control " id="type_of_business" name="type_of_business">
+                                <option disabled>Select Form of Business</option>
+                                <option value="Private Limited">Private Limited</option>
+                                <option value="Private Business Cooperation">Private Business Cooperation</option>
+                                <option value="Cooperative">Cooperative</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Syndicate">Syndicate</option>
+                                <option value="Consortium">Consortium</option>
+                                <option value="Group">Group</option>
+                                <option value="Sole Proprietorship">Sole Proprietorship</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <label for="sex"><i class="fas fa-venus-mars text-info"></i> Sex</label>
-                            <select class="form-control select2" id="sex" name="sex">
-                                <option selected="selected" disabled="disabled">Select Sex</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select> 
+                        <div class="col-md-6">
+                            <label for="registration" class="form-label">Registration Status</label>
+                            <select class="form-control " id="registration" name="registration">
+                                <option disabled>Select Registration Status</option>
+                                <option value="Registered">Registered</option>
+                                <option value="Not-Registered">Not Registered</option>
+                            </select>
                         </div>
-                        <div class="col-md-4">
-                            <label for="disability"><i class="fas fa-wheelchair text-info"></i> Disability</label>
-                            <select class="form-control select2" id="disability" name="disability">
-                                <option selected="selected" disabled="disabled">Select</option>
-                                <option value="Disabled">Disabled</option>
-                                <option value="Not-Disabled">Not-Disabled</option>
+                        <div class="col-md-6">
+                            <label for="sector" class="form-label">Sector</label>
+                            <select class="form-control " id="sector" name="sector">
+                                <option disabled>Select Sector</option>
                             </select>
                         </div>
                     </div>
-    
-                    <!-- Third Row: Phone Number, Email, Education Level -->
-                    <div class="row g-3 mb-4">
+
+                    <div class="row g-4 mb-4">
                         <div class="col-md-4">
-                            <label for="phone_number"><i class="fas fa-phone-alt text-info"></i> Phone Number</label>
-                            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone Number" required>
+                            <label for="product_service" class="form-label">Product or Service</label>
+                            <input type="text" class="form-control" id="product_service" name="product_service" placeholder="Enter Product or Service">
                         </div>
                         <div class="col-md-4">
-                            <label for="email"><i class="fas fa-envelope text-info"></i> Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" required>
+                            <label for="number_of_employees" class="form-label">Number of Employees</label>
+                            <input type="number" class="form-control" id="number_of_employees" name="number_of_employees" placeholder="Enter Number of Employees">
                         </div>
                         <div class="col-md-4">
-                            <label for="education"><i class="fas fa-graduation-cap text-info"></i> Education Level</label>
-                            <select class="form-control select2" id="education" name="education">
-                                <option selected="selected" disabled="disabled">Select Education Level</option>
+                            <label for="export" class="form-label">Exports</label>
+                            <select class="form-control " id="export" name="export">
+                                <option disabled>Select Exports Status</option>
+                                <option value="Exporter">Exporter</option>
+                                <option value="Non-Exporter">Non-Exporter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label for="ownership" class="form-label">Ownership</label>
+                            <select class="form-control " id="ownership" name="ownership">
+                                <option disabled>Select Ownership</option>
+                                <option value="Youth owned">Youth Owned</option>
+                                <option value="Women Owned">Women Owned</option>
+                                <option value="Men Owned">Men Owned</option>
+                                <option value="Warvets Owned">Warvets Owned</option>
+                                <option value="Disabled Owned">Disabled Owned</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="section-header bg-info text-white py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-user text-white"></i> Business Contact Information</h5>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label for="contact_person" class="form-label">Contact Person</label>
+                            <input type="text" class="form-control" id="contact_person" name="contact_person" placeholder="Enter Contact Person Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Business Physical Address</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter Address">
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter Phone Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="education" class="form-label">Managerial Education Level</label>
+                            <select class="form-control " id="education" name="education">
+                                <option disabled>Select Education Level</option>
                                 <option value="Primary">Primary</option>
                                 <option value="O Level">O Level</option>
                                 <option value="A Level">A Level</option>
@@ -218,109 +121,143 @@
                             </select>
                         </div>
                     </div>
-    
-                    <!-- Business Support Services Section -->
-                    <div class="section-header bg-success text-white py-1 px-2 rounded mb-3">
-                        <h5><i class="fas fa-cogs"></i> Business Support Services</h5>
+
+                    <!-- Business Support -->
+                    <div class="section-header bg-success text-white py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-cogs text-white"></i> Business Support Services Received</h5>
                     </div>
-                    <div class="row g-3">
-                        <!-- Training Field -->
+                    <div class="row g-4 mb-4">
+                        <!-- Edit Modal Support Services -->
                         <div class="col-md-6">
-                            <label for="training">
-                                <i class="fas fa-chalkboard-teacher text-success"></i> Training
-                            </label>
-                            <select class="form-control select2" id="training" name="training">
-                                <option selected="selected" disabled="disabled">Select Training</option>
-                                <option value="Trained">Trained</option>
-                                <option value="Not-Trained">Not-Trained</option>
+                            <label for="edit_support_service" class="form-label">Support Service</label>
+                            <select class="form-control select2" id="edit_support_service" name="edit_support_service[]" multiple required>
+                                <option value="Funding">Funding</option>
+                                <option value="Workspace">Workspace</option>
+                                <option value="Registration">Registration</option>
+                                <option value="Training">Training</option>
+                                <option value="Market Access">Market Access</option>
+                                <option value="Standards Development">Standards Development</option>
                             </select>
                         </div>
-                        
-                        <!-- Annual Revenue Field -->
-                        <div class="col-md-6">
-                            <label for="annual_revenue">
-                                <i class="fas fa-chart-line text-success"></i> Training received
-                            </label>
-                            <input type="text" class="form-control" id="training_recieved" name="training_recieved" placeholder="Enter training received" required>
+
+                        <div class="col-md-6" id="edit_training_field" style="display: none;">
+                            <label for="edit_training_received" class="form-label">Training Received</label>
+                            <input type="text" class="form-control" id="edit_training_received" name="edit_training_received" placeholder="Enter Training Received">
                         </div>
-                    </div>
-    
-    
-                    <!-- Compliance Section -->
-                    <div class="section-header bg-info text-white py-1 px-2 rounded mb-3">
-                        <h5><i class="fas fa-shield-alt"></i> Compliance</h5>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="compliance"><i class="fas fa-clipboard-check text-primary"></i> Compliance</label>
-                                <input type="text" class="form-control bg-light" id="compliance" name="compliance" placeholder="Enter Compliance (e.g., ZIMRA, NSSA, EMA)" required>
-                            </div>
+
+                        <div class="col-md-6" id="edit_funding_field" style="display: none;">
+                            <label for="edit_funding_received" class="form-label">Funding Received</label>
+                            <input type="text" class="form-control" id="edit_funding_received" name="edit_funding_received" placeholder="Enter Funding Received">
                         </div>
-    
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="tax"><i class="fas fa-calculator text-primary"></i> Tax</label>
-                                <input type="text" class="form-control bg-light" id="tax" name="tax" placeholder="Enter Tax Type (e.g., Income Tax, PAYE, VAT)" required> 
-                            </div>
-                        </div>
-                    </div>
-    
-                                    <!-- Financial Information Section -->
-                    <div class="section-header bg-warning text-white py-1 px-2 rounded mb-3">
-                        <h5><i class="fas fa-wallet"></i> Financial Information</h5>
-                    </div>
-    
-                    <div class="row g-3">
-                        <!-- Source of Funds -->
-                        <div class="col-md-4">
-                            <label for="source_of_funds">
-                                <i class="fas fa-money-bill-alt text-warning"></i> Source of Funds
-                            </label>
-                            <select class="form-control select2" id="source_of_funds" name="source_of_funds">
-                                <option selected="selected" disabled="disabled">Select Source of Funds</option>
-                                <option value="Business grants">Business grants</option>
-                                <option value="Venture capital">Venture capital</option>
-                                <option value="Angel investors">Angel investors</option>
-                                <option value="Friends and Family">Friends and Family</option>
-                                <option value="Term loan">Term-loan</option>
-                                <option value="Government loan">Government-loan</option>
-                            </select>
-                        </div>
-    
-                            <!-- Annual Turnover -->
-                            <div class="col-md-4">
-                                <label for="annual_revenue">
-                                    <i class="fas fa-dollar-sign text-warning"></i> Annual Turnover (USD - $)
-                                </label>
-                                <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter Annual Turnover" required>
-                            </div>
-    
-                            <!-- Assets Value -->
-                            <div class="col-md-4">
-                                <label for="asset_value">
-                                    <i class="fas fa-warehouse text-warning"></i> Assets Value (USD - $)
-                                </label>
-                                <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Assets Value" required>
-                            </div>
-                        </div>
-                        <!-- Challenges Section -->
-                        <div class="section-header bg-danger text-white py-1 px-2 rounded mb-3">
-                            <h5><i class="fas fa-exclamation-circle"></i> Challenges</h5>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <label for="comments"></label>
-                                <textarea class="form-control" name="comments" id="comments" placeholder="Enter Challenges"></textarea>
-                            </div>
-                        </div>
-                    <div class="modal-footer" style="background-color: #f9f9f9; border-top: 1px solid #dee2e6;">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-outline-primary btn-sm" id="save-changes">Submit</button>
                     </div>
 
+                    <!-- Compliance -->
+                    <div class="section-header bg-warning text-white py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-shield-alt text-white"></i> Compliance</h5>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <label for="compliance" class="form-label">Compliance</label>
+                            <input type="text" class="form-control" id="compliance" name="compliance" placeholder="Enter Compliance">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tax" class="form-label">Tax</label>
+                            <input type="text" class="form-control" id="tax" name="tax" placeholder="Enter Tax">
+                        </div>
+                    </div>
+
+                    <!-- Financial Info -->
+                    <div class="section-header bg-danger text-white py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-wallet text-white"></i> Financial Information</h5>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <label for="source_of_funds" class="form-label">Source of Capital Funds</label>
+                            <select class="form-control " id="source_of_funds" name="source_of_funds">
+                                <option disabled>Select Source</option>
+                                <option value="Government loan">Government loan</option>
+                                <option value="Venture capital">Venture capital</option>
+                                <option value="Own savings">Own savings</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="annual_revenue" class="form-label">Annual Turnover (USD)</label>
+                            <input type="number" class="form-control" id="annual_revenue" name="annual_revenue" placeholder="Enter Turnover">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="asset_value" class="form-label">Assets Value (USD)</label>
+                            <input type="number" class="form-control" id="asset_value" name="asset_value" placeholder="Enter Asset Value">
+                        </div>
+                    </div>
+
+                    <!-- Challenges -->
+                    <div class="section-header bg-info text-white py-2 px-3 rounded mb-4">
+                        <h5><i class="fas fa-exclamation-circle text-white"></i> Challenges</h5>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <textarea class="form-control" name="comments" id="comments" rows="3" placeholder="Enter Challenges"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> Update SME</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize Select2 for both modals
+        $('#support_service, #edit_support_service').select2({
+            placeholder: "Select support services",
+            width: '100%'
+        });
+
+        // Function to toggle fields based on selected values
+        function toggleFields(modalIdSuffix) {
+            const supportService = $(`#${modalIdSuffix}_support_service`).val() || [];
+        
+            const trainingField = document.getElementById(`${modalIdSuffix}_training_field`);
+            const fundingField = document.getElementById(`${modalIdSuffix}_funding_field`);
+            const trainingInput = document.getElementById(`${modalIdSuffix}_training_received`);
+            const fundingInput = document.getElementById(`${modalIdSuffix}_funding_received`);
+        
+            if (supportService.includes('Training')) {
+                trainingField.style.display = 'block';
+                trainingInput.setAttribute('required', 'required');
+            } else {
+                trainingField.style.display = 'none';
+                trainingInput.removeAttribute('required');
+                trainingInput.value = '';
+            }
+        
+            if (supportService.includes('Funding')) {
+                fundingField.style.display = 'block';
+                fundingInput.setAttribute('required', 'required');
+            } else {
+                fundingField.style.display = 'none';
+                fundingInput.removeAttribute('required');
+                fundingInput.value = '';
+            }
+        }
+        
+
+        // Setup listeners for both modals
+        $('#support_service').on('change', () => toggleFields(''));
+        $('#edit_support_service').on('change', () => toggleFields('edit'));
+
+        // Trigger after setting initial values
+        $('#editSmeModal').on('shown.bs.modal', function () {
+            toggleFields('edit');
+        });
+
+        // Initial toggle for new form
+        toggleFields('');
+    });
+</script>
+
