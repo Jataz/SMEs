@@ -23,7 +23,21 @@
   <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
 
   <style>
+    input::placeholder,
+    textarea::placeholder {
+        color: #888; /* Placeholder text color */
+        font-size: 12px; /* Placeholder text size */
+        font-style: italic; /* Placeholder text style */
+        opacity: 0.7; /* Placeholder transparency */
+    }
 
+    /* For the native select element */
+    select option:first-child {
+        color: #888;  /* Placeholder text color */
+        font-size: 16px;  /* Font size */
+        font-style: italic;  /* Font style */
+        opacity: 0.7;  /* Opacity */
+    }
   
 
     /* Style DataTables buttons */

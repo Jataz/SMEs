@@ -260,11 +260,9 @@ def update_sme_record(request):
             'registration': registration,
             'tax': tax,
             'education': education,
-            'training_received': training_received,
             'source_of_funds': source_of_funds,
             'ownership': ownership,
             'support_service': support_service,
-            'funding_received': funding_received
         }
 
         # Check each field explicitly

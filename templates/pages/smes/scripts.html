@@ -245,21 +245,46 @@
             const smeId = $(event.relatedTarget).data('sme-id');
             const modal = $(this);
             $('#editSMEForm').data('sme-id', smeId);
-
+        
             $.ajax({
                 url: `/api/v1/sme-update/${smeId}/`,
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
+                    // Populate normal fields
                     Object.entries(data).forEach(([key, value]) => {
-                        const val = typeof value === 'object' ? value.id || value.name || '' : value;
+                        let val = typeof value === 'object' ? value.id || value.name || '' : value;
+        
+                        // Skip special fields for now
+                        if (['support_service', 'training_received', 'funding_received'].includes(key)) return;
+        
                         modal.find(`#${key}`).val(val);
                     });
+        
+                    // Populate support_service (multi-select)
+                    if (Array.isArray(data.support_service)) {
+                        $('#edit_support_service').val(data.support_service).trigger('change');
+                    }
+        
+                    // Now set training & funding received values
+                    $('#edit_training_received').val(data.training_received || '');
+                    $('#edit_funding_received').val(data.funding_received || '');
+
+                    // Populate sectors dropdown and select correct one
                     populateSectors('#editSmeModal #sector', data.sector.id);
+                    //populateSectors('#editSmeModal #sector', data.sector?.id);
+                    //populateSectors('#editSmeModal #sector', data.sector.id);
+        
+                    // Ensure visibility logic runs AFTER values are set
+                    toggleFields('edit');
+    
+
                 },
                 error: () => showAlert('danger', 'Error', 'Failed to load SME details.')
             });
         });
+        
+        
 
         // Handle SME edit submission
         $('#editSMEForm').submit(function (e) {
@@ -271,28 +296,27 @@
             const formData = {
                 smeId: smeId,
                 company: form.find('#company').val().trim().toUpperCase(),
-                contact_person: form.find('#contact_person').val().trim().toUpperCase(),
-                phone_number: form.find('#phone_number').val().trim(),
-                email: form.find('#email').val().trim(),
-                address: form.find('#address').val().trim().toUpperCase(),
+                type_of_business: form.find('#type_of_business').val(), 
+                registration: form.find('#registration').val().trim(),
                 sector: form.find('#sector').val(),
-                type_of_business: form.find('#type_of_business').val(),
                 product_service: form.find('#product_service').val().trim().toUpperCase(),
                 number_of_employees: form.find('#number_of_employees').val(),
-                asset_value: form.find('#asset_value').val(),
-                annual_revenue: form.find('#annual_revenue').val(),
-                age: form.find('#age').val(),
-                sex: form.find('#sex').val(),
                 export: form.find('#export').val(),
-                comments: form.find('#comments').val(),
-                disability: form.find('#disability').val(),
-                compliance: form.find('#compliance').val().trim(),
-                registration: form.find('#registration').val().trim(),
-                tax: form.find('#tax').val(),
-                training: form.find('#training').val(),
+                ownership: form.find('#ownership').val(),
+                contact_person: form.find('#contact_person').val().trim().toUpperCase(),
+                address: form.find('#address').val().trim().toUpperCase(), 
+                phone_number: form.find('#phone_number').val().trim(),
+                email: form.find('#email').val().trim(),
                 education: form.find('#education').val(),
-                training_recieved: form.find('#training_recieved').val(),
-                source_of_funds: form.find('#source_of_funds').val()
+                support_service: form.find('#edit_support_service').val(),
+                training_received: form.find('#edit_training_received').val(),
+                funding_received: form.find('#edit_funding_received').val(),
+                compliance: form.find('#compliance').val().trim(),
+                tax: form.find('#tax').val().trim(),
+                source_of_funds: form.find('#source_of_funds').val().trim(),
+                annual_revenue: form.find('#annual_revenue').val(),
+                asset_value: form.find('#asset_value').val(),
+                comments: form.find('#comments').val()
             };
 
             if (!/^[A-Za-z\s]+$/.test(formData.company) || !/^[A-Za-z\s]+$/.test(formData.contact_person)) {
@@ -309,6 +333,7 @@
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
+                headers: { "X-CSRFToken": getCookie("csrftoken") },
                 success: () => {
                     showAlert('success', 'Success', 'SME updated successfully.');
                     $('#editSmeModal').modal('hide');
