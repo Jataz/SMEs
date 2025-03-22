@@ -204,40 +204,7 @@ def sme_create_record(request):
     except Exception as e:
         return JsonResponse({'Error': f'An unexpected error occurred: {e}'}, status=400)
 
-def create_sme_record(company, contact_person, phone_number, email, address, sector, type_of_business, product_service, 
-                      province_id, district_id, ward_id, number_of_employees, asset_value, annual_revenue,
-                      export, comments, ownership,support_service, sme_ref_number,compliance,registration,tax,funding_received,education, training_received, source_of_funds):
-    
-    return SME.objects.create(
-        company=company,
-        type_of_business=type_of_business,
-        registration=registration,
-        sector=sector,
-        product_service=product_service,
-        number_of_employees=number_of_employees, 
-        export=export,
-        ownership=ownership,  # New field, setting default None
-        contact_person=contact_person,
-        address=address,
-        phone_number=phone_number,
-        email=email,
-        education=education,
-        support_service=support_service,  # New field, setting default None
-        training_received=training_received,  # Note spelling fixed from received
-        funding_received=funding_received,  # New field, setting default None
-        compliance=compliance,
-        tax=tax,
-        source_of_funds=source_of_funds,
-        annual_revenue=annual_revenue,
-        asset_value=asset_value,
-        comments=comments,
-        province_id=province_id,
-        district_id=district_id, 
-        ward_id=ward_id,
-        sme_ref_number=sme_ref_number
-    )
 
-    return sme
 
 
 def update_sme_record(request):
