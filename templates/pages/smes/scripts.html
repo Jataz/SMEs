@@ -169,7 +169,7 @@
         });
 
         // View modal
-        $('#viewSmeModal').on('show.bs.modal', function (event) {
+        $('#viewSmeModall').on('show.bs.modal', function (event) {
             const smeId = $(event.relatedTarget).data('sme-id');
             const modal = $(this);
 
@@ -183,6 +183,60 @@
                 })
                 .catch(error => {
                     modal.find('.modal-body').html(`<p>Error: ${error}</p>`);
+                });
+        });
+
+        $('#viewSmeModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var smeId = button.data('sme-id'); // Extract info from data-* attributes
+            var modal = $(this);
+            var url = `/api/v1/sme-detail/${smeId}/`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    modal.find('.modal-title').text(data.sme_ref_number);
+                    modal.find('.modal-body #company').text(data.company);
+                    modal.find('.modal-body #contact-person').text(data.contact_person);
+                    modal.find('.modal-body #phone-number').text(data.phone_number);
+                    modal.find('.modal-body #email').text(data.email);
+                    modal.find('.modal-body #address').text(data.address);
+                    modal.find('.modal-body #ownership').text(data.ownership);
+                   
+
+                    modal.find('.modal-body #sector').text(data.sector.name);
+                    modal.find('.modal-body #type-of-business').text(data.type_of_business);
+                    modal.find('.modal-body #product-service').text(data.product_service);
+                    modal.find('.modal-body #number-of-employees').text(data.number_of_employees);
+                    modal.find('.modal-body #asset-value').text(data.asset_value);
+                    modal.find('.modal-body #annual-revenue').text(data.annual_revenue);
+                    modal.find('.modal-body #export').text(data.export);
+                    modal.find('.modal-body #comments').text(data.comments);
+
+                    modal.find('.modal-body #training_received').text(data.training_received);
+                    modal.find('.modal-body #funding_received').text(data.funding_received);
+                    modal.find('.modal-body #support_service').text((data.support_service || []).join(', '));
+
+                    modal.find('.modal-body #size').text(data.calculation_scale[0].size_of_business.size);
+
+                    modal.find('.modal-body #compliance').text(data.compliance);
+                    modal.find('.modal-body #registration').text(data.registration);
+                    modal.find('.modal-body #tax').text(data.tax);
+                    modal.find('.modal-body #education').text(data.education);
+                    modal.find('.modal-body #source_of_funds').text(data.source_of_funds);
+                    modal.find('.modal-body #size-of-business').text(data.calculation_scale[0].size_of_business.size);
+
+                    modal.find('.modal-body #province').text(data.province.province_name);
+                    modal.find('.modal-body #district').text(data.district.district_name);
+                    modal.find('.modal-body #ward').text(data.ward.ward_name);
+                })
+                .catch(error => {
+                    modal.find('.modal-body').html(`<p>Error: ${error.message}</p>`);
                 });
         });
 
