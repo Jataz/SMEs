@@ -8,7 +8,7 @@ from .views import ( SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme
             financial_performance_report_api,
             export_report_api,
             training_education_report_api,
-            gender_api,
+            ownership_api,
             age_api,
             )
 from . import views
@@ -49,7 +49,7 @@ urlpatterns =[
     path('api/financial-performance/', financial_performance_report_api, name='financial_performance_api'),
     path('api/export/', export_report_api, name='export_api'),
     path('api/training-education/', training_education_report_api, name='training_education_api'),
-    path('api/gender/', gender_api, name='gender_api'),
+    path('api/ownership/', ownership_api, name='ownership_api'),
     path('api/age/', age_api, name='age_api'),
 
 ]
