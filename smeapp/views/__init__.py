@@ -9,6 +9,6 @@ from .reports import (
     financial_performance_report_api,
     export_report_api,
     training_education_report_api,
-    gender_api,
+    ownership_api,
     age_api
     )

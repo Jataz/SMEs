@@ -210,7 +210,7 @@ def training_education_report_api(request):
 
 
 # 6. Gender Report API
-def gender_api(request):
+def ownership_api(request):
     try:
         session_id = request.COOKIES.get('sessionid')
         response = requests.get(
@@ -223,26 +223,24 @@ def gender_api(request):
         else:
             sme_data = []
 
-        # Count the occurrences of each sex
+        # Count the occurrences of each ownership type
         total_smes = len(sme_data)
-        sex_counts = {'Male': 0, 'Female': 0}
+        ownership_counts = Counter()
         for sme in sme_data:
-            sex = sme.get('sex')
-            if sex in sex_counts:
-                sex_counts[sex] += 1
+            ownership = sme.get('ownership')
+            if ownership:
+                ownership_counts[ownership] += 1
 
         # Calculate percentages
         percentages = {}
         if total_smes > 0:
-            for sex, count in sex_counts.items():
-                percentages[sex] = round((count / total_smes) * 100)
-        else:
-            pass
+            for ownership, count in ownership_counts.items():
+                percentages[ownership] = round((count / total_smes) * 100, 2)
 
         # Prepare data for Chart.js
         labels = list(percentages.keys())
         data = list(percentages.values())
-        counts = list(sex_counts.values())
+        counts = list(ownership_counts.values())
 
         context = {
             'labels': labels,
