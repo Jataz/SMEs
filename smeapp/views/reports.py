@@ -254,8 +254,8 @@ def ownership_api(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
-# 7. Age Report API
-def age_api(request):
+# 7. Asset Performance Report API
+def asset_performance_report_api(request):
     try:
         session_id = request.COOKIES.get('sessionid')
         response = requests.get(
@@ -268,25 +268,108 @@ def age_api(request):
         else:
             sme_data = []
 
-        age_ranges = {
-            "18-25": [18, 25],
-            "26-35": [26, 35],
-            "36-45": [36, 45],
-            "46-55": [46, 55],
-            "56+": [56, 100],
+        sectors = [sme['sector']['name'] for sme in sme_data if sme.get('sector')]
+        sector_revenue = Counter()
+
+        for sme in sme_data:
+            if sme.get('sector') and sme.get('asset_value'):
+                sector_revenue[sme['sector']['name']] += float(sme['asset_value'])
+
+        total_revenue = sum(sector_revenue.values())
+        percentages = {}
+        if total_revenue > 0:
+            percentages = {sector: round((revenue / total_revenue) * 100, 2) for sector, revenue in sector_revenue.items()}
+        else:
+            percentages = {sector: 0 for sector in sector_revenue.keys()}
+
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(sector_revenue.values())
+
+        return JsonResponse({'labels': labels, 'data': data, 'counts': counts})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+ 
+#Business support report
+def business_support_api(request):
+    try:
+        session_id = request.COOKIES.get('sessionid')
+        response = requests.get(
+            f'{settings.API_BASE_URL}/api/v1/smes/',
+            cookies={'sessionid': session_id} if session_id else {}
+        )
+
+        if response.status_code == 200:
+            sme_data = response.json()
+        else:
+            sme_data = []
+
+        # Count the occurrences of each support service
+        total_smes = len(sme_data)
+        support_counts = Counter()
+        for sme in sme_data:
+            support_service = sme.get('support_service')
+            if support_service:
+                if isinstance(support_service, list):
+                    for service in support_service:
+                        support_counts[str(service)] += 1
+                else:
+                    support_counts[str(support_service)] += 1
+
+        # Calculate percentages
+        percentages = {}
+        if total_smes > 0:
+            for service, count in support_counts.items():
+                percentages[service] = round((count / total_smes) * 100, 2)
+
+        # Prepare data for Chart.js
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(support_counts.values())
+
+        context = {
+            'labels': labels,
+            'data': data,
+            'counts': counts
         }
 
-        age_data = {key: 0 for key in age_ranges.keys()}
+        return JsonResponse(context)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+#Number of Employees by Sector
+def employees_by_sector_api(request):
+    try:
+        session_id = request.COOKIES.get('sessionid')
+        response = requests.get(
+            f'{settings.API_BASE_URL}/api/v1/smes/',
+            cookies={'sessionid': session_id} if session_id else {}
+        )
+
+        if response.status_code == 200:
+            sme_data = response.json()
+        else:
+            sme_data = []
+
+        sectors = [sme['sector']['name'] for sme in sme_data if sme.get('sector')]
+        sector_employees = Counter()
+
         for sme in sme_data:
-            if 'age' in sme and sme['age'].isdigit():
-                age = int(sme['age'])
-                for key, value in age_ranges.items():
-                    if value[0] <= age <= value[1]:
-                        age_data[key] += 1
+            if sme.get('sector') and sme.get('number_of_employees'):
+                sector_employees[sme['sector']['name']] += int(sme['number_of_employees'])
 
-        labels = list(age_data.keys())
-        data = list(age_data.values())
+        total_employees = sum(sector_employees.values())
+        percentages = {}
+        if total_employees > 0:
+            percentages = {sector: round((employees / total_employees) * 100, 2) for sector, employees in sector_employees.items()}
+        else:
+            percentages = {sector: 0 for sector in sector_employees.keys()}
 
-        return JsonResponse({'labels': labels, 'data': data})
+        labels = list(percentages.keys())
+        data = list(percentages.values())
+        counts = list(sector_employees.values())
+
+        return JsonResponse({'labels': labels, 'data': data, 'counts': counts})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

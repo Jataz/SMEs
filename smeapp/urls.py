@@ -9,7 +9,9 @@ from .views import ( SMEListView,ProvinceAPIView,DistrictAPIView,WardAPIView,sme
             export_report_api,
             training_education_report_api,
             ownership_api,
-            age_api,
+            business_support_api,
+            asset_performance_report_api,
+            employees_by_sector_api,
             )
 from . import views
 
@@ -50,6 +52,8 @@ urlpatterns =[
     path('api/export/', export_report_api, name='export_api'),
     path('api/training-education/', training_education_report_api, name='training_education_api'),
     path('api/ownership/', ownership_api, name='ownership_api'),
-    path('api/age/', age_api, name='age_api'),
+    path('api/business-support/', business_support_api, name='business_support_api'),
+    path('api/asset-performance/', asset_performance_report_api, name='asset_performance_api'),
+    path('api/employees-by-sector/', employees_by_sector_api, name='employees_by_sector_api'),
 
 ]
