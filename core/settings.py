@@ -30,12 +30,12 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-6dlcpv@nzd1e2fmwuz(zaqk39-q6svj+7ruo&e$4s^@@^+r5&p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = env.bool('DEBUG', default=False)
 
-API_BASE_URL = env('API_BASE_URL', default='http://127.0.0.1:8000')
+API_BASE_URL = env('API_BASE_URL', default='https://smedb.women.gov.zw')
 
 # Application definition
-ALLOWED_HOSTS = ['127.0.0.1','localhost','173.249.5.188']
+ALLOWED_HOSTS = ['smedb.women.gov.zw','127.0.0.1','localhost','197.221.227.143']
 
 INSTALLED_APPS = [
     #'material',
@@ -69,18 +69,22 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-	'http://127.0.0.1',
-      'http://173.249.5.188',
+    'https://127.0.0.1',
+    'https://197.221.227.143',
+    'https://smedb.women.gov.zw',
 ]
+
 
 if DEBUG:
     CORS_ORIGIN_ALLOW_ALL = True
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
-	'http://127.0.0.1',
-        'http://173.249.5.188',
+    'https://127.0.0.1',
+    'https://197.221.227.143',
+    'https://smedb.women.gov.zw',
 ]
+# CSRF_COOKIE_SECURE = True
 
 #CSRF_COOKIE_HTTPONLY = False
 
@@ -126,9 +130,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mwacsmed',
-        'USER': 'root',
-        'PASSWORD': '',
+        'NAME': 'mwacsmed_db',
+        'USER': 'mwac',
+        'PASSWORD': 'womensmes@2025#',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -197,7 +201,7 @@ SESSION_SAVE_EVERY_REQUEST = True  # Reset expiry time on each request
 USE_X_FORWARDED_HOST = True
 USE_X_FORWARDED_PORT = True
 
-""" CACHES = {
+CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
@@ -207,5 +211,7 @@ USE_X_FORWARDED_PORT = True
             "SOCKET_CONNECT_TIMEOUT": 5,
         }
     }
-} """
+} 
+
+
 

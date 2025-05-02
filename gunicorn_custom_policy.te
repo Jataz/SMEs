@@ -1,0 +1,21 @@
+
+module gunicorn_custom_policy 1.0;
+
+require {
+	type soundd_port_t;
+	type httpd_sys_content_t;
+	type init_t;
+	type httpd_t;
+	type user_home_t;
+	class tcp_socket name_connect;
+	class file execute;
+}
+
+#============= httpd_t ==============
+
+#!!!! This avc can be allowed using the boolean 'httpd_can_network_connect'
+allow httpd_t soundd_port_t:tcp_socket name_connect;
+
+#============= init_t ==============
+allow init_t httpd_sys_content_t:file execute;
+allow init_t user_home_t:file execute;
